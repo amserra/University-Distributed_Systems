@@ -8,6 +8,7 @@ public class MulticastServer extends Thread {
     //Thread para fazer a recusrsividade e adicionar as palavras
     //Thread para cada comunicacao com o servidor rmi (pesquisa, login, registo etc)
     //Thread que peridodicamente comunica com os outros servidores multicast e sincronizam as informacoes
+    //Usar multicast client para testar cenas
 
     private String MULTICAST_ADDRESS = "224.3.2.1";
     private int PORT = 4321;
