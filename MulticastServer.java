@@ -10,9 +10,10 @@ public class MulticastServer extends Thread {
     //Thread que peridodicamente comunica com os outros servidores multicast e sincronizam as informacoes
     //Usar multicast client para testar cenas
 
-    private String MULTICAST_ADDRESS = "224.3.2.1";
+    private String MULTICAST_ADDRESS = "224.0.224.0";
     private int PORT = 4321;
     private long SLEEP_TIME = 5000;
+    protected byte[] buf = new byte[256];
 
     public static void main(String[] args) {
         MulticastServer server = new MulticastServer();
@@ -28,16 +29,24 @@ public class MulticastServer extends Thread {
         long counter = 0;
         System.out.println(this.getName() + " running...");
         try {
-            socket = new MulticastSocket();  // create socket without binding it (only for sending)
+            //socket = new MulticastSocket();  // create socket without binding it (only for sending)
+            socket = new MulticastSocket(PORT);
+            InetAddress group = InetAddress.getByName(MULTICAST_ADDRESS);
+            socket.joinGroup(group);
             while (true) {
-                String message = this.getName() + " packet " + counter++;
+                DatagramPacket packetReceived = new DatagramPacket(buf, buf.length);
+                socket.receive(packetReceived);
+                String received = new String(packetReceived.getData(), 0, packetReceived.getLength());
+
+                System.out.println("Received: " + received);
+
+                /*String message = this.getName() + " packet " + counter++;
+                byte[] buffer = message.getBytes();*/
+
+                String message = "Message received";
                 byte[] buffer = message.getBytes();
-
-                InetAddress group = InetAddress.getByName(MULTICAST_ADDRESS);
-                DatagramPacket packet = new DatagramPacket(buffer, buffer.length, group, PORT);
-                socket.send(packet);
-
-                try { sleep((long) (Math.random() * SLEEP_TIME)); } catch (InterruptedException e) { }
+                DatagramPacket packetSent = new DatagramPacket(buffer, buffer.length, group, PORT);
+                socket.send(packetSent);
             }
         } catch (IOException e) {
             e.printStackTrace();
