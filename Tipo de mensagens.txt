@@ -1,0 +1,19 @@
+MENSAGENS QUE O RMI SERVER RECEBE:
+
+Registo aceite:
+type | registerComplete ; username | *o username* ; message | Welcome to ucBusca
+
+Registo com username existente
+type | invalidRegister ; username | *username invalido* ; message | That username already exists
+
+
+
+
+
+
+
+
+MENSAGENS QUE O RMI SERVER MANDA:
+
+Registar:
+type | register ; username | *username* ; password | *password*

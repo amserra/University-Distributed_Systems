@@ -2,6 +2,7 @@
     "configurations": [
         {
             "type": "java",
+<<<<<<< HEAD
             "name": "CodeLens (Launch) - MulticastClient",
             "request": "launch",
             "mainClass": "MulticastClient"
@@ -11,6 +12,17 @@
             "name": "CodeLens (Launch) - MulticastServer",
             "request": "launch",
             "mainClass": "MulticastServer"
+=======
+            "name": "CodeLens (Launch) - LoginDemo",
+            "request": "launch",
+            "mainClass": "LoginDemo"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - Client",
+            "request": "launch",
+            "mainClass": "Client"
+>>>>>>> e1858d97c8a3d14d79747d3c44ddb64ce937ae16
         }
     ]
 }

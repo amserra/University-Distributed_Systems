@@ -38,12 +38,14 @@ public class MulticastClient extends Thread {
                 byte[] buffer = new byte[256];
                 DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
                 socket.receive(packet);
-
-                System.out.println("Received packet from " + packet.getAddress().getHostAddress() + ":" + packet.getPort() + " with message:");
                 String message = new String(packet.getData(), 0, packet.getLength());
-                System.out.println(message);
+                //if(!packet.getAddress().getHostAddress().equals(MULTICAST_ADDRESS)){
+                if(!message.equals("type|register;username|stelyt;|password;a")){
+                    System.out.println("Received packet from " + packet.getAddress().getHostAddress() + ":" + packet.getPort() + " with message:");
+                    System.out.println(message);
+                }
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         } finally {
             socket.close();

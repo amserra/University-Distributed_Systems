@@ -1,4 +1,5 @@
 import java.net.MulticastSocket;
+import java.util.ArrayList;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.io.IOException;
@@ -12,8 +13,8 @@ public class MulticastServer extends Thread {
 
     private String MULTICAST_ADDRESS = "224.0.224.0";
     private int PORT = 4321;
-    private long SLEEP_TIME = 5000;
-    protected byte[] buf = new byte[256];
+
+    private ArrayList<User> listUsers = new ArrayList<User>();
 
     public static void main(String[] args) {
         MulticastServer server = new MulticastServer();
@@ -29,7 +30,8 @@ public class MulticastServer extends Thread {
         long counter = 0;
         System.out.println(this.getName() + " running...");
         try {
-            //socket = new MulticastSocket();  // create socket without binding it (only for sending)
+           // socket = new MulticastSocket();  // create socket without binding it (only for sending)
+            byte[] buf = new byte[256];
             socket = new MulticastSocket(PORT);
             InetAddress group = InetAddress.getByName(MULTICAST_ADDRESS);
             socket.joinGroup(group);
@@ -38,17 +40,46 @@ public class MulticastServer extends Thread {
                 socket.receive(packetReceived);
                 String received = new String(packetReceived.getData(), 0, packetReceived.getLength());
 
-                System.out.println("Received: " + received);
+                String[] receivedSplit = received.split(";");
+                String[] type = receivedSplit[0].split("\\|");
+                String messageType = type[1];
+                if(messageType.equals("register")){
+                    User newUser;
+                    boolean checkUser = false;
 
-                /*String message = this.getName() + " packet " + counter++;
-                byte[] buffer = message.getBytes();*/
+                    String username = receivedSplit[1].split("\\|")[1];
+                    String password = receivedSplit[2].split("\\|")[1];
 
-                String message = "Message received";
-                byte[] buffer = message.getBytes();
-                DatagramPacket packetSent = new DatagramPacket(buffer, buffer.length, group, PORT);
-                socket.send(packetSent);
+
+                    for(User u: listUsers){
+                        if(u.getUsername().equals(username))
+                        checkUser = true;
+                    }
+
+                    if(!checkUser){
+                        //Primeiro Utilizador, logo é admin
+                        if(listUsers.isEmpty())
+                            newUser = new User(username,password,true);
+                        //Outro utilizador logo é um utilizador
+                        else
+                            newUser = new User(username,password,false);
+
+                        listUsers.add(newUser);
+                        String message = "type|registerComplete;username|" + newUser.getUsername()+";message|Welcome to ucBusca";
+                        byte[] buffer = message.getBytes();
+                        DatagramPacket packetSent = new DatagramPacket(buffer, buffer.length, group, PORT);
+                        socket.send(packetSent);
+                    }else{
+                        String message = "type|invalidRegister;username|" + username+";message|That username already exists";
+                        byte[] buffer = message.getBytes();
+                        DatagramPacket packetSent = new DatagramPacket(buffer, buffer.length, group, PORT);
+                        socket.send(packetSent);
+                    }
+                    
+                }
+                
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         } finally {
             socket.close();
