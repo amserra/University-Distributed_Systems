@@ -15,6 +15,7 @@ public class MulticastServer extends Thread {
     private int PORT = 4321;
 
     private ArrayList<User> listUsers = new ArrayList<User>();
+    private HashMap<String,HashSet<String>> index = new HashMap();
 
     public static void main(String[] args) {
         MulticastServer server = new MulticastServer();
@@ -53,7 +54,7 @@ public class MulticastServer extends Thread {
 
                     for(User u: listUsers){
                         if(u.getUsername().equals(username))
-                        checkUser = true;
+                            checkUser = true;
                     }
 
                     if(!checkUser){
@@ -65,17 +66,63 @@ public class MulticastServer extends Thread {
                             newUser = new User(username,password,false);
 
                         listUsers.add(newUser);
-                        String message = "type|registerComplete;username|" + newUser.getUsername()+";message|Welcome to ucBusca";
+                        String message = "type|registerComplete;username|" + newUser.getUsername();
                         byte[] buffer = message.getBytes();
                         DatagramPacket packetSent = new DatagramPacket(buffer, buffer.length, group, PORT);
                         socket.send(packetSent);
                     }else{
-                        String message = "type|invalidRegister;username|" + username+";message|That username already exists";
+                        String message = "type|invalidRegister;username|" + username;
                         byte[] buffer = message.getBytes();
                         DatagramPacket packetSent = new DatagramPacket(buffer, buffer.length, group, PORT);
                         socket.send(packetSent);
                     }
                     
+                }
+                else if(messageType.equals("login")){
+
+                    boolean checkUser = false;
+
+                    String username = receivedSplit[1].split("\\|")[1];
+                    String password = receivedSplit[2].split("\\|")[1];
+
+
+                    for(User u: listUsers){
+                        if(u.getUsername().equals(username) && u.getPassword().equals(password))
+                            checkUser = true;
+                    }
+
+                    if(checkUser){
+                        String message = "type|validLogin;username|" + username;
+                        byte[] buffer = message.getBytes();
+                        DatagramPacket packetSent = new DatagramPacket(buffer, buffer.length, group, PORT);
+                        socket.send(packetSent);
+                    }
+                    else{
+                        String message = "type|invalidLogin";
+                        byte[] buffer = message.getBytes();
+                        DatagramPacket packetSent = new DatagramPacket(buffer, buffer.length, group, PORT);
+                        socket.send(packetSent);
+                    }
+
+                }
+
+                else if(messageType.equals("index")){
+                    String palavra = receivedSplit[1].split("\\|")[1];
+                    String url = receivedSplit[2].split("\\|")[1];
+                    System.out.println(url);
+                    try { 
+                        Document doc = Jsoup.connect(url).get(); 
+                        StringTokenizer tokens = new StringTokenizer(doc.text()); 
+                        int countTokens = 0; 
+                        while (tokens.hasMoreElements() && countTokens++ < 100) 
+                            System.out.println(tokens.nextToken().toLowerCase()); 
+                        Elements links = doc.select("a[href]"); 
+                        for (Element link : links) 
+                            System.out.println(link.text() + "\n" + link.attr("abs:href") + "\n"); 
+                        } catch (IOException e) { 
+                            e.printStackTrace(); 
+                        }
+
                 }
                 
             }

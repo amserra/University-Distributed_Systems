@@ -39,8 +39,7 @@ public class MulticastClient extends Thread {
                 DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
                 socket.receive(packet);
                 String message = new String(packet.getData(), 0, packet.getLength());
-                //if(!packet.getAddress().getHostAddress().equals(MULTICAST_ADDRESS)){
-                if(!message.equals("type|register;username|stelyt;|password;a")){
+                if(packet.getAddress().getHostAddress().equals(MULTICAST_ADDRESS) || packet.getPort() == PORT){
                     System.out.println("Received packet from " + packet.getAddress().getHostAddress() + ":" + packet.getPort() + " with message:");
                     System.out.println(message);
                 }
