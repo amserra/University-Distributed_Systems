@@ -1,12 +1,31 @@
+import java.net.MalformedURLException;
+import java.rmi.Naming;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
+
 public class RMIClient {
     String typeOfClient;
     String username;
     UI userUI;
+    RMIInterface ci;
 
-    RMIClient() {
+    RMIClient() throws MalformedURLException, RemoteException, NotBoundException {
+        connectToRMIServer();
         this.typeOfClient = "admin";
         userUI = new UI(this);
         userUI.mainMenu();
+    }
+
+    public void connectToRMIServer() throws MalformedURLException, RemoteException, NotBoundException {
+        try {
+            ci = (RMIInterface) Naming.lookup("RMIConnection");
+        } catch (java.rmi.ConnectException e) {
+            System.out.println("\nConnect the server first.");
+            System.exit(-1);
+        }
+
+        String msg = ci.sayHello();
+        System.out.println(msg);
     }
 
     public void login() {
@@ -72,8 +91,8 @@ public class RMIClient {
         // Pedir ao RMI Server os clientes todos
     }
 
-    public static void main(String[] args) {
-        RMIClient client = new RMIClient();
+    public static void main(String[] args) throws MalformedURLException, RemoteException, NotBoundException {
+        new RMIClient();
     }
 
 }
