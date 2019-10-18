@@ -1,7 +1,2 @@
-guardar urls com base nas palavras
-guardar urls recursivamente
 hashMap <URL, numero de links a apontar para eles>
-hashMap<palavra,listaUrls>
-hashMap<Username,password>
 HashMap<Username, pesquisas recentes>
-usar o jsoup para guardar urls e palavras

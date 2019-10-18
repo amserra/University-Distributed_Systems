@@ -1,7 +1,7 @@
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.StringTokenizer;
-import java.io.IOException;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -25,10 +25,10 @@ public class WebCrawler extends Thread{
 
     public void run() {
         HashMap<String,HashSet<String>> index = server.getIndex();
-        recursiveIndex(index,word,url);
+        recursiveIndexWithWord(index,word,url);
     }
 
-    private void recursiveIndex(HashMap<String,HashSet<String>> index, String word,String url){
+    private void recursiveIndexWithWord(HashMap<String,HashSet<String>> index, String word,String url){
         boolean urlVerified = true;
 
         HashSet<String> indexURLs = new HashSet<>();
@@ -45,11 +45,8 @@ public class WebCrawler extends Thread{
                 urlVerified = false;
 
             indexURLs.add(url);
-
-            System.out.println("Word: " + word.toLowerCase() + " URL: " + url);
         }
 
-        System.out.println(url);
         try { 
             Document doc = Jsoup.connect(url).get(); 
             //System.out.println("Title: " + doc.title()); ------------- GET TITLE DA PAGINA --------------
@@ -70,25 +67,56 @@ public class WebCrawler extends Thread{
                     
                 indexURLs.add(url);
 
-                System.out.println("Word: " + currentToken.toLowerCase() + " URL: " + index.get(currentToken.toLowerCase()));
-
             }
             Elements links = doc.select("a[href]");
             if(word != null) 
                 indexURLs = index.get(word.toLowerCase());
             for (Element link : links){ 
-                System.out.println(link.attr("abs:href"));
                 if(word != null)
                     indexURLs.add(link.attr("abs:href"));
                 if(!urlVerified)
-                    recursiveIndex(index,null,link.attr("abs:href"));
-                //System.out.println(link.text() + "\n" + link.attr("abs:href") + "\n"); 
-                //System.out.println("Word: " + word.toLowerCase() + " URLs: " + index.get(word.toLowerCase()));
+                    recursiveIndex(index,link.attr("abs:href"));
             }
-            //System.out.println("Word: " + word.toLowerCase() + " URLs: " + index.get(word.toLowerCase()));
+
             } catch (IOException e) { 
                 e.printStackTrace(); 
             }
     }
 
+    private void recursiveIndex(HashMap<String,HashSet<String>> index, String url){
+        boolean urlVerified = true;
+
+        //System.out.println(url);
+
+        HashSet<String> indexURLs = new HashSet<>();
+
+        try { 
+            Document doc = Jsoup.connect(url).get(); 
+            StringTokenizer tokens = new StringTokenizer(doc.text()); 
+            String currentToken;
+            while (tokens.hasMoreElements()) {
+                currentToken = tokens.nextToken();
+
+                indexURLs = index.get(currentToken.toLowerCase());
+
+                if(indexURLs == null){
+                    indexURLs = new HashSet<String>(HashSetInitialCapacity,HashSetLoadFactor);
+                    index.put(currentToken.toLowerCase(), indexURLs);
+                    urlVerified = false;
+                }
+                else if(!indexURLs.contains(url))
+                    urlVerified = false;
+                    
+                indexURLs.add(url);
+
+            }
+            Elements links = doc.select("a[href]");
+            for (Element link : links){ 
+                if(!urlVerified)
+                    recursiveIndex(index,link.attr("abs:href"));
+            }
+            } catch (IOException e) { 
+                e.printStackTrace(); 
+            }
+    }
 }

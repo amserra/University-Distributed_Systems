@@ -1,7 +1,7 @@
-import java.net.MulticastSocket;
+import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
-import java.io.IOException;
+import java.net.MulticastSocket;
 import java.util.Scanner;
 
 /**
@@ -35,7 +35,7 @@ public class MulticastClient extends Thread {
             InetAddress group = InetAddress.getByName(MULTICAST_ADDRESS);
             socket.joinGroup(group);
             while (true) {
-                byte[] buffer = new byte[256];
+                byte[] buffer = new byte[64*1024];
                 DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
                 socket.receive(packet);
                 String message = new String(packet.getData(), 0, packet.getLength());

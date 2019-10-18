@@ -12,6 +12,9 @@ type | validLogin ; username | *username*
 Login invalid:
 type | invalidLogin
 
+Resultado de pesquisa:
+type | searchResult ; urlCount | *numero de urls* ; url_0 | *1º url* ; url_1 | *2º url* ;etc.
+
 
 
 
@@ -25,3 +28,9 @@ type | register ; username | *username* ; password | *password*
 
 Login:
 type | login ; username | *username* ; password | *password*
+
+Indexar um novo url a uma palavra
+type | index ; word | *palavra* ; url | *url associado*
+
+Pesquisar uma palavra
+type | serach ; word | *palavra*

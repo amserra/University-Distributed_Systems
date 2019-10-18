@@ -1,16 +1,9 @@
+import java.net.DatagramPacket;
+import java.net.InetAddress;
 import java.net.MulticastSocket;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.StringTokenizer;
-import java.net.DatagramPacket;
-import java.net.InetAddress;
-import java.io.IOException;
-
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 
 
 
@@ -125,49 +118,36 @@ public class MulticastServer extends Thread {
                     WebCrawler getUrls = new WebCrawler(this,word,url);
                     getUrls.start();
                 }
+
+                else if(messageType.equals("search")){
+                    String word = receivedSplit[1].split("\\|")[1];
+
+                    HashSet<String> urlResults = index.get(word); 
+
+                    String message = "type|searchResult;urlCount|";              
+
+                    if(urlResults != null){
+                        message += urlResults.size();
+
+                        int urlCount = 0;
+
+                        for(String s: urlResults)
+                            message += ";url_" + urlCount++ + "|" + s;
+                    }
+                    else
+                        message += 0;
+
+                    byte[] buffer = message.getBytes();
+                    DatagramPacket packetSent = new DatagramPacket(buffer, buffer.length, group, PORT);
+                    socket.send(packetSent);
+
+                }
                 
             }
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
             socket.close();
-        }
-    }
-
-    
-
-    private void recursiveUrlIndex(String url){
-        try { 
-            HashSet<String> indexURLs;
-            Document doc = Jsoup.connect(url).get(); 
-            System.out.println("URL: " + url);
-            System.out.println("Title: " + doc.title());
-            StringTokenizer tokens = new StringTokenizer(doc.text()); 
-            String currentToken = tokens.nextToken();
-            while (tokens.hasMoreElements()) {
-                indexURLs = index.get(currentToken.toLowerCase());
-
-                if(indexURLs == null){
-                    indexURLs = new HashSet<String>(HashSetInitialCapacity,HashSetLoadFactor);
-                    index.put(currentToken.toLowerCase(), indexURLs);
-                }
-
-                indexURLs.add(url);
-
-                //System.out.println("Word: " + currentToken.toLowerCase() + " URL: " + index.get(currentToken.toLowerCase()));
-
-                currentToken = tokens.nextToken();
-            }
-            Elements links = doc.select("a[href]"); 
-            for (Element link : links){ 
-                System.out.println(url != link.attr("abs:href"));
-                if(url != link.attr("abs:href"))
-                    recursiveUrlIndex(link.attr("abs:href"));
-                //System.out.println(link.text() + "\n" + link.attr("abs:href") + "\n"); 
-                //System.out.println("Word: " + word.toLowerCase() + " URLs: " + index.get(word.toLowerCase()));
-            }
-        } catch (IOException e) { 
-            e.printStackTrace(); 
         }
     }
 
