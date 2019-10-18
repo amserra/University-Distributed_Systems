@@ -2,6 +2,27 @@
     "configurations": [
         {
             "type": "java",
+            "name": "CodeLens (Launch) - RMIServer",
+            "request": "launch",
+            "mainClass": "RMIServer",
+            "projectName": "Projeto-SD"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - MulticastClient",
+            "request": "launch",
+            "mainClass": "MulticastClient",
+            "projectName": "Projeto-SD"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - MulticastServer",
+            "request": "launch",
+            "mainClass": "MulticastServer",
+            "projectName": "Projeto-SD"
+        },
+        {
+            "type": "java",
             "name": "CodeLens (Launch) - RMIClient",
             "request": "launch",
             "mainClass": "RMIClient",
