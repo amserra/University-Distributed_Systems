@@ -1,9 +1,9 @@
-public class Client {
+public class RMIClient {
     String typeOfClient;
     String username;
     UI userUI;
 
-    Client() {
+    RMIClient() {
         this.typeOfClient = "admin";
         userUI = new UI(this);
         userUI.mainMenu();
@@ -36,6 +36,8 @@ public class Client {
     }
 
     public void shutdown() {
+        // Save previous typeOfClient in case of change? How about when force shutdown?
+        // Or is this info in Multicast?
         // Desligar conexao
         System.out.println("\nShutdown complete.\nHope to see you again soon! :)");
         System.exit(1);
@@ -71,7 +73,7 @@ public class Client {
     }
 
     public static void main(String[] args) {
-        Client client = new Client();
+        RMIClient client = new RMIClient();
     }
 
 }

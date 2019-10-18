@@ -7,10 +7,10 @@ import java.util.Scanner;
 import org.apache.commons.validator.routines.UrlValidator;
 
 public class UI {
-    Client client;
+    RMIClient client;
     Scanner sc = new Scanner(System.in);
 
-    UI(Client client) {
+    UI(RMIClient client) {
         this.client = client;
     }
 

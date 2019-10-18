@@ -2,6 +2,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "CodeLens (Launch) - RMIClient",
+            "request": "launch",
+            "mainClass": "RMIClient",
+            "projectName": "Projeto-SD"
+        },
+        {
+            "type": "java",
             "name": "CodeLens (Launch) - Client",
             "request": "launch",
             "mainClass": "Client",
