@@ -122,49 +122,8 @@ public class MulticastServer extends Thread {
                     String word = receivedSplit[1].split("\\|")[1];
                     String url = receivedSplit[2].split("\\|")[1];
 
-                    HashSet<String> indexURLs = index.get(word.toLowerCase());
-
-                    if(indexURLs == null){
-                        indexURLs = new HashSet<String>(HashSetInitialCapacity,HashSetLoadFactor);
-                        index.put(word.toLowerCase(),indexURLs);
-                    }
-                    indexURLs.add(url);
-
-                    System.out.println("Word: " + word.toLowerCase() + " URL: " + url);
-                    
-                    System.out.println(url);
-                    try { 
-                        Document doc = Jsoup.connect(url).get(); 
-                        //System.out.println("Title: " + doc.title()); ------------- GET TITLE DA PAGINA --------------
-                        StringTokenizer tokens = new StringTokenizer(doc.text()); 
-                        String currentToken = tokens.nextToken();
-                        while (tokens.hasMoreElements()) {
-                            indexURLs = index.get(currentToken.toLowerCase());
-
-                            if(indexURLs == null){
-                                indexURLs = new HashSet<String>(HashSetInitialCapacity,HashSetLoadFactor);
-                                index.put(currentToken.toLowerCase(), indexURLs);
-                            }
-
-                            indexURLs.add(url);
-
-                            System.out.println("Word: " + currentToken.toLowerCase() + " URL: " + index.get(currentToken.toLowerCase()));
-
-                            currentToken = tokens.nextToken();
-                        }
-                        Elements links = doc.select("a[href]"); 
-                        indexURLs = index.get(word.toLowerCase());
-                        for (Element link : links){ 
-                            System.out.println(link.attr("abs:href"));
-                            indexURLs.add(link.attr("abs:href"));
-                            recursiveUrlIndex(link.attr("abs:href"));
-                            //System.out.println(link.text() + "\n" + link.attr("abs:href") + "\n"); 
-                            //System.out.println("Word: " + word.toLowerCase() + " URLs: " + index.get(word.toLowerCase()));
-                        }
-                        System.out.println("Word: " + word.toLowerCase() + " URLs: " + index.get(word.toLowerCase()));
-                        } catch (IOException e) { 
-                            e.printStackTrace(); 
-                        }
+                    WebCrawler getUrls = new WebCrawler(this,word,url);
+                    getUrls.start();
                 }
                 
             }
@@ -174,6 +133,8 @@ public class MulticastServer extends Thread {
             socket.close();
         }
     }
+
+    
 
     private void recursiveUrlIndex(String url){
         try { 
@@ -208,5 +169,13 @@ public class MulticastServer extends Thread {
         } catch (IOException e) { 
             e.printStackTrace(); 
         }
+    }
+
+    public HashMap<String, HashSet<String>> getIndex() {
+        return index;
+    }
+
+    public void setIndex(HashMap<String, HashSet<String>> index) {
+        this.index = index;
     }
 }
