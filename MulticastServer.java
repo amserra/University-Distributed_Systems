@@ -1,8 +1,18 @@
 import java.net.MulticastSocket;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.StringTokenizer;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.io.IOException;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
+
 
 public class MulticastServer extends Thread {
 
@@ -13,9 +23,11 @@ public class MulticastServer extends Thread {
 
     private String MULTICAST_ADDRESS = "224.0.224.0";
     private int PORT = 4321;
+    private int HashSetInitialCapacity = 10000;
+    private float HashSetLoadFactor = 0.75f;
 
     private ArrayList<User> listUsers = new ArrayList<User>();
-    private HashMap<String,HashSet<String>> index = new HashMap();
+    private HashMap<String,HashSet<String>> index = new HashMap<>();
 
     public static void main(String[] args) {
         MulticastServer server = new MulticastServer();
@@ -109,20 +121,45 @@ public class MulticastServer extends Thread {
                 else if(messageType.equals("index")){
                     String palavra = receivedSplit[1].split("\\|")[1];
                     String url = receivedSplit[2].split("\\|")[1];
+
+                    HashSet<String> indexURLs = index.get(palavra);
+
+                    if(indexURLs == null){
+                        indexURLs = new HashSet<String>(HashSetInitialCapacity,HashSetLoadFactor);
+                        index.put(palavra,indexURLs);
+                    }
+                    indexURLs.add(url);
+
+                    System.out.println("Word: " + palavra + " URL: " + url);
+                    
                     System.out.println(url);
                     try { 
                         Document doc = Jsoup.connect(url).get(); 
+                        System.out.println("Title: " + doc.title());
                         StringTokenizer tokens = new StringTokenizer(doc.text()); 
-                        int countTokens = 0; 
-                        while (tokens.hasMoreElements() && countTokens++ < 100) 
-                            System.out.println(tokens.nextToken().toLowerCase()); 
+                        String currentToken = tokens.nextToken();
+                        while (tokens.hasMoreElements()) {
+                            indexURLs = index.get(currentToken.toLowerCase());
+
+                            if(indexURLs == null){
+                                indexURLs = new HashSet<String>(HashSetInitialCapacity,HashSetLoadFactor);
+                                index.put(currentToken.toLowerCase(), indexURLs);
+                            }
+
+                            indexURLs.add(url);
+
+                            System.out.println("Word: " + currentToken.toLowerCase() + " URL: " + index.get(currentToken.toLowerCase()));
+
+                           currentToken = tokens.nextToken();
+                        }
                         Elements links = doc.select("a[href]"); 
-                        for (Element link : links) 
+                        for (Element link : links){ 
+
                             System.out.println(link.text() + "\n" + link.attr("abs:href") + "\n"); 
+                        }
                         } catch (IOException e) { 
                             e.printStackTrace(); 
                         }
-
                 }
                 
             }
