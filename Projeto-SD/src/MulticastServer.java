@@ -2,6 +2,7 @@ import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -16,11 +17,11 @@ public class MulticastServer extends Thread {
 
     private String MULTICAST_ADDRESS = "224.0.224.0";
     private int PORT = 4321;
-    private int HashSetInitialCapacity = 10000;
-    private float HashSetLoadFactor = 0.75f;
+
 
     private ArrayList<User> listUsers = new ArrayList<User>();
     private HashMap<String,HashSet<String>> index = new HashMap<>();
+    private ArrayList<URL> urlLinksCount = new ArrayList<>();
 
     public static void main(String[] args) {
         MulticastServer server = new MulticastServer();
@@ -33,7 +34,6 @@ public class MulticastServer extends Thread {
 
     public void run() {
         MulticastSocket socket = null;
-        long counter = 0;
         System.out.println(this.getName() + " running...");
         try {
            // socket = new MulticastSocket();  // create socket without binding it (only for sending)
@@ -122,7 +122,7 @@ public class MulticastServer extends Thread {
                 else if(messageType.equals("search")){
                     String word = receivedSplit[1].split("\\|")[1];
 
-                    HashSet<String> urlResults = index.get(word); 
+                    HashSet<String> urlResults = index.get(word);
 
                     String message = "type|searchResult;urlCount|";              
 
@@ -131,12 +131,16 @@ public class MulticastServer extends Thread {
 
                         int urlCount = 0;
 
-                        for(String s: urlResults)
-                            message += ";url_" + urlCount++ + "|" + s;
+                        Collections.sort(urlLinksCount);
+
+                        for(URL url: urlLinksCount){
+                            if(urlResults.contains(url.getUrl()))
+                                message += ";url_" + urlCount++ + "|" + url.getUrl();
+                        }
                     }
                     else
                         message += 0;
-
+                        
                     byte[] buffer = message.getBytes();
                     DatagramPacket packetSent = new DatagramPacket(buffer, buffer.length, group, PORT);
                     socket.send(packetSent);
@@ -157,5 +161,13 @@ public class MulticastServer extends Thread {
 
     public void setIndex(HashMap<String, HashSet<String>> index) {
         this.index = index;
+    }
+
+    public ArrayList<URL> getUrlLinksCount() {
+        return urlLinksCount;
+    }
+
+    public void setUrlLinksCount(ArrayList<URL> urlLinksCount) {
+        this.urlLinksCount = urlLinksCount;
     }
 }

@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.StringTokenizer;
@@ -15,6 +16,7 @@ public class WebCrawler extends Thread{
     private String url;
     private int HashSetInitialCapacity = 10000;
     private float HashSetLoadFactor = 0.75f;
+    private int MaxWordsText = 20;
 
     public WebCrawler(MulticastServer server, String word, String url){
         super();
@@ -25,33 +27,46 @@ public class WebCrawler extends Thread{
 
     public void run() {
         HashMap<String,HashSet<String>> index = server.getIndex();
-        recursiveIndexWithWord(index,word,url);
+        ArrayList<URL> urlLinksCount = server.getUrlLinksCount();
+        recursiveIndexWithWord(index, urlLinksCount, word,url);
     }
 
-    private void recursiveIndexWithWord(HashMap<String,HashSet<String>> index, String word,String url){
+    private void recursiveIndexWithWord(HashMap<String,HashSet<String>> index, ArrayList<URL> urlLinksCount, String word,String url){
+        //Verifica se esta pagina ja foi visitada ou houve alguma atualizacao na pagina
         boolean urlVerified = true;
+        
 
-        HashSet<String> indexURLs = new HashSet<>();
-
-        if(word != null){
-            indexURLs = index.get(word.toLowerCase());
-
-            if(indexURLs == null){
-                indexURLs = new HashSet<String>(HashSetInitialCapacity,HashSetLoadFactor);
-                index.put(word.toLowerCase(),indexURLs);
-                urlVerified = false;
-            }
-            else if(!indexURLs.contains(url))
-                urlVerified = false;
-
-            indexURLs.add(url);
+        //Adiciona o Url à lista de URLs
+        URL urlObject = new URL(url);
+        if(!urlLinksCount.contains(urlObject)){
+            urlObject.setLinksCount(0);
+            urlLinksCount.add(urlObject);
         }
 
+        //Indexa o url dado pelo administrador, fazendo as verificacoes necessarias
+        HashSet<String> indexURLs = new HashSet<>(HashSetInitialCapacity,HashSetLoadFactor);
+
+        indexURLs = index.get(word.toLowerCase());
+
+        if(indexURLs == null){
+            indexURLs = new HashSet<String>(HashSetInitialCapacity,HashSetLoadFactor);
+            index.put(word.toLowerCase(),indexURLs);
+            urlVerified = false;
+        }
+        else if(!indexURLs.contains(url))
+            urlVerified = false;
+
+        indexURLs.add(url);
+
+
+        //Indexar as palavras na pagina o url, fazendo as verificacoes necessarias
         try { 
             Document doc = Jsoup.connect(url).get(); 
-            //System.out.println("Title: " + doc.title()); ------------- GET TITLE DA PAGINA --------------
+            urlObject.setTitle(doc.title());  //Guardar o titulo da pagina
             StringTokenizer tokens = new StringTokenizer(doc.text()); 
             String currentToken;
+            String text = ""; //Vai guardar um excerto de texto da pagina
+            int wordsCount = 0;
             while (tokens.hasMoreElements()) {
                 currentToken = tokens.nextToken();
 
@@ -67,15 +82,22 @@ public class WebCrawler extends Thread{
                     
                 indexURLs.add(url);
 
+                if(wordsCount <= MaxWordsText){
+                    text += currentToken + " ";
+                    wordsCount++;
+                }
             }
+
+            urlObject.setText(text);
+
             Elements links = doc.select("a[href]");
-            if(word != null) 
-                indexURLs = index.get(word.toLowerCase());
+            indexURLs = index.get(word.toLowerCase());
             for (Element link : links){ 
-                if(word != null)
-                    indexURLs.add(link.attr("abs:href"));
+                url = (link.attr("abs:href"));
+                indexURLs.add(url);
+
                 if(!urlVerified)
-                    recursiveIndex(index,link.attr("abs:href"));
+                    recursiveIndex(index,urlLinksCount,url);
             }
 
             } catch (IOException e) { 
@@ -83,17 +105,35 @@ public class WebCrawler extends Thread{
             }
     }
 
-    private void recursiveIndex(HashMap<String,HashSet<String>> index, String url){
+    private void recursiveIndex(HashMap<String,HashSet<String>> index, ArrayList<URL> urlLinksCount,String url){
         boolean urlVerified = true;
 
-        //System.out.println(url);
+        //Adiciona o Url à lista de URLs ou vai busca lo a lista (se ja la estiver)
+        URL urlObject = new URL(url);
+        if(!urlLinksCount.contains(urlObject)){
+            urlObject.setLinksCount(1);
+            urlLinksCount.add(urlObject);
+        }
+        else{
+            int indexOfUrl = urlLinksCount.indexOf(urlObject);
+            urlObject = urlLinksCount.get(indexOfUrl);
+            Integer linksCount = urlObject.getLinksCount();
+            if(linksCount == null)
+                linksCount = 0;
+            linksCount++;
+            urlObject.setLinksCount(linksCount);
+        }
 
         HashSet<String> indexURLs = new HashSet<>();
 
+        //Indexar as palavras na pagina do url, fazendo as verificacoes necessarias
         try { 
             Document doc = Jsoup.connect(url).get(); 
+            urlObject.setTitle(doc.title());  //Guardar o titulo da pagina
             StringTokenizer tokens = new StringTokenizer(doc.text()); 
             String currentToken;
+            String text = ""; //Vai guardar um excerto de texto da pagina
+            int wordsCount = 0;
             while (tokens.hasMoreElements()) {
                 currentToken = tokens.nextToken();
 
@@ -109,11 +149,21 @@ public class WebCrawler extends Thread{
                     
                 indexURLs.add(url);
 
+                if(wordsCount <= MaxWordsText){
+                    text += currentToken + " ";
+                    wordsCount++;
+                }
             }
+
+            urlObject.setText(text);
+
+
             Elements links = doc.select("a[href]");
             for (Element link : links){ 
+                url = (link.attr("abs:href"));
+
                 if(!urlVerified)
-                    recursiveIndex(index,link.attr("abs:href"));
+                    recursiveIndex(index,urlLinksCount,url);
             }
             } catch (IOException e) { 
                 e.printStackTrace(); 
