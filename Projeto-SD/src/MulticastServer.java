@@ -20,8 +20,9 @@ public class MulticastServer extends Thread {
 
 
     private ArrayList<User> listUsers = new ArrayList<User>();
-    private HashMap<String,HashSet<String>> index = new HashMap<>();
     private ArrayList<URL> urlLinksCount = new ArrayList<>();
+
+    private HashMap<String,HashSet<String>> index = new HashMap<>();
 
     public static void main(String[] args) {
         MulticastServer server = new MulticastServer();
@@ -122,6 +123,24 @@ public class MulticastServer extends Thread {
                 else if(messageType.equals("search")){
                     String word = receivedSplit[1].split("\\|")[1];
 
+                    try{
+                        String username = receivedSplit[2].split("\\|")[1];
+
+                        User user = null;
+
+                        for(User u: listUsers)
+                            if(u.equals(username)){
+                                user = u;
+                                break;
+                            }
+
+                        if(user != null)
+                            user.getSearches().add(0,word);
+                        
+                    } catch (Exception e){
+                       
+                    }
+
                     HashSet<String> urlResults = index.get(word);
 
                     String message = "type|searchResult;urlCount|";              
@@ -144,8 +163,33 @@ public class MulticastServer extends Thread {
                     byte[] buffer = message.getBytes();
                     DatagramPacket packetSent = new DatagramPacket(buffer, buffer.length, group, PORT);
                     socket.send(packetSent);
+                } else if(messageType.equals("searchList")){
 
-                }
+                    String username = receivedSplit[1].split("\\|")[1];
+
+                    User user = null;
+
+                    for(User u: listUsers)
+                        if(u.equals(username)){
+                            user = u;
+                            break;
+                        }
+
+                    ArrayList<String> searchList = user.getSearches();
+
+                    String message = "type|searchListResults;searchCount|" + searchList.size();
+
+                    int searchCount = 0;
+
+                    for(String s: searchList){
+                        message += ";search_" + searchCount + "|" + s;
+                        searchCount++;
+                    }
+
+                    byte[] buffer = message.getBytes();
+                    DatagramPacket packetSent = new DatagramPacket(buffer, buffer.length, group, PORT);
+                    socket.send(packetSent);
+            }
                 
             }
         } catch (Exception e) {
