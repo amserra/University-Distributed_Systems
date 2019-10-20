@@ -11,40 +11,48 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface {
     static final long serialVersionUID = 1L;
     int clientNo = 1; // Id for RMIServer to indentify RMIClients
     RMIInterface ci;
-    boolean isBackup = false; // Is backup server?
+    boolean isBackup; // Is backup server?
     MulticastSocket socket = null;
     final String MULTICAST_ADDRESS = "224.0.224.0";
     final int PORT = 4321;
 
-    RMIServer() throws RemoteException, MalformedURLException, NotBoundException {
+    RMIServer() throws RemoteException, NotBoundException, MalformedURLException {
         super();
         connectToRMIServer();
         // connectToMulticast();
     }
 
-    public void connectToRMIServer() throws AccessException, RemoteException {
+    public void connectToRMIServer() throws AccessException, RemoteException, MalformedURLException, NotBoundException {
         try {
-            // Tentar primeiro conectar ao primary RMIServer(no caso de ser backup)
-            ci = (RMIInterface) Naming.lookup("RMIConnection");
-            String msg = ci.sayHello("server");
-            System.out.println(msg);
-            this.isBackup = true;
-        } catch (Exception e) { // Usually java.rmi.ConnectException
-            // Qual a excecao?
-            System.out.println("No primary RMIServer yet. Connecting...");
-        } finally {
-            // Se nao for o backup server, cria ligacao
-            if (!isBackup) {
+            LocateRegistry.createRegistry(1099).rebind("RMIConnection", this);
+            this.isBackup = false;
+            System.out.println("Primary RMIServer ready...");
+            System.out.println("Print model: \"[Message responsible] Message\"");
+        } catch (Exception e) {
+            if (e instanceof java.rmi.server.ExportException) {
+                // Ja ha conexao. Quer dizer que temos de tomar posicao de backup server
                 try {
-                    LocateRegistry.createRegistry(1099).rebind("RMIConnection", this);
-                    System.out.println("Primary RMIServer ready...");
-                    System.out.println("Print model: \"[Message responsible] Message\"");
-                } catch (Exception e) {
-                    System.out.println("\nSomething went wrong. Aborting program...");
+                    ci = (RMIInterface) Naming.lookup("RMIConnection");
+                    String msg = ci.sayHello("server");
+                    System.out.println(msg);
+                    this.isBackup = true;
+                    checkPrimaryServerStatus();
+                } catch (Exception er) {
+                    System.out.println(
+                            "\nERROR: Something went wrong. Couldn't be either primary or secondary server. Aborting program...");
+                    System.out.println("Exception: " + er);
                     System.exit(-1);
                 }
+            } else {
+                System.out.println("\nERROR: Something went wrong. Aborting program...");
+                System.out.println("Exception: " + e);
+                System.exit(-1);
             }
         }
+    }
+
+    public void checkPrimaryServerStatus() {
+
     }
 
     public void connectToMulticast() {
@@ -83,11 +91,10 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface {
     }
 
     public void login() throws RemoteException {
-
+        // tentar ligar
     }
 
-    public static void main(String[] args) throws RemoteException, MalformedURLException, NotBoundException {
-        // Preciso de 2 server RMI (2 threads?). Um vai ser o ativo e outro o passivo
+    public static void main(String[] args) throws RemoteException, NotBoundException, MalformedURLException {
         new RMIServer();
     }
 
