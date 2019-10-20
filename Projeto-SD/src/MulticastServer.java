@@ -54,8 +54,9 @@ public class MulticastServer extends Thread {
                     User newUser;
                     boolean checkUser = false;
 
-                    String username = receivedSplit[1].split("\\|")[1];
-                    String password = receivedSplit[2].split("\\|")[1];
+                    String clientNo = receivedSplit[2].split("\\|")[1];
+                    String username = receivedSplit[3].split("\\|")[1];
+                    String password = receivedSplit[4].split("\\|")[1];
 
                     for (User u : listUsers) {
                         if (u.getUsername().equals(username))
@@ -71,12 +72,12 @@ public class MulticastServer extends Thread {
                             newUser = new User(username, password, false);
 
                         listUsers.add(newUser);
-                        String message = "type|registerComplete;username|" + newUser.getUsername();
+                        String message = "type|registerComplete;clientNo|" + clientNo + ";username|" + newUser.getUsername();
                         byte[] buffer = message.getBytes();
                         DatagramPacket packetSent = new DatagramPacket(buffer, buffer.length, group, PORT);
                         socket.send(packetSent);
                     } else {
-                        String message = "type|invalidRegister;username|" + username;
+                        String message = "type|invalidRegister;clientNo|" + clientNo + ";username|" + username;
                         byte[] buffer = message.getBytes();
                         DatagramPacket packetSent = new DatagramPacket(buffer, buffer.length, group, PORT);
                         socket.send(packetSent);
