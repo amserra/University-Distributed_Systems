@@ -47,6 +47,8 @@ public class MulticastServer extends Thread {
                 socket.receive(packetReceived);
                 String received = new String(packetReceived.getData(), 0, packetReceived.getLength());
 
+                System.out.println(received);
+
                 String[] receivedSplit = received.split(";");
                 String[] type = receivedSplit[0].split("\\|");
                 String messageType = type[1];
@@ -55,8 +57,11 @@ public class MulticastServer extends Thread {
                     boolean checkUser = false;
 
                     String clientNo = receivedSplit[1].split("\\|")[1];
+                    System.out.println(clientNo);
                     String username = receivedSplit[2].split("\\|")[1];
+                    System.out.println(username);
                     String password = receivedSplit[3].split("\\|")[1];
+                    System.out.println(password);
 
                     for (User u : listUsers) {
                         if (u.getUsername().equals(username))
@@ -72,12 +77,12 @@ public class MulticastServer extends Thread {
                             newUser = new User(username, password, false);
 
                         listUsers.add(newUser);
-                        String message = "type|registerComplete;clientNo|" + clientNo + ";username|" + newUser.getUsername();
+                        String message = "type|registerResult;clientNo|" + clientNo + ";status|complete;username|" + newUser.getUsername();
                         byte[] buffer = message.getBytes();
                         DatagramPacket packetSent = new DatagramPacket(buffer, buffer.length, group, PORT);
                         socket.send(packetSent);
                     } else {
-                        String message = "type|invalidRegister;clientNo|" + clientNo + ";username|" + username;
+                        String message = "type|registerResult;clientNo|" + clientNo + ";status|incomplete;username|" + username;
                         byte[] buffer = message.getBytes();
                         DatagramPacket packetSent = new DatagramPacket(buffer, buffer.length, group, PORT);
                         socket.send(packetSent);
@@ -89,8 +94,9 @@ public class MulticastServer extends Thread {
 
                     User user = null;
 
-                    String username = receivedSplit[1].split("\\|")[1];
-                    String password = receivedSplit[2].split("\\|")[1];
+                    String clientNo = receivedSplit[1].split("\\|")[1];
+                    String username = receivedSplit[2].split("\\|")[1];
+                    String password = receivedSplit[3].split("\\|")[1];
 
                     for (User u : listUsers) {
                         if (u.getUsername().equals(username) && u.getPassword().equals(password)){
@@ -101,12 +107,12 @@ public class MulticastServer extends Thread {
                     }
 
                     if (checkUser) {
-                        String message = "type|validLogin;username|" + user.getUsername() + ";isAdmin|" + user.isAdmin();
+                        String message = "type|validLogin;clientNo|" + clientNo + ";username|" + user.getUsername() + ";isAdmin|" + user.isAdmin();
                         byte[] buffer = message.getBytes();
                         DatagramPacket packetSent = new DatagramPacket(buffer, buffer.length, group, PORT);
                         socket.send(packetSent);
                     } else {
-                        String message = "type|invalidLogin";
+                        String message = "type|invalidLogin;clientNo|" + clientNo;
                         byte[] buffer = message.getBytes();
                         DatagramPacket packetSent = new DatagramPacket(buffer, buffer.length, group, PORT);
                         socket.send(packetSent);
@@ -123,7 +129,8 @@ public class MulticastServer extends Thread {
                 }
 
                 else if (messageType.equals("search")) {
-                    String word = receivedSplit[1].split("\\|")[1];
+                    String clientNo = receivedSplit[1].split("\\|")[1];
+                    String word = receivedSplit[2].split("\\|")[1];
 
                     try {
                         String username = receivedSplit[2].split("\\|")[1];
@@ -145,7 +152,7 @@ public class MulticastServer extends Thread {
 
                     HashSet<String> urlResults = index.get(word);
 
-                    String message = "type|searchResult;urlCount|";
+                    String message = "type|searchResult;clientNo|" + clientNo + ";urlCount|";
 
                     if (urlResults != null) {
                         message += urlResults.size();
@@ -166,7 +173,8 @@ public class MulticastServer extends Thread {
                     socket.send(packetSent);
                 } else if (messageType.equals("searchHistory")) {
 
-                    String username = receivedSplit[1].split("\\|")[1];
+                    String clientNo = receivedSplit[1].split("\\|")[1];
+                    String username = receivedSplit[2].split("\\|")[1];
 
                     User user = null;
 
@@ -178,7 +186,7 @@ public class MulticastServer extends Thread {
 
                     ArrayList<String> searchList = user.getSearchHistory();
 
-                    String message = "type|searchHistoryResults;searchCount|" + searchList.size();
+                    String message = "type|searchHistoryResults;clientNo|" + clientNo + ";searchCount|" + searchList.size();
 
                     int searchCount = 0;
 
@@ -191,9 +199,10 @@ public class MulticastServer extends Thread {
                     DatagramPacket packetSent = new DatagramPacket(buffer, buffer.length, group, PORT);
                     socket.send(packetSent);
                 } else if (messageType.equals("linksPointing")) {
-                    String url = receivedSplit[1].split("\\|")[1];
+                    String clientNo = receivedSplit[1].split("\\|")[1];
+                    String url = receivedSplit[2].split("\\|")[1];
 
-                    String message = "type|linkPointingResult;linkCount|";
+                    String message = "type|linkPointingResult;clientNo|" + clientNo + ";linkCount|";
                     String saveMessage = message;
 
                     URL urlObject = new URL(url);
@@ -224,7 +233,8 @@ public class MulticastServer extends Thread {
                     DatagramPacket packetSent = new DatagramPacket(buffer, buffer.length, group, PORT);
                     socket.send(packetSent);
                 } else if(messageType.equals("promote")){
-                    String username = receivedSplit[1].split("\\|")[1];
+                    String clientNo = receivedSplit[1].split("\\|")[1];
+                    String username = receivedSplit[2].split("\\|")[1];
 
                     User tempUser = new User(username);
 
@@ -234,13 +244,13 @@ public class MulticastServer extends Thread {
                         int indexOfUser = listUsers.indexOf(tempUser);
                         User user = listUsers.get(indexOfUser);
                         if(user.isAdmin())
-                            message = "type|invalidPromotion;message|User is already admin";
+                            message = "type|invalidPromotion;clientNo|" + clientNo + ";message|User is already admin";
                         else{
-                            message = "type|promotionSuccessful";
+                            message = "type|promotionSuccessful;clientNo|" + clientNo;
                             user.setAdmin(true);
                         }
                     } else{
-                        message = "type|invalidPromotion;message|That user doesn't exist";
+                        message = "type|invalidPromotion;clientNo|" + clientNo + ";message|That user doesn't exist";
                     }
 
                     byte[] buffer = message.getBytes();
