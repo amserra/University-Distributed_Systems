@@ -1,0 +1,28 @@
+Outra forma de fazer a função connectToRMIServer no RMIServer.java
+Esta forma foi a primeira implementada e é funcional, mas pareceu-me pouco correta do ponto de vista de flow de execução.
+
+Caso a outra nao de por algum motivo, ela está aqui:
+
+// try {
+        // // Tentar primeiro conectar ao primary RMIServer(no caso de ser backup)
+        // ci = (RMIInterface) Naming.lookup("RMIConnection");
+        // String msg = ci.sayHello("server");
+        // System.out.println(msg);
+        // this.isBackup = true;
+        // } catch (Exception e) { // Usually java.rmi.ConnectException
+        // // Qual a excecao?
+        // System.out.println("No primary RMIServer yet. Connecting...");
+        // } finally {
+        // // Se nao for o backup server, cria ligacao
+        // if (!isBackup) {
+        // try {
+        // LocateRegistry.createRegistry(1099).rebind("RMIConnection", this);
+        // System.out.println("Primary RMIServer ready...");
+        // System.out.println("Print model: \"[Message responsible] Message\"");
+        // } catch (Exception e) {
+        // System.out.println("\nSomething went wrong. Aborting program...");
+        // System.exit(-1);
+        // }
+        // }
+        // }
+        // Tenta ser servidor
