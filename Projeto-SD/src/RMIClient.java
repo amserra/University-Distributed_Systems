@@ -23,9 +23,9 @@ public class RMIClient {
             System.out.println("\nConnect the server first.");
             System.exit(-1);
         }
-
-        String msg = ci.sayHello();
+        String msg = ci.sayHello("client");
         System.out.println(msg);
+
     }
 
     public void login() {
