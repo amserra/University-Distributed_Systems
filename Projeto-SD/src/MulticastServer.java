@@ -86,16 +86,21 @@ public class MulticastServer extends Thread {
 
                     boolean checkUser = false;
 
+                    User user = null;
+
                     String username = receivedSplit[1].split("\\|")[1];
                     String password = receivedSplit[2].split("\\|")[1];
 
                     for (User u : listUsers) {
-                        if (u.getUsername().equals(username) && u.getPassword().equals(password))
+                        if (u.getUsername().equals(username) && u.getPassword().equals(password)){
                             checkUser = true;
+                            user = u;
+                            break;
+                        }
                     }
 
                     if (checkUser) {
-                        String message = "type|validLogin;username|" + username;
+                        String message = "type|validLogin;username|" + user.getUsername() + ";isAdmin|" + user.isAdmin();
                         byte[] buffer = message.getBytes();
                         DatagramPacket packetSent = new DatagramPacket(buffer, buffer.length, group, PORT);
                         socket.send(packetSent);
@@ -222,13 +227,24 @@ public class MulticastServer extends Thread {
 
                     User tempUser = new User(username);
 
-                    String message = ""
+                    String message;
 
                     if(listUsers.contains(tempUser)){
                         int indexOfUser = listUsers.indexOf(tempUser);
                         User user = listUsers.get(indexOfUser);
-                        System.out.println(user.getUsername());
+                        if(user.isAdmin())
+                            message = "type|invalidPromotion;message|User is already admin";
+                        else{
+                            message = "type|promotionSuccessful";
+                            user.setAdmin(true);
+                        }
+                    } else{
+                        message = "type|invalidPromotion;message|That user doesn't exist";
                     }
+
+                    byte[] buffer = message.getBytes();
+                    DatagramPacket packetSent = new DatagramPacket(buffer, buffer.length, group, PORT);
+                    socket.send(packetSent);
 
                 }
 
