@@ -39,16 +39,30 @@ public class RMIClient {
         userUI.mainMenu();
     }
 
+    // Funcional!!
     public void register(String username, String password) throws RemoteException {
         String msg = ci.register(this.clientNo, username, password);
-        // if msg == success, main menu
-        // else, register
-        // Chamar metodo do server RMI para verificar se user ja existe.
-        // Se sim, entao meter outra vez a página registo do UI userUI.register()
-        // Se nao, dizer "Registo bem sucedido" e ir para o userUI.mainMenu()
-        // Change type of user
-
-        userUI.mainMenu();
+        // System.out.println("Msg = " + msg);
+        String[] parameters = msg.split(";");
+        String status = parameters[2].split("\\|")[1];
+        String usr = parameters[3].split("\\|")[1];
+        int receivedClientNo = Integer.parseInt(parameters[1].split("\\|")[1]);
+        // Sera preciso esta confirmacao?
+        if (this.clientNo == receivedClientNo) {
+            if (status.equals("complete")) {
+                System.out.println("Register successful. Welcome " + usr + "\n");
+                this.username = usr;
+                this.typeOfClient = "user";
+                userUI.mainMenu();
+            } else if (status.equals("incomplete")) {
+                System.out.println("Register failed. Try again.\n");
+                userUI.register();
+            } else {
+                // Caso aconteca alguma coisa a mensagem
+                System.out.println("MSG error");
+                userUI.mainMenu();
+            }
+        }
     }
 
     public void logout(boolean result) throws RemoteException {

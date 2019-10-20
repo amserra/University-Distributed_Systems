@@ -8,6 +8,8 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class RMIServer extends UnicastRemoteObject implements RMIInterface {
     static final long serialVersionUID = 1L;
@@ -21,7 +23,6 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface {
     RMIServer() throws RemoteException, NotBoundException, MalformedURLException {
         super();
         connectToRMIServer();
-        // connectToMulticast();
     }
 
     public void connectToRMIServer() throws AccessException, RemoteException, MalformedURLException, NotBoundException {
@@ -53,11 +54,28 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface {
         }
     }
 
+    // OK! Dá
+    // For the secondary server to check if primary failed
     public void checkPrimaryServerStatus() {
 
+        Timer timer = new Timer();
+        TimerTask myTask = new TimerTask() {
+            @Override
+            public void run() {
+                // whatever you need to do every 2 seconds
+                try {
+                    String res = ci.testPrimary();
+                    System.out.println("[Primary server] " + res);
+                } catch (RemoteException e) {
+                    System.out.println("Primary server not responding. Assuming primary functions...");
+                }
+            }
+        };
+
+        timer.schedule(myTask, 2000, 2000);
     }
 
-    public void connectToMulticast(int clientNo, String msg) {
+    public String connectToMulticast(int clientNo, String msg) {
         try {
             // Send
             socket = new MulticastSocket(PORT); // create socket and bind it
@@ -68,7 +86,7 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface {
             DatagramPacket packetSend = new DatagramPacket(bufferSend, bufferSend.length, group, PORT);
             socket.send(packetSend);
 
-            // Recieve
+            // Receive
             String type;
             int receivedClientNo;
             String msgReceive;
@@ -78,7 +96,7 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface {
                 socket.receive(packetReceive);
                 msgReceive = new String(packetReceive.getData(), 0, packetReceive.getLength());
 
-                System.out.println("Mensagem recebida: " + msgReceive);
+                // System.out.println("Mensagem recebida: " + msgReceive);
 
                 String[] parameters = msgReceive.split(";");
                 type = parameters[0].split("\\|")[1];
@@ -87,12 +105,17 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface {
             } while ((!type.equals("registerResult")) || (receivedClientNo != clientNo));
 
             System.out.println("Mensagem final: " + msgReceive);
+            socket.close();
+            return msgReceive;
+            // dar return de msgReceive
 
         } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
             socket.close();
+            System.out.println("ERROR: Something went from. Did you forget the flag? Aborting program...");
+            System.exit(-1);
         }
+        // Necessary but unimportant
+        return null;
     }
 
     public String sayHello(String type) throws RemoteException {
@@ -106,13 +129,17 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface {
         }
     }
 
+    public String testPrimary() throws RemoteException {
+        // Called by backup to test
+        // Message from primary to backup to confirm that all is ok
+        return "All good";
+    }
+
     public String register(int clientNo, String username, String password) throws RemoteException {
         String msg = "type|register;clientNo|" + clientNo + ";username|" + username + ";password|" + password;
         System.out.println("Mensgem a ser enviada: " + msg);
-        connectToMulticast(clientNo, msg);
-        return null;
-
-        // tentar ligar
+        String msgReceive = connectToMulticast(clientNo, msg);
+        return msgReceive;
     }
 
     public static void main(String[] args) throws RemoteException, NotBoundException, MalformedURLException {
