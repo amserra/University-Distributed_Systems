@@ -1,9 +1,12 @@
-public class URL implements Comparable<URL>{
+import java.util.ArrayList;
+
+public class URL implements Comparable<URL> {
 
     private String url;
     private String title;
     private String text;
     private Integer linksCount;
+    private ArrayList<String> urlPointingToMeList;
 
 
 
@@ -64,9 +67,16 @@ public class URL implements Comparable<URL>{
         this.linksCount = linksCount;
     }
 
+
+    public ArrayList<String> getUrlPointingToMeList() {
+        return urlPointingToMeList;
+    }
+
+    public void setUrlPointingToMeList(ArrayList<String> urlPointingToMeList) {
+        this.urlPointingToMeList = urlPointingToMeList;
+    }
+
     public String toString(){
         return "URL: " + url + "\nTitle: " +title+ "\nText: " + text + "\nNumero de referencias: " + linksCount;
     }
-
-    
 }

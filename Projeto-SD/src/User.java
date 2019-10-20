@@ -5,16 +5,20 @@ public class User {
     private String username;
     private String password;
     private boolean isAdmin;
-    private ArrayList<String> searches;
+    private ArrayList<String> searchHistory;
 
     public User(String username, String password, boolean isAdmin) {
         this.username = username;
         this.password = password;
         this.isAdmin = isAdmin;
-        this.searches = new ArrayList<>();
+        this.searchHistory = new ArrayList<>();
     }
 
-    @Override
+    public User(String username) {
+        this.username = username;
+	}
+
+	@Override
     public boolean equals(Object o){
         if(o instanceof User){
             User p = (User) o;
@@ -50,12 +54,12 @@ public class User {
         this.isAdmin = isAdmin;
     }
 
-    public ArrayList<String> getSearches() {
-        return searches;
+    public ArrayList<String> getSearchHistory() {
+        return searchHistory;
     }
 
-    public void setSearches(ArrayList<String> searches) {
-        this.searches = searches;
+    public void setSearchHistory(ArrayList<String> searchHistory) {
+        this.searchHistory = searchHistory;
     }
 
     

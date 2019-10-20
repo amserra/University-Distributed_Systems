@@ -1,0 +1,9 @@
+type|index;word|abola;url|https://www.abola.pt/
+
+type|search;word|abola 
+
+type|search;word|abola;username|stelyt
+
+type|register;username|stelyt;password|a
+
+type|login;username|stelyt;password|a

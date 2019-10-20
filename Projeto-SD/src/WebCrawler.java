@@ -27,20 +27,22 @@ public class WebCrawler extends Thread{
 
     public void run() {
         HashMap<String,HashSet<String>> index = server.getIndex();
-        ArrayList<URL> urlLinksCount = server.getUrlLinksCount();
-        recursiveIndexWithWord(index, urlLinksCount, word,url);
+        ArrayList<URL> urlList = server.getUrlList();
+        recursiveIndexWithWord(index, urlList, word,url);
     }
 
-    private void recursiveIndexWithWord(HashMap<String,HashSet<String>> index, ArrayList<URL> urlLinksCount, String word,String url){
+    private void recursiveIndexWithWord(HashMap<String,HashSet<String>> index, ArrayList<URL> urlList, String word,String url){
         //Verifica se esta pagina ja foi visitada ou houve alguma atualizacao na pagina
         boolean urlVerified = true;
+
+        String saveUrl = url;
         
 
         //Adiciona o Url à lista de URLs
         URL urlObject = new URL(url);
-        if(!urlLinksCount.contains(urlObject)){
+        if(!urlList.contains(urlObject)){
             urlObject.setLinksCount(0);
-            urlLinksCount.add(urlObject);
+            urlList.add(urlObject);
         }
 
         //Indexa o url dado pelo administrador, fazendo as verificacoes necessarias
@@ -97,7 +99,7 @@ public class WebCrawler extends Thread{
                 indexURLs.add(url);
 
                 if(!urlVerified)
-                    recursiveIndex(index,urlLinksCount,url);
+                    recursiveIndex(index,urlList,url,saveUrl);
             }
 
             } catch (IOException e) { 
@@ -105,22 +107,42 @@ public class WebCrawler extends Thread{
             }
     }
 
-    private void recursiveIndex(HashMap<String,HashSet<String>> index, ArrayList<URL> urlLinksCount,String url){
+    private void recursiveIndex(HashMap<String,HashSet<String>> index, ArrayList<URL> urlList,String url, String previousUrl){
         boolean urlVerified = true;
+
+        String saveURL = url;
 
         //Adiciona o Url à lista de URLs ou vai busca lo a lista (se ja la estiver)
         URL urlObject = new URL(url);
-        if(!urlLinksCount.contains(urlObject)){
+        if(!urlList.contains(urlObject)){
+            //Atualiza a contagem de links a apontar para 1, visto que é o primeiro
             urlObject.setLinksCount(1);
-            urlLinksCount.add(urlObject);
+
+            //Cria uma nova Lista com os URLs a apontarem para este URL
+            ArrayList<String> urlPointingList = new ArrayList<>();
+            urlPointingList.add(previousUrl);
+            urlObject.setUrlPointingToMeList(urlPointingList);
+
+            //Adiciona o URL à lista de URLs
+            urlList.add(urlObject);
         }
         else{
-            int indexOfUrl = urlLinksCount.indexOf(urlObject);
-            urlObject = urlLinksCount.get(indexOfUrl);
+            int indexOfUrl = urlList.indexOf(urlObject);
+            urlObject = urlList.get(indexOfUrl);
+
+            //Vê se tem a contagem de links a apontar
             Integer linksCount = urlObject.getLinksCount();
             if(linksCount == null)
                 linksCount = 0;
             linksCount++;
+
+            //Adiciona o URL para o qual aponta
+            ArrayList<String> urlPointingList = urlObject.getUrlPointingToMeList();
+            if(urlPointingList == null)
+                urlPointingList = new ArrayList<>();
+            urlPointingList.add(previousUrl);
+            urlObject.setUrlPointingToMeList(urlPointingList);
+
             urlObject.setLinksCount(linksCount);
         }
 
@@ -163,7 +185,7 @@ public class WebCrawler extends Thread{
                 url = (link.attr("abs:href"));
 
                 if(!urlVerified)
-                    recursiveIndex(index,urlLinksCount,url);
+                    recursiveIndex(index,urlList,url,saveURL);
             }
             } catch (IOException e) { 
                 e.printStackTrace(); 

@@ -15,6 +15,9 @@ type | invalidLogin
 Resultado de pesquisa:
 type | searchResult ; urlCount | *numero de urls* ; url_0 | *1º url* ; url_1 | *2º url* ;etc.
 
+Receber historico de pesquisa de um utilizador
+type | searchHistoryResults ; searchCount | *numero de pesquisas* ; word_0 | *1ª pesquisa mais recente* ; etc.
+
 
 
 
@@ -34,3 +37,9 @@ type | index ; word | *palavra* ; url | *url associado*
 
 Pesquisar uma palavra
 type | serach ; word | *palavra*
+
+Pesquisar uma palavra por utilizador logado
+type | serach ; word | *palavra* ; username | *username*
+
+Historico de pesquisas de um utilizador
+type | searchHistory ; username | *username*
