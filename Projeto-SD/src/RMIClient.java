@@ -4,6 +4,7 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 
 public class RMIClient {
+    int clientNo;
     String typeOfClient;
     String username;
     UI userUI;
@@ -11,7 +12,7 @@ public class RMIClient {
 
     RMIClient() throws MalformedURLException, RemoteException, NotBoundException {
         connectToRMIServer();
-        this.typeOfClient = "admin";
+        this.typeOfClient = "anonymous";
         userUI = new UI(this);
         userUI.mainMenu();
     }
@@ -24,11 +25,12 @@ public class RMIClient {
             System.exit(-1);
         }
         String msg = ci.sayHello("client");
+        this.clientNo = Integer.parseInt(msg.substring(msg.length() - 1));
         System.out.println(msg);
 
     }
 
-    public void login() {
+    public void login() throws RemoteException {
         // Chamar metodo do server RMI para verificar se user ja existe.
         // Se sim, entao meter outra vez a página login do UI userUI.login()
         // Se nao, dizer "Registo bem sucedido" e ir para o userUI.mainMenu()
@@ -37,7 +39,10 @@ public class RMIClient {
         userUI.mainMenu();
     }
 
-    public void register() {
+    public void register(String username, String password) throws RemoteException {
+        String msg = ci.register(this.clientNo, username, password);
+        // if msg == success, main menu
+        // else, register
         // Chamar metodo do server RMI para verificar se user ja existe.
         // Se sim, entao meter outra vez a página registo do UI userUI.register()
         // Se nao, dizer "Registo bem sucedido" e ir para o userUI.mainMenu()
@@ -46,7 +51,7 @@ public class RMIClient {
         userUI.mainMenu();
     }
 
-    public void logout(boolean result) {
+    public void logout(boolean result) throws RemoteException {
         if (result == true) {
             this.typeOfClient = "anonymous";
         }
@@ -62,7 +67,7 @@ public class RMIClient {
         System.exit(1);
     }
 
-    public void search(String[] words) {
+    public void search(String[] words) throws RemoteException {
         // Chamar metodo do server RMI para enviar termos de procura
         // Listar termos obtidos
         // Voltar para o search menu
@@ -76,7 +81,7 @@ public class RMIClient {
         // Call RMI Server method to query all the searches
     }
 
-    public void indexNewURL(String url) {
+    public void indexNewURL(String url) throws RemoteException {
         // Send URL from RMI server to Multicast Server to be indexed
         // return to indexNewURL menu to index more
         userUI.indexNewURL();

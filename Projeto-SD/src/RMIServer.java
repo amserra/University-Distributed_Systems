@@ -1,3 +1,5 @@
+import java.net.DatagramPacket;
+import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.MulticastSocket;
 import java.rmi.AccessException;
@@ -55,42 +57,61 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface {
 
     }
 
-    public void connectToMulticast() {
-        // try {
-        // socket = new MulticastSocket(PORT); // create socket and bind it
-        // InetAddress group = InetAddress.getByName(MULTICAST_ADDRESS);
-        // socket.joinGroup(group);
-        // while (true) {
-        // DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
-        // socket.receive(packet);
-        // String message = new String(packet.getData(), 0, packet.getLength());
-        // if (packet.getAddress().getHostAddress().equals(MULTICAST_ADDRESS) ||
-        // packet.getPort() == PORT) {
-        // System.out.println("Received packet from " +
-        // packet.getAddress().getHostAddress() + ":"
-        // + packet.getPort() + " with message:");
-        // System.out.println(message);
-        // }
-        // }
-        // } catch (Exception e) {
-        // e.printStackTrace();
-        // } finally {
-        // socket.close();
-        // }
+    public void connectToMulticast(int clientNo, String msg) {
+        try {
+            // Send
+            socket = new MulticastSocket(PORT); // create socket and bind it
+            InetAddress group = InetAddress.getByName(MULTICAST_ADDRESS);
+            socket.joinGroup(group);
+
+            byte[] bufferSend = msg.getBytes();
+            DatagramPacket packetSend = new DatagramPacket(bufferSend, bufferSend.length, group, PORT);
+            socket.send(packetSend);
+
+            // Recieve
+            String type;
+            int receivedClientNo;
+            String msgReceive;
+            do {
+                byte[] bufferReceive = new byte[64 * 1024];
+                DatagramPacket packetReceive = new DatagramPacket(bufferReceive, bufferReceive.length);
+                socket.receive(packetReceive);
+                msgReceive = new String(packetReceive.getData(), 0, packetReceive.getLength());
+
+                System.out.println("Mensagem recebida: " + msgReceive);
+
+                String[] parameters = msgReceive.split(";");
+                type = parameters[0].split("\\|")[1];
+                receivedClientNo = Integer.parseInt(parameters[1].split("\\|")[1]);
+
+            } while ((!type.equals("registerResult")) || (receivedClientNo != clientNo));
+
+            System.out.println("Mensagem final: " + msgReceive);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            socket.close();
+        }
     }
 
     public String sayHello(String type) throws RemoteException {
         if (type.compareTo("client") == 0) {
-            System.out.println("[Client " + clientNo + "] " + "Has just connected.");
+            System.out.println("[Client no " + clientNo + "] " + "Has just connected.");
             clientNo++;
-            return "Connected to RMI Primary Server successfully!";
+            return "Connected to RMI Primary Server successfully!\nServer gave me the id no " + (clientNo - 1);
         } else {
             System.out.println("[Backup server] Has just connected.");
             return "Connected to RMI Primary Server successfully!";
         }
     }
 
-    public void login() throws RemoteException {
+    public String register(int clientNo, String username, String password) throws RemoteException {
+        String msg = "type|register;clientNo|" + clientNo + ";username|" + username + ";password|" + password;
+        System.out.println("Mensgem a ser enviada: " + msg);
+        connectToMulticast(clientNo, msg);
+        return null;
+
         // tentar ligar
     }
 

@@ -1,6 +1,7 @@
 
 // import java.apache.commons.validator.*;
 import java.io.Console;
+import java.rmi.RemoteException;
 import java.util.Scanner;
 
 // Import routines package!
@@ -14,7 +15,7 @@ public class UI {
         this.client = client;
     }
 
-    public void mainMenu() {
+    public void mainMenu() throws RemoteException {
         System.out.println("\n-----Main Menu-----");
         System.out.println("Type of client: " + client.typeOfClient + "\n");
         if (client.typeOfClient.compareTo("anonymous") == 0) {
@@ -97,7 +98,7 @@ public class UI {
 
     }
 
-    public void administrationPage() {
+    public void administrationPage() throws RemoteException {
         System.out.println("\n-----Administration page-----\n");
 
         System.out.println("1. Index new URL");
@@ -133,7 +134,7 @@ public class UI {
         // imprimir aqui
     }
 
-    public void indexNewURL() {
+    public void indexNewURL() throws RemoteException {
         // Verificar se e um URL valido
         System.out.println("\n-----Index new URLs-----\n");
         System.out.println("NOTE: Type -1 to return to the main menu\n");
@@ -158,7 +159,7 @@ public class UI {
         // username e meter o seu typeOfClient = "admin"
     }
 
-    public void login() {
+    public void login() throws RemoteException {
         System.out.println("\n-----Login-----");
         System.out.println("NOTE: Type -1 to return to the main menu\n");
         String userName = validateStringValue("Username: ",
@@ -171,13 +172,13 @@ public class UI {
         client.login();
     }
 
-    public void logout() {
+    public void logout() throws RemoteException {
         System.out.println("\nAre you sure you want to logout?(y/n)");
         boolean result = validateLogout();
         client.logout(result);
     }
 
-    public void register() {
+    public void register() throws RemoteException {
         System.out.println("\n-----Register-----");
         System.out.println("NOTE: Type -1 to return to the main menu\n");
         String userName = validateStringValue("Username: ",
@@ -190,10 +191,10 @@ public class UI {
         // Chamar metodo do server RMI, para ele poder enviar para o server Multicast
 
         // change type of user?
-        client.register();
+        client.register(userName, password);
     }
 
-    public void search() {
+    public void search() throws RemoteException {
         System.out.println("\n-----Search-----");
         System.out.println("NOTE: Type -1 to return to the main menu\n");
 
@@ -232,7 +233,7 @@ public class UI {
         }
     }
 
-    public String validateStringValue(String msg, String errorMsg, int min, int max) {
+    public String validateStringValue(String msg, String errorMsg, int min, int max) throws RemoteException {
         while (true) {
             System.out.print(msg);
             String line = sc.nextLine();
@@ -251,8 +252,9 @@ public class UI {
         }
     }
 
-    public String validatePasswordValue(String errorMsg) {
+    public String validatePasswordValue(String errorMsg) throws RemoteException {
         Console console = System.console();
+        console.flush();
         while (true) {
             String line = new String(console.readPassword("Password: "));
             try {
@@ -270,7 +272,7 @@ public class UI {
 
     }
 
-    public String[] validateSearch() {
+    public String[] validateSearch() throws RemoteException {
         int count;
         while (true) {
             count = 0;
@@ -301,7 +303,7 @@ public class UI {
         }
     }
 
-    public String validateURL() {
+    public String validateURL() throws RemoteException {
         // Only allows http/https URLs
         UrlValidator defaultValidator = new UrlValidator(); // default schemes
         while (true) {
