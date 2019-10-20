@@ -54,9 +54,9 @@ public class MulticastServer extends Thread {
                     User newUser;
                     boolean checkUser = false;
 
-                    String clientNo = receivedSplit[2].split("\\|")[1];
-                    String username = receivedSplit[3].split("\\|")[1];
-                    String password = receivedSplit[4].split("\\|")[1];
+                    String clientNo = receivedSplit[1].split("\\|")[1];
+                    String username = receivedSplit[2].split("\\|")[1];
+                    String password = receivedSplit[3].split("\\|")[1];
 
                     for (User u : listUsers) {
                         if (u.getUsername().equals(username))
