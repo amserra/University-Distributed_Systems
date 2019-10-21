@@ -142,16 +142,14 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface {
         return "All good";
     }
 
-    public String register(int clientNo, String username, String password) throws RemoteException {
-        String msg = "type|register;clientNo|" + clientNo + ";username|" + username + ";password|" + password;
-        System.out.println("Mensgem a ser enviada: " + msg);
-        String msgReceive = connectToMulticast(clientNo, msg);
-        System.out.println("Mensagem recebida: " + msgReceive);
-        return msgReceive;
-    }
+    public String authentication(int clientNo, boolean isLogin, String username, String password)
+            throws RemoteException {
+        String msg;
+        if (isLogin)
+            msg = "type|login;clientNo|" + clientNo + ";username|" + username + ";password|" + password;
+        else
+            msg = "type|register;clientNo|" + clientNo + ";username|" + username + ";password|" + password;
 
-    public String login(int clientNo, String username, String password) throws RemoteException {
-        String msg = "type|login;clientNo|" + clientNo + ";username|" + username + ";password|" + password;
         System.out.println("Mensgem a ser enviada: " + msg);
         String msgReceive = connectToMulticast(clientNo, msg);
         System.out.println("Mensagem recebida: " + msgReceive);

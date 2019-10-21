@@ -169,7 +169,7 @@ public class UI {
         String password = validatePasswordValue(
                 "Invalid password.\nInsert a password with only letters and numbers and length within 4 to 15 characters.");
 
-        client.login(userName, password);
+        client.authentication(true, userName, password);
     }
 
     public void logout() throws RemoteException {
@@ -191,7 +191,7 @@ public class UI {
         // Chamar metodo do server RMI, para ele poder enviar para o server Multicast
 
         // change type of user?
-        client.register(userName, password);
+        client.authentication(false, userName, password);
     }
 
     public void search() throws RemoteException {

@@ -34,57 +34,46 @@ public class RMIClient {
 
     }
 
-    public void login(String username, String password) throws RemoteException {
-        String msg = ci.login(this.clientNo, username, password);
-        System.out.println("Recebi a mensagem: " + msg);
+    public void authentication(boolean isLogin, String username, String password) throws RemoteException {
+        try {
+            String msg = ci.authentication(this.clientNo, isLogin, username, password);
+            System.out.println("Recebi a mensagem: " + msg);
 
-        String[] parameters = msg.split(";");
-        String status = parameters[2].split("\\|")[1];
-        int receivedClientNo = Integer.parseInt(parameters[1].split("\\|")[1]);
-        // Sera preciso esta confirmacao?
-        if (this.clientNo == receivedClientNo) {
-            if (status.equals("valid")) {
-                String usr = parameters[3].split("\\|")[1];
-                System.out.println("Login successful. Welcome " + usr + "\n");
-                this.username = usr;
-                this.typeOfClient = "user";
-                userUI.mainMenu();
-            } else if (status.equals("invalid")) {
-                System.out.println("Login failed. Try again.\n");
-                userUI.login();
-            } else {
-                // Caso aconteca alguma coisa a mensagem
-                System.out.println("MSG error. Message was: " + msg);
+            String[] parameters = msg.split(";");
+            String status = parameters[2].split("\\|")[1];
+            int receivedClientNo = Integer.parseInt(parameters[1].split("\\|")[1]);
+            // Sera preciso esta confirmacao?
+            if (this.clientNo == receivedClientNo) {
+                if (status.equals("valid")) {
+                    String usr = parameters[3].split("\\|")[1];
+                    if (isLogin)
+                        System.out.println("Login successful. Welcome " + usr + "\n");
+                    else
+                        System.out.println("Register successful. Welcome " + usr + "\n");
 
-                userUI.mainMenu();
+                    this.username = usr;
+                    this.typeOfClient = "user";
+                    userUI.mainMenu();
+
+                } else if (status.equals("invalid")) {
+                    if (isLogin) {
+                        System.out.println("Login failed. Try again.\n");
+                        userUI.login();
+                    } else {
+                        System.out.println("Register failed. Try again.\n");
+                        userUI.register();
+                    }
+                } else {
+                    // Caso aconteca alguma coisa à mensagem
+                    System.out.println("ERROR: Something went wrong. Would you mind to try again? :)");
+                    if (isLogin)
+                        userUI.login();
+                    else
+                        userUI.register();
+                }
             }
-        }
-    }
-
-    // Funcional!!
-    public void register(String username, String password) throws RemoteException {
-        String msg = ci.register(this.clientNo, username, password);
-        System.out.println("Recebi a mensagem: " + msg);
-
-        String[] parameters = msg.split(";");
-        String status = parameters[2].split("\\|")[1];
-        int receivedClientNo = Integer.parseInt(parameters[1].split("\\|")[1]);
-        // Sera preciso esta confirmacao?
-        if (this.clientNo == receivedClientNo) {
-            if (status.equals("valid")) {
-                String usr = parameters[3].split("\\|")[1];
-                System.out.println("Register successful. Welcome " + usr + "\n");
-                this.username = usr;
-                this.typeOfClient = "user";
-                userUI.mainMenu();
-            } else if (status.equals("invalid")) {
-                System.out.println("Register failed. Try again.\n");
-                userUI.register();
-            } else {
-                // Caso aconteca alguma coisa a mensagem
-                System.out.println("MSG error");
-                userUI.mainMenu();
-            }
+        } catch (RemoteException e) {
+            System.out.println("ERROR: Something went wrong. Would you mind to try again? :)");
         }
     }
 
