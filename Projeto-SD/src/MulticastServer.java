@@ -42,10 +42,10 @@ public class MulticastServer extends Thread {
             InetAddress group = InetAddress.getByName(MULTICAST_ADDRESS);
             socket.joinGroup(group);
 
-            String messageNewConnection = "type|connectionStarted";
+            /*String messageNewConnection = "type|connectionStarted";
             byte[] bufferNewConnection = messageNewConnection.getBytes();
             DatagramPacket packetSentNewConnection = new DatagramPacket(bufferNewConnection, bufferNewConnection.length, group, PORT);
-            socket.send(packetSentNewConnection);
+            socket.send(packetSentNewConnection);*/
 
 
             while (true) {
