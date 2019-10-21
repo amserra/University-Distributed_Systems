@@ -1,45 +1,98 @@
-MENSAGENS QUE O RMI SERVER RECEBE:
+---------------- REGISTO: ---------------
+
+Pedido:
+
+type | register ; clientNo | *clientNo* ; username | *username* ; password | *password*
+
+Respostas:
 
 Registo aceite:
-type | registerComplete ; username | *o username*
+type | registerResult ; clientNo | *clientNo* ; status | valid ; username | *o username*
+
+Registo com username já existente:
+type | registerResult ; clientNo | *clientNo* ; status | invalid
+
+
+------------- LOGIN: -------------------
+
+Pedido:
+
+type | login ; clientNo | *clientNo* ; username | *username* ; password | *password*
+
+Respostas:
+
+Registo aceite:
+type | loginResult ; clientNo | *clientNo* ; status | valid ; username | *o username*
 
 Registo com username existente:
-type | invalidRegister ; username | *username invalido*
-
-Login valido:
-type | validLogin ; username | *username*
-
-Login invalid:
-type | invalidLogin
-
-Resultado de pesquisa:
-type | searchResult ; urlCount | *numero de urls* ; url_0 | *1º url* ; url_1 | *2º url* ;etc.
-
-Receber historico de pesquisa de um utilizador
-type | searchHistoryResults ; searchCount | *numero de pesquisas* ; word_0 | *1ª pesquisa mais recente* ; etc.
+type | loginResult ; clientNo | *clientNo* ; status | invalid
 
 
+---------------- INDEX: -----------------
+
+Pedido:
+
+type | index ; clientNo | *clientNo* ; word | *word* ; url | *url*
+
+Resposta:
+
+type | indexResult ; clientNo | *clientNo* ; status | started
+
+
+------------- SEARCH: -------------------
+
+Pedido:
+
+type | search ; clientNo | *clientNo* ; word | *word*
+
+Resposta:
+
+type | searchResult ; clientNo | *clientNo* ; urlCount | *numero de urls* ; url_0 | *1º url* ; url_1 | *2º url* ; etc.
+
+
+----------- SEARCH HISTORY: ---------------
+
+Pedido:
+
+type | searchHistory ; clientNo | *clientNo* ; username | *username*
+
+Reposta:
+
+type | searchHistoryResult ; clientNo | *clientNo* ; searchCount | *numero de urls* ; search_0 | *1º url* ; search_1 | *2º url* ; etc.
+
+
+----------- LINKS POINTING: ---------------
+
+Pedido:
+
+type | linksPointing ; clientNo | *clientNo* ; url | *url*
+
+Reposta:
+
+type | linksPointingResult ; clientNo | *clientNo* ; linkCount | *numero de links* ; link_0 | *1º url* ; link_1 | *2º url* ; etc.
+
+
+-------------- PROMOTION: -----------------
+
+Pedido:
+
+type | promote ; clientNo | *clientNo* ; username | *username*
+
+Respostas:
+
+type | promoteResult ; clientNo | *clientNo* ; status | valid
+
+type | promoteResult ; clientNo | *clientNo* ; status | invalid ; message | User is already admin
+
+
+type | promoteResult ; clientNo | *clientNo* ; status | invalid ; message | That user doesn't exist
 
 
 
 
 
-MENSAGENS QUE O RMI SERVER MANDA:
 
-Registar:
-type | register ; username | *username* ; password | *password*
 
-Login:
-type | login ; username | *username* ; password | *password*
 
-Indexar um novo url a uma palavra
-type | index ; word | *palavra* ; url | *url associado*
 
-Pesquisar uma palavra
-type | serach ; word | *palavra*
 
-Pesquisar uma palavra por utilizador logado
-type | serach ; word | *palavra* ; username | *username*
-
-Historico de pesquisas de um utilizador
-type | searchHistory ; username | *username*
