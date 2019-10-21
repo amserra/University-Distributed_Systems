@@ -5,7 +5,7 @@ import java.rmi.RemoteException;
 
 public class RMIClient {
     int clientNo;
-    String typeOfClient;
+    String typeOfClient = "anonymous";
     String username;
     UI userUI;
     RMIInterface ci;
@@ -16,7 +16,6 @@ public class RMIClient {
 
     RMIClient() throws MalformedURLException, RemoteException, NotBoundException {
         connectToRMIServer();
-        this.typeOfClient = "anonymous";
         userUI = new UI(this);
         userUI.mainMenu();
     }
@@ -29,7 +28,7 @@ public class RMIClient {
             System.exit(-1);
         }
         String msg = ci.sayHello("client");
-        this.clientNo = Integer.parseInt(msg.substring(msg.length() - 1));
+        clientNo = Integer.parseInt(msg.substring(msg.length() - 1));
         System.out.println(msg);
 
     }
@@ -64,6 +63,7 @@ public class RMIClient {
                         userUI.register();
                     }
                 } else {
+                    // CHEGA AQUI QD MUDA DE SERVER
                     // Caso aconteca alguma coisa à mensagem
                     System.out.println("ERROR: Something went wrong. Would you mind to try again? :)");
                     if (isLogin)

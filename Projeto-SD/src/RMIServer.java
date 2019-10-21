@@ -8,8 +8,6 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class RMIServer extends UnicastRemoteObject implements RMIInterface {
     static final long serialVersionUID = 1L;
@@ -19,6 +17,8 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface {
     MulticastSocket socket = null;
     final String MULTICAST_ADDRESS = "224.0.224.0";
     final int PORT = 4369;
+    final int RMIPORT = 1099;
+    final String RMINAME = "RMIConnection";
 
     public static void main(String[] args) throws RemoteException, NotBoundException, MalformedURLException {
         new RMIServer();
@@ -30,54 +30,62 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface {
     }
 
     public void connectToRMIServer() throws AccessException, RemoteException, MalformedURLException, NotBoundException {
+        // So para mensagem na consola
+        boolean wasBackup = false;
         try {
-            LocateRegistry.createRegistry(1099).rebind("RMIConnection", this);
-            this.isBackup = false;
-            System.out.println("Primary RMIServer ready...");
-            System.out.println("Print model: \"[Message responsible] Message\"");
-        } catch (Exception e) {
-            if (e instanceof java.rmi.server.ExportException) {
-                // Ja ha conexao. Quer dizer que temos de tomar posicao de backup server
+            // Tentar primeiro conectar ao primary RMIServer(no caso de ser backup)
+            ci = (RMIInterface) Naming.lookup("RMIConnection");
+            String msg = ci.sayHello("server");
+            System.out.println(msg);
+            wasBackup = true;
+            this.isBackup = true;
+            checkPrimaryServerStatus();
+        } catch (Exception e) { // Usually java.rmi.ConnectException
+            // Qual a excecao?
+            System.out.println("No primary RMIServer yet. Connecting...");
+        } finally {
+            // Se nao for o backup server, cria ligacao
+            if (!isBackup) {
                 try {
-                    ci = (RMIInterface) Naming.lookup("RMIConnection");
-                    String msg = ci.sayHello("server");
-                    System.out.println(msg);
-                    this.isBackup = true;
-                    checkPrimaryServerStatus();
-                } catch (Exception er) {
-                    System.out.println(
-                            "\nERROR: Something went wrong. Couldn't be either primary or secondary server. Aborting program...");
-                    System.out.println("Exception: " + er);
+                    LocateRegistry.createRegistry(RMIPORT).rebind(RMINAME, this);
+                    if (wasBackup) {
+                        wasBackup = false;
+                        System.out.println("I am now the primary server!");
+                    } else {
+                        System.out.println("Primary RMIServer ready...");
+                    }
+                    System.out.println("Print model: \"[Message responsible] Message\"");
+                } catch (Exception e) {
+                    System.out.println("\nERROR: Something went wrong. Aborting program...");
+                    e.printStackTrace();
                     System.exit(-1);
                 }
             } else {
-                System.out.println("\nERROR: Something went wrong. Aborting program...");
-                System.out.println("Exception: " + e);
-                System.exit(-1);
+
             }
         }
     }
 
     // OK! Dá
     // For the secondary server to check if primary failed
-    public void checkPrimaryServerStatus() {
-
-        Timer timer = new Timer();
-        TimerTask myTask = new TimerTask() {
-            @Override
-            public void run() {
-                // whatever you need to do every 2 seconds
+    public void checkPrimaryServerStatus() throws InterruptedException, AccessException, RemoteException {
+        boolean run = true;
+        while (run) {
+            Thread.sleep(5000);
+            try {
+                String res = ci.testPrimary();
+                System.out.println("[Primary server] " + res);
+            } catch (RemoteException e) {
+                System.out.println("Primary server not responding. Assuming primary functions...");
                 try {
-                    String res = ci.testPrimary();
-                    System.out.println("[Primary server] " + res);
-                } catch (RemoteException e) {
-                    System.out.println("Primary server not responding. Assuming primary functions...");
-                    timer.cancel();
+                    run = false;
+                    this.isBackup = false;
+                } catch (Exception er) {
+                    System.out.println("Can't rebind. Aborting program...");
+                    System.exit(-1);
                 }
             }
-        };
-
-        timer.schedule(myTask, 2000, 2000);
+        }
     }
 
     public String connectToMulticast(int clientNo, String msg) {
@@ -118,7 +126,7 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface {
 
         } catch (Exception e) {
             socket.close();
-            System.out.println("ERROR: Something went from. Did you forget the flag? Aborting program...");
+            System.out.println("ERROR: Something went wrong. Did you forget the flag? Aborting program...");
             System.exit(-1);
         }
         // Necessary but unimportant
