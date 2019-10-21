@@ -169,7 +169,7 @@ public class UI {
         String password = validatePasswordValue(
                 "Invalid password.\nInsert a password with only letters and numbers and length within 4 to 15 characters.");
 
-        client.login();
+        client.login(userName, password);
     }
 
     public void logout() throws RemoteException {
@@ -248,7 +248,7 @@ public class UI {
                 }
             } catch (NumberFormatException e) {
             }
-            System.out.println("ERRO: " + errorMsg);
+            System.out.println("ERROR: " + errorMsg);
         }
     }
 
@@ -267,7 +267,7 @@ public class UI {
                 }
             } catch (NumberFormatException e) {
             }
-            System.out.println("ERRO: " + errorMsg);
+            System.out.println("ERROR: " + errorMsg);
         }
 
     }

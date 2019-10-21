@@ -10,6 +10,10 @@ public class RMIClient {
     UI userUI;
     RMIInterface ci;
 
+    public static void main(String[] args) throws MalformedURLException, RemoteException, NotBoundException {
+        new RMIClient();
+    }
+
     RMIClient() throws MalformedURLException, RemoteException, NotBoundException {
         connectToRMIServer();
         this.typeOfClient = "anonymous";
@@ -30,31 +34,50 @@ public class RMIClient {
 
     }
 
-    public void login() throws RemoteException {
-        // Chamar metodo do server RMI para verificar se user ja existe.
-        // Se sim, entao meter outra vez a página login do UI userUI.login()
-        // Se nao, dizer "Registo bem sucedido" e ir para o userUI.mainMenu()
-        // Change type of user
+    public void login(String username, String password) throws RemoteException {
+        String msg = ci.login(this.clientNo, username, password);
+        System.out.println("Recebi a mensagem: " + msg);
 
-        userUI.mainMenu();
+        String[] parameters = msg.split(";");
+        String status = parameters[2].split("\\|")[1];
+        int receivedClientNo = Integer.parseInt(parameters[1].split("\\|")[1]);
+        // Sera preciso esta confirmacao?
+        if (this.clientNo == receivedClientNo) {
+            if (status.equals("valid")) {
+                String usr = parameters[3].split("\\|")[1];
+                System.out.println("Login successful. Welcome " + usr + "\n");
+                this.username = usr;
+                this.typeOfClient = "user";
+                userUI.mainMenu();
+            } else if (status.equals("invalid")) {
+                System.out.println("Login failed. Try again.\n");
+                userUI.login();
+            } else {
+                // Caso aconteca alguma coisa a mensagem
+                System.out.println("MSG error. Message was: " + msg);
+
+                userUI.mainMenu();
+            }
+        }
     }
 
     // Funcional!!
     public void register(String username, String password) throws RemoteException {
         String msg = ci.register(this.clientNo, username, password);
-        // System.out.println("Msg = " + msg);
+        System.out.println("Recebi a mensagem: " + msg);
+
         String[] parameters = msg.split(";");
         String status = parameters[2].split("\\|")[1];
-        String usr = parameters[3].split("\\|")[1];
         int receivedClientNo = Integer.parseInt(parameters[1].split("\\|")[1]);
         // Sera preciso esta confirmacao?
         if (this.clientNo == receivedClientNo) {
-            if (status.equals("complete")) {
+            if (status.equals("valid")) {
+                String usr = parameters[3].split("\\|")[1];
                 System.out.println("Register successful. Welcome " + usr + "\n");
                 this.username = usr;
                 this.typeOfClient = "user";
                 userUI.mainMenu();
-            } else if (status.equals("incomplete")) {
+            } else if (status.equals("invalid")) {
                 System.out.println("Register failed. Try again.\n");
                 userUI.register();
             } else {
@@ -109,9 +132,4 @@ public class RMIClient {
         // Get users para conceder admin a um
         // Pedir ao RMI Server os clientes todos
     }
-
-    public static void main(String[] args) throws MalformedURLException, RemoteException, NotBoundException {
-        new RMIClient();
-    }
-
 }

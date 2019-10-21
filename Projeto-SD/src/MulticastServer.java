@@ -15,7 +15,7 @@ public class MulticastServer extends Thread {
     // Usar multicast client para testar cenas
 
     private String MULTICAST_ADDRESS = "224.0.224.0";
-    private int PORT = 4321;
+    private int PORT = 4369;
 
     private ArrayList<User> listUsers = new ArrayList<User>();
     private ArrayList<URL> urlList = new ArrayList<>();
@@ -42,11 +42,13 @@ public class MulticastServer extends Thread {
             InetAddress group = InetAddress.getByName(MULTICAST_ADDRESS);
             socket.joinGroup(group);
 
-            /*String messageNewConnection = "type|connectionStarted";
-            byte[] bufferNewConnection = messageNewConnection.getBytes();
-            DatagramPacket packetSentNewConnection = new DatagramPacket(bufferNewConnection, bufferNewConnection.length, group, PORT);
-            socket.send(packetSentNewConnection);*/
-
+            /*
+             * String messageNewConnection = "type|connectionStarted"; byte[]
+             * bufferNewConnection = messageNewConnection.getBytes(); DatagramPacket
+             * packetSentNewConnection = new DatagramPacket(bufferNewConnection,
+             * bufferNewConnection.length, group, PORT);
+             * socket.send(packetSentNewConnection);
+             */
 
             while (true) {
                 DatagramPacket packetReceived = new DatagramPacket(buf, buf.length);
@@ -56,7 +58,6 @@ public class MulticastServer extends Thread {
                 MulticastServerAction newAction = new MulticastServerAction(received, socket, group, this);
                 newAction.start();
 
-                
             }
 
         } catch (Exception e) {
@@ -105,7 +106,5 @@ public class MulticastServer extends Thread {
     public void setListUsers(ArrayList<User> listUsers) {
         this.listUsers = listUsers;
     }
-
-
 
 }

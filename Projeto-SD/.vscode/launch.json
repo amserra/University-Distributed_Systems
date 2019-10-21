@@ -4,6 +4,7 @@
             "type": "java",
             "name": "CodeLens (Launch) - RMIServer",
             "request": "launch",
+            "vmArgs": "-Djava.net.preferIPv4Stack=true",
             "mainClass": "RMIServer",
             "projectName": "Projeto-SD"
         },
@@ -18,6 +19,7 @@
             "type": "java",
             "name": "CodeLens (Launch) - MulticastServer",
             "request": "launch",
+            "vmArgs": "-Djava.net.preferIPv4Stack=true",
             "mainClass": "MulticastServer",
             "projectName": "Projeto-SD"
         },
