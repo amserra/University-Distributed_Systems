@@ -104,7 +104,8 @@ public class RMIClient {
 
     public void search(String[] words) throws RemoteException, MalformedURLException, NotBoundException {
         try {
-            String msg = ci.search(this.clientNo, username, words);
+            String searchTerms = String.join(" ", words);
+            String msg = ci.search(this.clientNo, username, searchTerms);
             System.out.println("Recebi a mensagem: " + msg);
             String[] parameters = msg.split(";");
             int receivedClientNo = Integer.parseInt(parameters[1].split("\\|")[1]);

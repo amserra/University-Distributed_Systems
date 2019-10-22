@@ -160,12 +160,13 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface {
         return msgReceive;
     }
 
-    public String search(int clientNo, String username, String[] words) throws RemoteException {
+    public String search(int clientNo, String username, String searchTerms) throws RemoteException {
         String msg;
+
         if (username != null)
-            msg = "type|search;clientNo|" + clientNo + ";word|" + words + ";username|" + username;
+            msg = "type|search;clientNo|" + clientNo + ";word|" + searchTerms + ";username|" + username;
         else
-            msg = "type|search;clientNo|" + clientNo + ";word|" + words;
+            msg = "type|search;clientNo|" + clientNo + ";word|" + searchTerms;
 
         System.out.println("Mensagem a ser enviada: " + msg);
         String msgReceive = connectToMulticast(clientNo, msg);
