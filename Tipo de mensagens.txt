@@ -32,7 +32,7 @@ type | loginResult ; clientNo | *clientNo* ; status | invalid
 
 Pedido:
 
-type | index ; clientNo | *clientNo* ; word | *word* ; url | *url*
+type | index ; clientNo | *clientNo* ; url | *url*
 
 Resposta:
 
@@ -43,7 +43,7 @@ type | indexResult ; clientNo | *clientNo* ; status | started
 
 Pedido:
 
-type | search ; clientNo | *clientNo* ; word | *word*
+type | search ; clientNo | *clientNo* ; word | *words*
 
 Resposta:
 

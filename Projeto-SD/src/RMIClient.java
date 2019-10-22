@@ -6,9 +6,10 @@ import java.rmi.RemoteException;
 public class RMIClient {
     int clientNo;
     String typeOfClient = "anonymous";
-    String username;
+    String username = null;
     UI userUI;
     RMIInterface ci;
+    final String RMINAME = "RMIConnection";
 
     public static void main(String[] args) throws MalformedURLException, RemoteException, NotBoundException {
         new RMIClient();
@@ -22,7 +23,7 @@ public class RMIClient {
 
     public void connectToRMIServer() throws MalformedURLException, RemoteException, NotBoundException {
         try {
-            ci = (RMIInterface) Naming.lookup("RMIConnection");
+            ci = (RMIInterface) Naming.lookup(RMINAME);
         } catch (java.rmi.ConnectException e) {
             System.out.println("\nConnect the server first.");
             System.exit(-1);
@@ -36,7 +37,8 @@ public class RMIClient {
     public void authentication(boolean isLogin, String username, String password)
             throws RemoteException, MalformedURLException, NotBoundException {
         try {
-            ci = (RMIInterface) Naming.lookup("RMIConnection");
+            // Dar para trocar o bkup pelo prim vir aqui. E so para ser + rapido
+            // ci = (RMIInterface) Naming.lookup(RMINAME);
             String msg = ci.authentication(this.clientNo, isLogin, username, password);
             System.out.println("Recebi a mensagem: " + msg);
 
@@ -47,13 +49,18 @@ public class RMIClient {
             if (this.clientNo == receivedClientNo) {
                 if (status.equals("valid")) {
                     String usr = parameters[3].split("\\|")[1];
+                    boolean isAdmin = Boolean.parseBoolean(parameters[4].split("\\|")[1]);
+                    if (isAdmin)
+                        this.typeOfClient = "admin";
+                    else
+                        this.typeOfClient = "user";
+
                     if (isLogin)
                         System.out.println("Login successful. Welcome " + usr + "\n");
                     else
                         System.out.println("Register successful. Welcome " + usr + "\n");
 
                     this.username = usr;
-                    this.typeOfClient = "user";
                     userUI.mainMenu();
 
                 } else if (status.equals("invalid")) {
@@ -96,9 +103,25 @@ public class RMIClient {
     }
 
     public void search(String[] words) throws RemoteException, MalformedURLException, NotBoundException {
-        // Chamar metodo do server RMI para enviar termos de procura
-        // Listar termos obtidos
-        // Voltar para o search menu
+        try {
+            String msg = ci.search(this.clientNo, username, words);
+            System.out.println("Recebi a mensagem: " + msg);
+            String[] parameters = msg.split(";");
+            int receivedClientNo = Integer.parseInt(parameters[1].split("\\|")[1]);
+            int numOfURLs = Integer.parseInt(parameters[2].split("\\|")[1]);
+
+            if (this.clientNo == receivedClientNo) {
+                int count = 0;
+                int startIndex = 3;
+                // Starts at index 3
+                for (int i = startIndex; i < numOfURLs + startIndex; i++) {
+                    count++;
+                    System.out.println("Url " + count + ": " + parameters[i]);
+                }
+            }
+        } catch (RemoteException e) {
+            System.out.println("ERROR #3: Something went wrong. Would you mind to try again? :)");
+        }
 
         userUI.search();
     }
@@ -112,6 +135,14 @@ public class RMIClient {
     public void indexNewURL(String url) throws RemoteException, MalformedURLException, NotBoundException {
         // Send URL from RMI server to Multicast Server to be indexed
         // return to indexNewURL menu to index more
+        try {
+            String msg = ci.indexNewURL(this.clientNo, url);
+            System.out.println("Recebi a mensagem: " + msg);
+            System.out.println("Started indexing the requested url!");
+
+        } catch (RemoteException e) {
+            System.out.println("ERROR #4: Something went wrong. Would you mind to try again? :)");
+        }
         userUI.indexNewURL();
     }
 

@@ -8,4 +8,8 @@ public interface RMIInterface extends Remote {
 
     public String testPrimary() throws java.rmi.RemoteException;
 
+    public String search(int clientNo, String username, String[] words) throws java.rmi.RemoteException;
+
+    public String indexNewURL(int clientNo, String url) throws java.rmi.RemoteException;
+
 }

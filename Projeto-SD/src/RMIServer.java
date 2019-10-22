@@ -35,7 +35,7 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface {
         boolean wasBackup = false;
         try {
             // Tentar primeiro conectar ao primary RMIServer(no caso de ser backup)
-            ci = (RMIInterface) Naming.lookup("RMIConnection");
+            ci = (RMIInterface) Naming.lookup(RMINAME);
             String msg = ci.sayHello("server");
             System.out.println(msg);
             wasBackup = true;
@@ -78,13 +78,8 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface {
                         + LocalDateTime.now().getSecond() + " [Primary server] " + res);
             } catch (RemoteException e) {
                 System.out.println("Primary server not responding. Assuming primary functions...");
-                try {
-                    run = false;
-                    this.isBackup = false;
-                } catch (Exception er) {
-                    System.out.println("Can't rebind. Aborting program...");
-                    System.exit(-1);
-                }
+                run = false;
+                this.isBackup = false;
             }
         }
     }
@@ -165,4 +160,24 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface {
         return msgReceive;
     }
 
+    public String search(int clientNo, String username, String[] words) throws RemoteException {
+        String msg;
+        if (username != null)
+            msg = "type|search;clientNo|" + clientNo + ";word|" + words + ";username|" + username;
+        else
+            msg = "type|search;clientNo|" + clientNo + ";word|" + words;
+
+        System.out.println("Mensagem a ser enviada: " + msg);
+        String msgReceive = connectToMulticast(clientNo, msg);
+        System.out.println("Mensagem recebida: " + msgReceive);
+        return msgReceive;
+    }
+
+    public String indexNewURL(int clientNo, String url) throws RemoteException {
+        String msg = "type|index;clientNo|" + clientNo + ";url|" + url;
+        System.out.println("Mensagem a ser enviada: " + msg);
+        String msgReceive = connectToMulticast(clientNo, msg);
+        System.out.println("Mensagem recebida: " + msgReceive);
+        return msgReceive;
+    }
 }
