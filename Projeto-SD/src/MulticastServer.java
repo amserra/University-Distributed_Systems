@@ -17,6 +17,11 @@ public class MulticastServer extends Thread {
     private String MULTICAST_ADDRESS = "224.0.224.0";
     private int PORT = 4369;
 
+    private int multicastServerNo;
+    private ArrayList<Integer> multicastServerNoList = new ArrayList<>();
+    private HashSet<Integer> multicastServerCheckedList = new HashSet<>();
+    private boolean checkingMulticastServers = false;
+
     private ArrayList<User> listUsers = new ArrayList<User>();
     private ArrayList<URL> urlList = new ArrayList<>();
 
@@ -28,27 +33,20 @@ public class MulticastServer extends Thread {
     }
 
     public MulticastServer() {
-        super("Server " + (long) (Math.random() * 1000));
+        super();
     }
 
     public void run() {
         MulticastSocket socket = null;
-        System.out.println(this.getName() + " running...");
         try {
-            // socket = new MulticastSocket(); // create socket without binding it (only for
-            // sending)
             byte[] buf = new byte[256];
             socket = new MulticastSocket(PORT);
             InetAddress group = InetAddress.getByName(MULTICAST_ADDRESS);
             socket.joinGroup(group);
 
-            /*
-             * String messageNewConnection = "type|connectionStarted"; byte[]
-             * bufferNewConnection = messageNewConnection.getBytes(); DatagramPacket
-             * packetSentNewConnection = new DatagramPacket(bufferNewConnection,
-             * bufferNewConnection.length, group, PORT);
-             * socket.send(packetSentNewConnection);
-             */
+            //getMulticastServerNo(socket, group);
+
+            //System.out.println("Server " + multicastServerNo + " is running!");
 
             while (true) {
                 DatagramPacket packetReceived = new DatagramPacket(buf, buf.length);
@@ -64,6 +62,45 @@ public class MulticastServer extends Thread {
             e.printStackTrace();
         } finally {
             socket.close();
+        }
+    }
+
+    private void getMulticastServerNo(MulticastSocket socket, InetAddress group) {
+        try{
+            String message = "type|multicastServerStarted"; 
+            byte[] buffer = message.getBytes(); 
+            DatagramPacket packetSent = new DatagramPacket(buffer, buffer.length, group, PORT);
+            socket.send(packetSent);
+
+            String messageType;
+            String[] splitReceived;
+
+            do{
+                byte[] buf = new byte[64*1024];
+                DatagramPacket packetReceived = new DatagramPacket(buf, buf.length);
+                socket.receive(packetReceived);
+                String received = new String(packetReceived.getData(), 0, packetReceived.getLength());
+
+                splitReceived = received.split(";");
+
+                messageType = splitReceived[0].split("\\|")[1];
+
+
+            } while (!messageType.equals("multicastServerNo"));
+
+            multicastServerNo = Integer.parseInt(splitReceived[1].split("\\|")[1]);
+
+            int multicastServerCount = Integer.parseInt(splitReceived[2].split("\\|")[1]);
+
+            for(int i = 0; i < multicastServerCount; i++){
+                multicastServerNoList.add(Integer.parseInt(splitReceived[3 + i].split("\\|")[1]));
+            }
+
+            MulticastServerControl multicastServerControl = new MulticastServerControl(this, group, socket);
+            multicastServerControl.start();
+
+        } catch (Exception e){
+            e.printStackTrace();
         }
     }
 
@@ -105,6 +142,38 @@ public class MulticastServer extends Thread {
 
     public void setListUsers(ArrayList<User> listUsers) {
         this.listUsers = listUsers;
+    }
+
+    public int getMulticastServerNo() {
+        return multicastServerNo;
+    }
+
+    public void setMulticastServerNo(int multicastServerNo) {
+        this.multicastServerNo = multicastServerNo;
+    }
+
+    public ArrayList<Integer> getMulticastServerNoList() {
+        return multicastServerNoList;
+    }
+
+    public void setMulticastServerNoList(ArrayList<Integer> multicastServerNoList) {
+        this.multicastServerNoList = multicastServerNoList;
+    }
+
+    public boolean isCheckingMulticastServers() {
+        return checkingMulticastServers;
+    }
+
+    public void setCheckingMulticastServers(boolean checkingMulticastServers) {
+        this.checkingMulticastServers = checkingMulticastServers;
+    }
+
+    public HashSet<Integer> getMulticastServerCheckedList() {
+        return multicastServerCheckedList;
+    }
+
+    public void setMulticastServerCheckedList(HashSet<Integer> multicastServerCheckedList) {
+        this.multicastServerCheckedList = multicastServerCheckedList;
     }
 
 }

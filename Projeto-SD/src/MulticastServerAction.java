@@ -64,7 +64,7 @@ public class MulticastServerAction extends Thread {
 
                     listUsers.add(newUser);
                     message = "type|registerResult;clientNo|" + clientNo + ";status|valid;username|"
-                            + newUser.getUsername();
+                            + newUser.getUsername() + ";isAdmin|" + newUser.isAdmin();
                 } else {
                     message = "type|registerResult;clientNo|" + clientNo + ";status|invalid";
                 }
@@ -88,8 +88,7 @@ public class MulticastServerAction extends Thread {
                 }
 
                 if (checkUser) {
-                    message = "type|loginResult;clientNo|" + clientNo + ";status|valid;username|" + user.getUsername()
-                            + ";isAdmin|" + user.isAdmin();
+                    message = "type|loginResult;clientNo|" + clientNo + ";status|valid;username|" + user.getUsername() + ";isAdmin|" + user.isAdmin();
                 } else {
                     message = "type|loginResult;clientNo|" + clientNo + ";status|invalid";
                 }
@@ -222,6 +221,20 @@ public class MulticastServerAction extends Thread {
                     message = "type|promoteResult;clientNo|" + clientNo
                             + ";status|invalid;message|That user doesn't exist";
                 }
+            } else if(messageType.equals("checkStatusConfirm")){
+
+                if(server.isCheckingMulticastServers()){
+
+                    int serverNo = Integer.parseInt(receivedSplit[1].split("\\|")[1]);
+
+                    server.getMulticastServerCheckedList().add(serverNo);
+                }
+                
+
+            } else if(messageType.equals("checkStatus")){
+                message = "type|checkStatusConfirm;serverNo|" + server.getMulticastServerNo();
+                
+                
             }
 
             if(!message.equals("")){

@@ -7,7 +7,7 @@ type | register ; clientNo | *clientNo* ; username | *username* ; password | *pa
 Respostas:
 
 Registo aceite:
-type | registerResult ; clientNo | *clientNo* ; status | valid ; username | *o username*
+type | registerResult ; clientNo | *clientNo* ; status | valid ; username | *o username* ; isAdmin | *boolean*
 
 Registo com username já existente:
 type | registerResult ; clientNo | *clientNo* ; status | invalid
@@ -21,10 +21,10 @@ type | login ; clientNo | *clientNo* ; username | *username* ; password | *passw
 
 Respostas:
 
-Registo aceite:
-type | loginResult ; clientNo | *clientNo* ; status | valid ; username | *o username*
+Login valido:
+type | loginResult ; clientNo | *clientNo* ; status | valid ; username | *o username* ; isAdmin | *boolean*
 
-Registo com username existente:
+Login Invalido:
 type | loginResult ; clientNo | *clientNo* ; status | invalid
 
 
@@ -86,6 +86,17 @@ type | promoteResult ; clientNo | *clientNo* ; status | invalid ; message | User
 
 
 type | promoteResult ; clientNo | *clientNo* ; status | invalid ; message | That user doesn't exist
+
+
+--------- QUANDO SE LIGA UM MULTICAST SERVER: -------------------
+
+O multicast server avisa o rmi server que se ligou:
+
+type | multicastServerStarter
+
+O RMI responde com o numero atribuido a este multicast server:
+
+type | multicastServerNo ; serverNo | *o numero do multicast server* ; serverCount | *numero de multicast servers existentes* ; serverNo_0 | *nº do 1º* ; serverNo_1 | *nº do 2º* ; etc.
 
 
 

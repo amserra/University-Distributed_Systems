@@ -19,7 +19,7 @@ import java.util.Scanner;
  */
 public class MulticastClient extends Thread {
     private String MULTICAST_ADDRESS = "224.0.224.0";
-    private int PORT = 4321;
+    private int PORT = 4369;
 
     public static void main(String[] args) {
         MulticastClient client = new MulticastClient();
@@ -54,7 +54,7 @@ public class MulticastClient extends Thread {
 
 class MulticastUser extends Thread {
     private String MULTICAST_ADDRESS = "224.0.224.0";
-    private int PORT = 4321;
+    private int PORT = 4369;
 
     public MulticastUser() {
         super("User " + (long) (Math.random() * 1000));
