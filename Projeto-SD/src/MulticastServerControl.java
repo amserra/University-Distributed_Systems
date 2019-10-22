@@ -43,10 +43,10 @@ public class MulticastServerControl extends Thread {
 
                 server.setCheckingMulticastServers(false);
 
-                //if(server.getMulticastServerCheckedList().size() != server.getMulticastServerCheckedList().size())
+                if(server.getMulticastServerCheckedList().size() != server.getMulticastServerCheckedList().size())
                     for(Integer i: server.getMulticastServerNoList())
                         if(!server.getMulticastServerCheckedList().contains(i))
-                            System.out.println("Foi abaixo " + i);
+                            System.out.println("Foi abaixo " + i); //MANDAR MENSAGEM AO SERVIDOR RMI QUE O MULTICAST SERVER FOI DOWN E REMOVER DA LISTA DE SERVERS (do multicast server)
                         else
                             System.out.println("Está bom " + i);
 
