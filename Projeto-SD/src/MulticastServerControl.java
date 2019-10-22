@@ -3,6 +3,7 @@ import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class MulticastServerControl extends Thread {
 
@@ -42,11 +43,15 @@ public class MulticastServerControl extends Thread {
 
                 server.setCheckingMulticastServers(false);
 
-                if(server.getMulticastServerCheckedList().size() != server.getMulticastServerCheckedList().size()){
+                //if(server.getMulticastServerCheckedList().size() != server.getMulticastServerCheckedList().size())
                     for(Integer i: server.getMulticastServerNoList())
                         if(!server.getMulticastServerCheckedList().contains(i))
-                            System.out.println(i);
-                }
+                            System.out.println("Foi abaixo " + i);
+                        else
+                            System.out.println("Está bom " + i);
+
+                server.setMulticastServerCheckedList(new HashSet<Integer>());
+                
 
                 
 

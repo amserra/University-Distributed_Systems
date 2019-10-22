@@ -17,10 +17,10 @@ public class MulticastServer extends Thread {
     private String MULTICAST_ADDRESS = "224.0.224.0";
     private int PORT = 4369;
 
-    private int multicastServerNo;
-    private ArrayList<Integer> multicastServerNoList = new ArrayList<>();
-    private HashSet<Integer> multicastServerCheckedList = new HashSet<>();
-    private boolean checkingMulticastServers = false;
+    private int multicastServerNo; //Numero do servidor
+    private ArrayList<Integer> multicastServerNoList = new ArrayList<>(); //Array List com os multicast servers
+    private HashSet<Integer> multicastServerCheckedList = new HashSet<>(); //HashSet para verificar os multicast servers que confirmaram estarem "vivos"
+    private boolean checkingMulticastServers = false; //para verificar se este multicast server está a fazer a verificação
 
     private ArrayList<User> listUsers = new ArrayList<User>();
     private ArrayList<URL> urlList = new ArrayList<>();
@@ -44,7 +44,7 @@ public class MulticastServer extends Thread {
             InetAddress group = InetAddress.getByName(MULTICAST_ADDRESS);
             socket.joinGroup(group);
 
-            //getMulticastServerNo(socket, group);
+           // getMulticastServerNo(socket, group);
 
             //System.out.println("Server " + multicastServerNo + " is running!");
 
@@ -95,6 +95,11 @@ public class MulticastServer extends Thread {
             for(int i = 0; i < multicastServerCount; i++){
                 multicastServerNoList.add(Integer.parseInt(splitReceived[3 + i].split("\\|")[1]));
             }
+
+            for(Integer i: multicastServerNoList)
+                System.out.println("SERVER: " + i);
+
+
 
             MulticastServerControl multicastServerControl = new MulticastServerControl(this, group, socket);
             multicastServerControl.start();

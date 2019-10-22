@@ -33,7 +33,7 @@ public class MulticastServerAction extends Thread {
 
     public void run() {
         try {
-            System.out.println(received);
+            System.out.println("RECEIVED: " + received);
 
             String[] receivedSplit = received.split(";");
             String[] type = receivedSplit[0].split("\\|");
@@ -97,10 +97,9 @@ public class MulticastServerAction extends Thread {
 
             else if (messageType.equals("index")) {
                 String clientNo = receivedSplit[1].split("\\|")[1];
-                String word = receivedSplit[2].split("\\|")[1];
-                String url = receivedSplit[3].split("\\|")[1];
+                String url = receivedSplit[2].split("\\|")[1];
 
-                WebCrawler getUrls = new WebCrawler(server, word, url);
+                WebCrawler getUrls = new WebCrawler(server, url);
                 getUrls.start();
 
                 message = "type|indexResult;clientNo|" + clientNo + ";status|started";
@@ -111,7 +110,7 @@ public class MulticastServerAction extends Thread {
                 String word = receivedSplit[2].split("\\|")[1];
 
                 try {
-                    String username = receivedSplit[2].split("\\|")[1];
+                    String username = receivedSplit[3].split("\\|")[1];
 
                     User user = null;
 
@@ -229,12 +228,29 @@ public class MulticastServerAction extends Thread {
 
                     server.getMulticastServerCheckedList().add(serverNo);
                 }
+
+                for(Integer i: server.getMulticastServerCheckedList())
+                    System.out.println("SERVER CHECKED: " + i);
                 
 
             } else if(messageType.equals("checkStatus")){
                 message = "type|checkStatusConfirm;serverNo|" + server.getMulticastServerNo();
-                
-                
+            } else if(messageType.equals("multicastServerNo")){
+                //Atualizar o array dos multicast servers que estão up
+
+                int multicastServerCount = Integer.parseInt(receivedSplit[2].split("\\|")[1]);
+
+                ArrayList<Integer> newMulticastServerNoList = new ArrayList<>();
+
+                for(int i = 0; i < multicastServerCount; i++){
+                    newMulticastServerNoList.add(Integer.parseInt(receivedSplit[3 + i].split("\\|")[1]));
+                }
+
+                server.setMulticastServerNoList(newMulticastServerNoList);
+
+                for(Integer i: server.getMulticastServerNoList())
+                    System.out.println("SERVER: " + i);
+
             }
 
             if(!message.equals("")){
