@@ -1,6 +1,8 @@
 
 // import java.apache.commons.validator.*;
 import java.io.Console;
+import java.net.MalformedURLException;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.Scanner;
 
@@ -15,7 +17,7 @@ public class UI {
         this.client = client;
     }
 
-    public void mainMenu() throws RemoteException {
+    public void mainMenu() throws RemoteException, MalformedURLException, NotBoundException {
         System.out.println("\n-----Main Menu-----");
         System.out.println("Type of client: " + client.typeOfClient + "\n");
         if (client.typeOfClient.compareTo("anonymous") == 0) {
@@ -98,7 +100,7 @@ public class UI {
 
     }
 
-    public void administrationPage() throws RemoteException {
+    public void administrationPage() throws RemoteException, MalformedURLException, NotBoundException {
         System.out.println("\n-----Administration page-----\n");
 
         System.out.println("1. Index new URL");
@@ -134,7 +136,7 @@ public class UI {
         // imprimir aqui
     }
 
-    public void indexNewURL() throws RemoteException {
+    public void indexNewURL() throws RemoteException, MalformedURLException, NotBoundException {
         // Verificar se e um URL valido
         System.out.println("\n-----Index new URLs-----\n");
         System.out.println("NOTE: Type -1 to return to the main menu\n");
@@ -159,7 +161,7 @@ public class UI {
         // username e meter o seu typeOfClient = "admin"
     }
 
-    public void login() throws RemoteException {
+    public void login() throws RemoteException, MalformedURLException, NotBoundException {
         System.out.println("\n-----Login-----");
         System.out.println("NOTE: Type -1 to return to the main menu\n");
         String userName = validateStringValue("Username: ",
@@ -172,13 +174,13 @@ public class UI {
         client.authentication(true, userName, password);
     }
 
-    public void logout() throws RemoteException {
+    public void logout() throws RemoteException, MalformedURLException, NotBoundException {
         System.out.println("\nAre you sure you want to logout?(y/n)");
         boolean result = validateLogout();
         client.logout(result);
     }
 
-    public void register() throws RemoteException {
+    public void register() throws RemoteException, MalformedURLException, NotBoundException {
         System.out.println("\n-----Register-----");
         System.out.println("NOTE: Type -1 to return to the main menu\n");
         String userName = validateStringValue("Username: ",
@@ -194,7 +196,7 @@ public class UI {
         client.authentication(false, userName, password);
     }
 
-    public void search() throws RemoteException {
+    public void search() throws RemoteException, MalformedURLException, NotBoundException {
         System.out.println("\n-----Search-----");
         System.out.println("NOTE: Type -1 to return to the main menu\n");
 
@@ -233,7 +235,8 @@ public class UI {
         }
     }
 
-    public String validateStringValue(String msg, String errorMsg, int min, int max) throws RemoteException {
+    public String validateStringValue(String msg, String errorMsg, int min, int max)
+            throws RemoteException, MalformedURLException, NotBoundException {
         while (true) {
             System.out.print(msg);
             String line = sc.nextLine();
@@ -252,7 +255,8 @@ public class UI {
         }
     }
 
-    public String validatePasswordValue(String errorMsg) throws RemoteException {
+    public String validatePasswordValue(String errorMsg)
+            throws RemoteException, MalformedURLException, NotBoundException {
         Console console = System.console();
         console.flush();
         while (true) {
@@ -272,7 +276,7 @@ public class UI {
 
     }
 
-    public String[] validateSearch() throws RemoteException {
+    public String[] validateSearch() throws RemoteException, MalformedURLException, NotBoundException {
         int count;
         while (true) {
             count = 0;
@@ -303,7 +307,7 @@ public class UI {
         }
     }
 
-    public String validateURL() throws RemoteException {
+    public String validateURL() throws RemoteException, MalformedURLException, NotBoundException {
         // Only allows http/https URLs
         UrlValidator defaultValidator = new UrlValidator(); // default schemes
         while (true) {

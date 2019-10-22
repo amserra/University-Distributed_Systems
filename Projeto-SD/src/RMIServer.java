@@ -8,6 +8,7 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.server.UnicastRemoteObject;
+import java.time.LocalDateTime;
 
 public class RMIServer extends UnicastRemoteObject implements RMIInterface {
     static final long serialVersionUID = 1L;
@@ -55,13 +56,11 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface {
                         System.out.println("Primary RMIServer ready...");
                     }
                     System.out.println("Print model: \"[Message responsible] Message\"");
-                } catch (Exception e) {
+                } catch (Exception err) {
                     System.out.println("\nERROR: Something went wrong. Aborting program...");
-                    e.printStackTrace();
+                    err.printStackTrace();
                     System.exit(-1);
                 }
-            } else {
-
             }
         }
     }
@@ -74,7 +73,9 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface {
             Thread.sleep(5000);
             try {
                 String res = ci.testPrimary();
-                System.out.println("[Primary server] " + res);
+
+                System.out.println(LocalDateTime.now().getHour() + ":" + LocalDateTime.now().getMinute() + ":"
+                        + LocalDateTime.now().getSecond() + " [Primary server] " + res);
             } catch (RemoteException e) {
                 System.out.println("Primary server not responding. Assuming primary functions...");
                 try {
