@@ -104,7 +104,7 @@ public class UI {
                 System.exit(1);
             }
         }
-
+        return;
     }
 
     public void administrationPage() throws RemoteException, MalformedURLException, NotBoundException {
@@ -133,7 +133,7 @@ public class UI {
             System.out.println("CRITICAL ERROR. SHUTTING DOWN");
             System.exit(1);
         }
-
+        return;
     }
 
     private void linksPointing() throws RemoteException, MalformedURLException, NotBoundException {
@@ -168,6 +168,7 @@ public class UI {
     public void grantPrivileges() throws RemoteException, MalformedURLException, NotBoundException {
         System.out.println("\n-----Grant admin privileges-----\n");
         System.out.println("NOTE: Type -1 to return to the main menu\n");
+
         String userName = validateStringValue("Username to make admin: ",
                 "Invalid username.\nInsert a valid username (with only letters and numbers and length within 4 to 15 characters).",
                 4, 15);
@@ -273,6 +274,7 @@ public class UI {
         Console console = System.console();
         console.flush();
         while (true) {
+            System.out.println("Note that, for security reasons, your password doesn't happear as you type it.");
             String line = new String(console.readPassword("Password: "));
             try {
                 if (line.compareTo("-1") == 0) {

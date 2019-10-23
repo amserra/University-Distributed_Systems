@@ -63,6 +63,9 @@ public class RMIServer extends UnicastRemoteObject implements ServerInterface {
                     if (wasBackup) {
                         wasBackup = false;
                         System.out.println("I am now the primary server!");
+                        System.out.println("Reconnecting to clients, please wait...");
+                        reconnectClients();
+                        System.out.println("Done! Backup server is now Primary Server.");
                     } else {
                         System.out.println("Primary RMIServer ready...");
                     }
@@ -76,16 +79,28 @@ public class RMIServer extends UnicastRemoteObject implements ServerInterface {
         }
     }
 
+    public void reconnectClients() throws MalformedURLException, RemoteException, NotBoundException {
+        for (HashMap.Entry<Integer, ClientInterface> entry : clientInterfacesMap.entrySet()) {
+            ClientInterface client = entry.getValue();
+            client.establishConnection();
+        }
+    }
+
+    public HashMap<Integer, ClientInterface> getHashMapFromPrimary() throws RemoteException {
+        return this.clientInterfacesMap;
+    }
+
     // For the secondary server to check if primary failed
     public void checkPrimaryServerStatus() throws InterruptedException, AccessException, RemoteException {
         boolean run = true;
         while (run) {
-            Thread.sleep(5000);
+            Thread.sleep(1000);
             try {
-                String res = serverInterface.testPrimary();
-
+                String[] res = serverInterface.testPrimary();
+                this.clientNo = Integer.parseInt(res[1]);
                 System.out.println(LocalDateTime.now().getHour() + ":" + LocalDateTime.now().getMinute() + ":"
-                        + LocalDateTime.now().getSecond() + " [Primary server] " + res);
+                        + LocalDateTime.now().getSecond() + " [Primary server] " + res[0]);
+                this.clientInterfacesMap = serverInterface.getHashMapFromPrimary();
             } catch (RemoteException e) {
                 System.out.println("Primary server not responding. Assuming primary functions...");
                 run = false;
@@ -132,7 +147,8 @@ public class RMIServer extends UnicastRemoteObject implements ServerInterface {
 
         } catch (Exception e) {
             socket.close();
-            System.out.println("ERROR: Something went wrong. Did you forget the flag? Aborting program...");
+            System.out.println(
+                    "ERROR: Something went wrong. Did you forget the flag? Are there any multicast servers? Aborting program...");
             System.exit(-1);
         }
         // Necessary but unimportant
@@ -152,10 +168,11 @@ public class RMIServer extends UnicastRemoteObject implements ServerInterface {
         return msg;
     }
 
-    public String testPrimary() throws RemoteException {
+    public String[] testPrimary() throws RemoteException {
         // Called by backup to test
         // Message from primary to backup to confirm that all is ok
-        return "All good";
+        String[] res = { "All good", String.valueOf(this.clientNo) };
+        return res;
     }
 
     public String authentication(int clientNo, boolean isLogin, String username, String password)
@@ -173,7 +190,7 @@ public class RMIServer extends UnicastRemoteObject implements ServerInterface {
     }
 
     public String logout(int clientNo, String username) throws RemoteException {
-        String msg = "type|logout;clientNo" + clientNo + ";username|" + username;
+        String msg = "type|logout;clientNo|" + clientNo + ";username|" + username;
         System.out.println("Mensagem a ser enviada: " + msg);
         String msgReceive = connectToMulticast(clientNo, msg);
         System.out.println("Mensagem recebida: " + msgReceive);
@@ -226,7 +243,7 @@ public class RMIServer extends UnicastRemoteObject implements ServerInterface {
         System.out.println("Mensagem recebida: " + msgReceive);
         String[] parameters = msgReceive.split(";");
         String status = parameters[2].split("\\|")[1];
-        // Prevents ArrayIndexOutOfBounds
+        // Erro esta aqui
         if ((parameters.length > 3) && (parameters[3] != null) && (status.equals("valid"))) {
             int newAdminNo = Integer.parseInt(parameters[3].split("\\|")[1]);
             ClientInterface client = clientInterfacesMap.get(newAdminNo);

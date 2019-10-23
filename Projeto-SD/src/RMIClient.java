@@ -26,9 +26,8 @@ public class RMIClient extends UnicastRemoteObject implements ClientInterface {
 
     public void notification() throws MalformedURLException, RemoteException, NotBoundException {
         if (this.typeOfClient.equals("user")) {
-            System.out.println("\nNotification: Promoted to admin!");
+            System.out.print("\n\nNotification: Promoted to admin!\n\nEnter an option: ");
             this.typeOfClient = "admin";
-            userUI.mainMenu();
         }
     }
 
@@ -49,8 +48,6 @@ public class RMIClient extends UnicastRemoteObject implements ClientInterface {
     public void authentication(boolean isLogin, String username, String password)
             throws RemoteException, MalformedURLException, NotBoundException {
         try {
-            // Dar para trocar o bkup pelo prim vir aqui. E so para ser + rapido
-            // serverInterface = (RMIInterface) Naming.lookup(RMINAME);
             String msg = serverInterface.authentication(this.clientNo, isLogin, username, password);
             System.out.println("Recebi a mensagem: " + msg);
 
@@ -135,12 +132,14 @@ public class RMIClient extends UnicastRemoteObject implements ClientInterface {
             int numOfURLs = Integer.parseInt(parameters[2].split("\\|")[1]);
 
             if (this.clientNo == receivedClientNo) {
+                if (numOfURLs == 0)
+                    System.out.println("Nothing came up! Ask an admin to index more pages.");
                 int count = 0;
                 int startIndex = 3;
                 // Starts at index 3
                 for (int i = startIndex; i < numOfURLs + startIndex; i++) {
                     count++;
-                    System.out.println("Url " + count + ": " + parameters[i]);
+                    System.out.println("Url " + count + ": " + parameters[i].split("\\|")[1]);
                 }
             }
         } catch (RemoteException e) {
@@ -226,7 +225,9 @@ public class RMIClient extends UnicastRemoteObject implements ClientInterface {
             System.out.println("Recebi a mensagem: " + msg);
             String[] parameters = msg.split(";");
             int receivedClientNo = Integer.parseInt(parameters[1].split("\\|")[1]);
+            System.out.println("Recieved client no: " + receivedClientNo);
             String status = parameters[2].split("\\|")[1];
+            System.out.println("Status: " + status);
             if (this.clientNo == receivedClientNo) {
                 if (status.equals("valid")) {
                     System.out.println("Conceded admin privileges to " + username + " successfully");
@@ -236,7 +237,6 @@ public class RMIClient extends UnicastRemoteObject implements ClientInterface {
                     System.out.println("ERROR: " + errorMsg + "\nTry again.");
                 }
             }
-
         } catch (RemoteException e) {
             System.out.println("ERROR #7: Something went wrong. Would you mind to try again? :)");
         }
@@ -246,5 +246,10 @@ public class RMIClient extends UnicastRemoteObject implements ClientInterface {
     public void realTimeStatistics() {
         // Ask to the multicast server?
         // Callback!
+    }
+
+    public void establishConnection() throws MalformedURLException, RemoteException, NotBoundException {
+        // Dar para trocar o bkup pelo prim vir aqui. E so para ser + rapido
+        serverInterface = (ServerInterface) Naming.lookup(RMINAME);
     }
 }

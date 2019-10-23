@@ -1,4 +1,5 @@
 import java.rmi.Remote;
+import java.util.HashMap;
 
 public interface ServerInterface extends Remote {
     public String sayHelloFromBackup() throws java.rmi.RemoteException; // For backup server
@@ -9,7 +10,9 @@ public interface ServerInterface extends Remote {
     public String authentication(int clientNo, boolean isLogin, String username, String password)
             throws java.rmi.RemoteException;
 
-    public String testPrimary() throws java.rmi.RemoteException;
+    public String[] testPrimary() throws java.rmi.RemoteException;
+
+    public HashMap<Integer, ClientInterface> getHashMapFromPrimary() throws java.rmi.RemoteException;
 
     public String search(int clientNo, String username, String searchTerms) throws java.rmi.RemoteException;
 
