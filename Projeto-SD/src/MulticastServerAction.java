@@ -59,14 +59,15 @@ public class MulticastServerAction extends Thread {
                 if (!checkUser) {
                     // Primeiro Utilizador, logo é admin
                     if (listUsers.isEmpty())
-                        newUser = new User(username, password, true);
+                        newUser = new User(username, password, true, true, Integer.parseInt(clientNo), false);
                     // Outro utilizador logo é um utilizador
                     else
-                        newUser = new User(username, password, false);
+                        newUser = new User(username, password, false, true, Integer.parseInt(clientNo), false);
 
                     listUsers.add(newUser);
                     message = "type|registerResult;clientNo|" + clientNo + ";status|valid;username|"
                             + newUser.getUsername() + ";isAdmin|" + newUser.isAdmin();
+
                 } else {
                     message = "type|registerResult;clientNo|" + clientNo + ";status|invalid";
                 }
@@ -90,7 +91,11 @@ public class MulticastServerAction extends Thread {
                 }
 
                 if (checkUser) {
-                    message = "type|loginResult;clientNo|" + clientNo + ";status|valid;username|" + user.getUsername() + ";isAdmin|" + user.isAdmin();
+                    user.setLoggedIn(true);
+                    user.setClientNo(Integer.parseInt(clientNo));
+                    message = "type|loginResult;clientNo|" + clientNo + ";status|valid;username|" + user.getUsername()
+                            + ";isAdmin|" + user.isAdmin() + ";notification|" + user.isNotification();
+                    user.setNotification(false);
                 } else {
                     message = "type|loginResult;clientNo|" + clientNo + ";status|invalid";
                 }
@@ -131,8 +136,8 @@ public class MulticastServerAction extends Thread {
 
                 HashSet<String> urlResults;
 
-                try{
-                    String[] wordList = words.split(" "); 
+                try {
+                    String[] wordList = words.split(" ");
 
                     System.out.println(words);
 
@@ -142,25 +147,23 @@ public class MulticastServerAction extends Thread {
 
                     urlResults = new HashSet<>(wordUrlResults_1);
 
-                    for(int i = 1; i < wordList.length; i++){
+                    for (int i = 1; i < wordList.length; i++) {
                         HashSet<String> wordUrlResults_2 = index.get(wordList[i]);
-                        for(String s: urlResults)
-                            if(!wordUrlResults_2.contains(s))
+                        for (String s : urlResults)
+                            if (!wordUrlResults_2.contains(s))
                                 urlResults.remove(s);
                     }
 
-                } catch(NullPointerException e){
+                } catch (NullPointerException e) {
                     e.printStackTrace();
 
                     urlResults = null;
-                } catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
 
                     urlResults = index.get(words);
 
                 }
-
-
 
                 message = "type|searchResult;clientNo|" + clientNo + ";urlCount|";
 
@@ -169,7 +172,7 @@ public class MulticastServerAction extends Thread {
 
                     int urlCount = 0;
 
-                    for(URL url: urlList){
+                    for (URL url : urlList) {
                         System.out.println(url.getTitle() + ": " + url.getLinksCount());
                     }
 
@@ -252,45 +255,49 @@ public class MulticastServerAction extends Thread {
                     else {
                         message = "type|promoteResult;clientNo|" + clientNo + ";status|valid";
                         user.setAdmin(true);
+                        if (user.isLoggedIn())
+                            message += ";newAdminNo|" + user.getClientNo();
+                        else
+                            user.setNotification(true);
+
                     }
                 } else {
                     message = "type|promoteResult;clientNo|" + clientNo
                             + ";status|invalid;message|That user doesn't exist";
                 }
-            } else if(messageType.equals("checkStatusConfirm")){
+            } else if (messageType.equals("checkStatusConfirm")) {
 
-                if(server.isCheckingMulticastServers()){
+                if (server.isCheckingMulticastServers()) {
 
                     int serverNo = Integer.parseInt(receivedSplit[1].split("\\|")[1]);
 
                     server.getMulticastServerCheckedList().add(serverNo);
                 }
 
-                for(Integer i: server.getMulticastServerCheckedList())
+                for (Integer i : server.getMulticastServerCheckedList())
                     System.out.println("SERVER CHECKED: " + i);
-                
 
-            } else if(messageType.equals("checkStatus")){
+            } else if (messageType.equals("checkStatus")) {
                 message = "type|checkStatusConfirm;serverNo|" + server.getMulticastServerNo();
-            } else if(messageType.equals("multicastServerNo")){
-                //Atualizar o array dos multicast servers que estão up
+            } else if (messageType.equals("multicastServerNo")) {
+                // Atualizar o array dos multicast servers que estão up
 
                 int multicastServerCount = Integer.parseInt(receivedSplit[2].split("\\|")[1]);
 
                 ArrayList<Integer> newMulticastServerNoList = new ArrayList<>();
 
-                for(int i = 0; i < multicastServerCount; i++){
+                for (int i = 0; i < multicastServerCount; i++) {
                     newMulticastServerNoList.add(Integer.parseInt(receivedSplit[3 + i].split("\\|")[1]));
                 }
 
                 server.setMulticastServerNoList(newMulticastServerNoList);
 
-                for(Integer i: server.getMulticastServerNoList())
+                for (Integer i : server.getMulticastServerNoList())
                     System.out.println("SERVER: " + i);
 
             }
 
-            if(!message.equals("")){
+            if (!message.equals("")) {
                 byte[] buffer = message.getBytes();
                 DatagramPacket packetSent = new DatagramPacket(buffer, buffer.length, group, PORT);
                 socket.send(packetSent);

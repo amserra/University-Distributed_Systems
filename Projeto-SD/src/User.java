@@ -7,10 +7,17 @@ public class User {
     private boolean isAdmin;
     private ArrayList<String> searchHistory;
 
-    public User(String username, String password, boolean isAdmin) {
+    private boolean isLoggedIn;
+    private int clientNo;
+    private boolean notification;
+
+    public User(String username, String password, boolean isAdmin, boolean isLoggedIn, int clientNo, boolean notification) {
         this.username = username;
         this.password = password;
         this.isAdmin = isAdmin;
+        this.isLoggedIn = isLoggedIn;
+        this.clientNo = clientNo;
+        this.notification = false;
         this.searchHistory = new ArrayList<>();
     }
 
@@ -60,6 +67,30 @@ public class User {
 
     public void setSearchHistory(ArrayList<String> searchHistory) {
         this.searchHistory = searchHistory;
+    }
+
+    public boolean isLoggedIn() {
+        return isLoggedIn;
+    }
+
+    public void setLoggedIn(boolean isLoggedIn) {
+        this.isLoggedIn = isLoggedIn;
+    }
+
+    public int getClientNo() {
+        return clientNo;
+    }
+
+    public void setClientNo(int clientNo) {
+        this.clientNo = clientNo;
+    }
+
+    public boolean isNotification() {
+        return notification;
+    }
+
+    public void setNotification(boolean notification) {
+        this.notification = notification;
     }
 
     
