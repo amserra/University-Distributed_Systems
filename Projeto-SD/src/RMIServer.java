@@ -181,4 +181,28 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface {
         System.out.println("Mensagem recebida: " + msgReceive);
         return msgReceive;
     }
+
+    public String searchHistory(int clientNo, String username) throws RemoteException {
+        String msg = "type|searchHistory;clientNo|" + clientNo + ";username|" + username;
+        System.out.println("Mensagem a ser enviada: " + msg);
+        String msgReceive = connectToMulticast(clientNo, msg);
+        System.out.println("Mensagem recebida: " + msgReceive);
+        return msgReceive;
+    }
+
+    public String linksPointing(int clientNo, String url) throws RemoteException {
+        String msg = "type|linksPointing;clientNo|" + clientNo + ";url|" + url;
+        System.out.println("Mensagem a ser enviada: " + msg);
+        String msgReceive = connectToMulticast(clientNo, msg);
+        System.out.println("Mensagem recebida: " + msgReceive);
+        return msgReceive;
+    }
+
+    public String grantPrivileges(int clientNo, String username) throws RemoteException {
+        String msg = "type|promote;clientNo|" + clientNo + ";username|" + username;
+        System.out.println("Mensagem a ser enviada: " + msg);
+        String msgReceive = connectToMulticast(clientNo, msg);
+        System.out.println("Mensagem recebida: " + msgReceive);
+        return msgReceive;
+    }
 }

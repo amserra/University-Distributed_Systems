@@ -31,7 +31,6 @@ public class RMIClient {
         String msg = ci.sayHello("client");
         clientNo = Integer.parseInt(msg.substring(msg.length() - 1));
         System.out.println(msg);
-
     }
 
     public void authentication(boolean isLogin, String username, String password)
@@ -127,10 +126,56 @@ public class RMIClient {
         userUI.search();
     }
 
-    public void searchHistory() {
-        // Get searches from database and send them to userUI.searchHistory to be
-        // printed
+    public void searchHistory() throws RemoteException, MalformedURLException, NotBoundException {
         // Call RMI Server method to query all the searches
+        try {
+            String msg = ci.searchHistory(this.clientNo, this.username);
+            System.out.println("Recebi a mensagem: " + msg);
+            String[] parameters = msg.split(";");
+            int receivedClientNo = Integer.parseInt(parameters[1].split("\\|")[1]);
+            int searchCount = Integer.parseInt(parameters[2].split("\\|")[1]);
+
+            if (this.clientNo == receivedClientNo && searchCount != 0) {
+                int count = 0;
+                int startIndex = 3;
+                // Starts at index 3
+                for (int i = startIndex; i < searchCount + startIndex; i++) {
+                    count++;
+                    System.out.println("Url " + count + ": " + parameters[i]);
+                }
+            } else if (this.clientNo == receivedClientNo && searchCount == 0) {
+                System.out.println("You haven't searched for anything yet!");
+            }
+
+        } catch (RemoteException e) {
+            System.out.println("ERROR #5: Something went wrong. Would you mind to try again? :)");
+        }
+        userUI.mainMenu();
+    }
+
+    public void linksPointing(String url) throws RemoteException, MalformedURLException, NotBoundException {
+        try {
+            String msg = ci.linksPointing(this.clientNo, url);
+            System.out.println("Recebi a mensagem: " + msg);
+            String[] parameters = msg.split(";");
+            int receivedClientNo = Integer.parseInt(parameters[1].split("\\|")[1]);
+            int numOfLinks = Integer.parseInt(parameters[2].split("\\|")[1]);
+            if (this.clientNo == receivedClientNo && numOfLinks != 0) {
+                int count = 0;
+                int startIndex = 3;
+                // Starts at index 3
+                for (int i = startIndex; i < numOfLinks + startIndex; i++) {
+                    count++;
+                    System.out.println("Link " + count + ": " + parameters[i]);
+                }
+            } else if (this.clientNo == receivedClientNo && numOfLinks == 0) {
+                System.out.println("Link doesn't have any pages connected to it yet!");
+            }
+
+        } catch (RemoteException e) {
+            System.out.println("ERROR #6: Something went wrong. Would you mind to try again? :)");
+        }
+        userUI.mainMenu();
     }
 
     public void indexNewURL(String url) throws RemoteException, MalformedURLException, NotBoundException {
@@ -138,8 +183,12 @@ public class RMIClient {
         // return to indexNewURL menu to index more
         try {
             String msg = ci.indexNewURL(this.clientNo, url);
+            String[] parameters = msg.split(";");
+            int receivedClientNo = Integer.parseInt(parameters[1].split("\\|")[1]);
             System.out.println("Recebi a mensagem: " + msg);
-            System.out.println("Started indexing the requested url!");
+            if (this.clientNo == receivedClientNo) {
+                System.out.println("Started indexing the requested url!");
+            }
 
         } catch (RemoteException e) {
             System.out.println("ERROR #4: Something went wrong. Would you mind to try again? :)");
@@ -147,12 +196,31 @@ public class RMIClient {
         userUI.indexNewURL();
     }
 
-    public void realTimeStatistics() {
-        // Ask to the multicast server?
+    public void grantPrivileges(String username) throws RemoteException, MalformedURLException, NotBoundException {
+        try {
+            String msg = ci.grantPrivileges(this.clientNo, username);
+            System.out.println("Recebi a mensagem: " + msg);
+            String[] parameters = msg.split(";");
+            int receivedClientNo = Integer.parseInt(parameters[1].split("\\|")[1]);
+            String status = parameters[2].split("\\|")[1];
+            if (this.clientNo == receivedClientNo) {
+                if (status.equals("valid")) {
+                    System.out.println("Conceded admin privileges to " + username + " successfully");
+                    // Falta o outro receber essa notificacao
+                } else if (status.equals("invalid")) {
+                    String errorMsg = parameters[3].split("\\|")[1];
+                    System.out.println("ERROR: " + errorMsg + "\nTry again.");
+                }
+            }
+
+        } catch (RemoteException e) {
+            System.out.println("ERROR #7: Something went wrong. Would you mind to try again? :)");
+        }
+        userUI.grantPrivileges();
     }
 
-    public void getUsers() {
-        // Get users para conceder admin a um
-        // Pedir ao RMI Server os clientes todos
+    public void realTimeStatistics() {
+        // Ask to the multicast server?
+        // Callback!
     }
 }

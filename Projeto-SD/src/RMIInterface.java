@@ -12,4 +12,10 @@ public interface RMIInterface extends Remote {
 
     public String indexNewURL(int clientNo, String url) throws java.rmi.RemoteException;
 
+    public String searchHistory(int clientNo, String username) throws java.rmi.RemoteException;
+
+    public String linksPointing(int clientNo, String url) throws java.rmi.RemoteException;
+
+    public String grantPrivileges(int clientNo, String username) throws java.rmi.RemoteException;
+
 }

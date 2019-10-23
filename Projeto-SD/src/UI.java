@@ -47,31 +47,7 @@ public class UI {
         } else if (client.typeOfClient.compareTo("user") == 0) {
             System.out.println("1. Search");
             System.out.println("2. Search history");
-            System.out.println("3. Logout");
-            System.out.println("4. Exit");
-
-            int option = validateIntegerValue(1, 4);
-            switch (option) {
-            case 1:
-                search();
-                return;
-            case 2:
-                client.searchHistory();
-                return;
-            case 3:
-                logout();
-                return;
-            case 4:
-                client.shutdown();
-                return;
-            default:
-                System.out.println("CRITICAL ERROR. SHUTTING DOWN");
-                System.exit(1);
-            }
-        } else if (client.typeOfClient.compareTo("admin") == 0) {
-            System.out.println("1. Search");
-            System.out.println("2. Search history");
-            System.out.println("3. Administration page");
+            System.out.println("3. List of pages with connection to another page");
             System.out.println("4. Logout");
             System.out.println("5. Exit");
 
@@ -81,15 +57,46 @@ public class UI {
                 search();
                 return;
             case 2:
-                client.searchHistory();
+                searchHistory();
                 return;
             case 3:
-                administrationPage();
-                return;
+                linksPointing();
             case 4:
                 logout();
                 return;
             case 5:
+                client.shutdown();
+                return;
+            default:
+                System.out.println("CRITICAL ERROR. SHUTTING DOWN");
+                System.exit(1);
+            }
+        } else if (client.typeOfClient.compareTo("admin") == 0) {
+            System.out.println("1. Search");
+            System.out.println("2. Search history");
+            System.out.println("3. List of pages with connection to another page");
+            System.out.println("4. Administration page");
+            System.out.println("5. Logout");
+            System.out.println("6. Exit");
+
+            int option = validateIntegerValue(1, 6);
+            switch (option) {
+            case 1:
+                search();
+                return;
+            case 2:
+                searchHistory();
+                return;
+            case 3:
+                linksPointing();
+                return;
+            case 4:
+                administrationPage();
+                return;
+            case 5:
+                logout();
+                return;
+            case 6:
                 client.shutdown();
                 return;
             default:
@@ -129,11 +136,17 @@ public class UI {
 
     }
 
-    public void searchHistory(String[] values) {
-        // Vai receber o search history(ns ainda que tipo de dados) através do Client
-        // E vai imprimir aqui
+    private void linksPointing() throws RemoteException, MalformedURLException, NotBoundException {
+        System.out.println("\n-----List of pages with link to another page-----\n");
+        System.out.println("NOTE: Type -1 to return to the main menu\n");
+
+        String url = validateURL();
+        client.linksPointing(url);
+    }
+
+    public void searchHistory() throws RemoteException, MalformedURLException, NotBoundException {
         System.out.println("\n-----Search history-----\n");
-        // imprimir aqui
+        client.searchHistory();
     }
 
     public void indexNewURL() throws RemoteException, MalformedURLException, NotBoundException {
@@ -152,13 +165,12 @@ public class UI {
         // imprimir aqui
     }
 
-    public void grantPrivileges() {
+    public void grantPrivileges() throws RemoteException, MalformedURLException, NotBoundException {
         System.out.println("\n-----Grant admin privileges-----\n");
-        // Obter lista de utilizadores(Client) e numera-los(1.,2.,3.,...)
-        // int option = validateIntegerValue(1, n);, com n o num utilizadores
-        // Pedir para selecionar um numero
-        // Ir buscar a lista de clientes ao RMI server(objetos), procurar por
-        // username e meter o seu typeOfClient = "admin"
+        String userName = validateStringValue("Username to make admin: ",
+                "Invalid username.\nInsert a valid username (with only letters and numbers and length within 4 to 15 characters).",
+                4, 15);
+        client.grantPrivileges(userName);
     }
 
     public void login() throws RemoteException, MalformedURLException, NotBoundException {
