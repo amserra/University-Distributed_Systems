@@ -80,12 +80,13 @@ type | promote ; clientNo | *clientNo* ; username | *username*
 
 Respostas:
 
-type | promoteResult ; clientNo | *clientNo* ; status | valid
+type | promoteResult ; clientNo | *clientNo* ; status | valid           // Resposta em que o novo admin não está online
 
-type | promoteResult ; clientNo | *clientNo* ; status | invalid ; message | User is already admin
+type | promoteResult ; clientNo | *clientNo* ; status | valid  ; newAdminNo | *newAdminNo*          //Resposta em que o novo admin está online e o RMI server tem de mandar notificação
 
+type | promoteResult ; clientNo | *clientNo* ; status | invalid ; message | User is already admin	//Resposta em que user já é admin
 
-type | promoteResult ; clientNo | *clientNo* ; status | invalid ; message | That user doesn't exist
+type | promoteResult ; clientNo | *clientNo* ; status | invalid ; message | That user doesn't exist	//Resposta em que o user não existe
 
 
 --------- QUANDO SE LIGA UM MULTICAST SERVER: -------------------
