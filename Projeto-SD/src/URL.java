@@ -29,10 +29,13 @@ public class URL implements Comparable<URL> {
 
     @Override
     public int compareTo(URL url) {
-        int compareLinks = url.getLinksCount();
+        if(url.getLinksCount() != null){
+            int compareLinks = url.getLinksCount();
 
-        /* For Descending order do like this */
-        return compareLinks-this.linksCount;
+            /* For Descending order do like this */
+            return compareLinks-this.linksCount;
+        } else 
+            return -1;
     }
 
     public String getUrl() {

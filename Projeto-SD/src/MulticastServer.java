@@ -4,6 +4,7 @@ import java.net.MulticastSocket;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class MulticastServer extends Thread {
 
@@ -23,7 +24,7 @@ public class MulticastServer extends Thread {
     private boolean checkingMulticastServers = false; //para verificar se este multicast server está a fazer a verificação
 
     private ArrayList<User> listUsers = new ArrayList<User>();
-    private ArrayList<URL> urlList = new ArrayList<>();
+    private CopyOnWriteArrayList<URL> urlList = new CopyOnWriteArrayList<>();
 
     private HashMap<String, HashSet<String>> index = new HashMap<>();
 
@@ -117,11 +118,11 @@ public class MulticastServer extends Thread {
         this.index = index;
     }
 
-    public ArrayList<URL> getUrlList() {
+    public CopyOnWriteArrayList<URL> getUrlList() {
         return urlList;
     }
 
-    public void setUrlList(ArrayList<URL> urlList) {
+    public void setUrlList(CopyOnWriteArrayList<URL> urlList) {
         this.urlList = urlList;
     }
 

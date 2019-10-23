@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class MulticastServerAction extends Thread {
 
@@ -16,9 +17,9 @@ public class MulticastServerAction extends Thread {
     String MULTICAST_ADDRESS;
     int PORT;
     ArrayList<User> listUsers;
-    ArrayList<URL> urlList;
+    CopyOnWriteArrayList<URL> urlList;
 
-    HashMap<String, HashSet<String>> index = new HashMap<>();
+    HashMap<String, HashSet<String>> index;
 
     public MulticastServerAction(String received, MulticastSocket socket, InetAddress group, MulticastServer server) {
         this.received = received;
@@ -29,6 +30,7 @@ public class MulticastServerAction extends Thread {
         this.PORT = server.getPORT();
         this.listUsers = server.getListUsers();
         this.urlList = server.getUrlList();
+        this.index = server.getIndex();
     }
 
     public void run() {
@@ -107,7 +109,7 @@ public class MulticastServerAction extends Thread {
 
             else if (messageType.equals("search")) {
                 String clientNo = receivedSplit[1].split("\\|")[1];
-                String word = receivedSplit[2].split("\\|")[1];
+                String words = receivedSplit[2].split("\\|")[1];
 
                 try {
                     String username = receivedSplit[3].split("\\|")[1];
@@ -121,13 +123,44 @@ public class MulticastServerAction extends Thread {
                         }
 
                     if (user != null)
-                        user.getSearchHistory().add(0, word);
+                        user.getSearchHistory().add(0, words);
 
                 } catch (Exception e) {
 
                 }
 
-                HashSet<String> urlResults = index.get(word);
+                HashSet<String> urlResults;
+
+                try{
+                    String[] wordList = words.split(" "); 
+
+                    System.out.println(words);
+
+                    System.out.println(wordList[0]);
+
+                    HashSet<String> wordUrlResults_1 = index.get(wordList[0]);
+
+                    urlResults = new HashSet<>(wordUrlResults_1);
+
+                    for(int i = 1; i < wordList.length; i++){
+                        HashSet<String> wordUrlResults_2 = index.get(wordList[i]);
+                        for(String s: urlResults)
+                            if(!wordUrlResults_2.contains(s))
+                                urlResults.remove(s);
+                    }
+
+                } catch(NullPointerException e){
+                    e.printStackTrace();
+
+                    urlResults = null;
+                } catch (Exception e){
+                    e.printStackTrace();
+
+                    urlResults = index.get(words);
+
+                }
+
+
 
                 message = "type|searchResult;clientNo|" + clientNo + ";urlCount|";
 
@@ -135,6 +168,10 @@ public class MulticastServerAction extends Thread {
                     message += urlResults.size();
 
                     int urlCount = 0;
+
+                    for(URL url: urlList){
+                        System.out.println(url.getTitle() + ": " + url.getLinksCount());
+                    }
 
                     Collections.sort(urlList);
 
