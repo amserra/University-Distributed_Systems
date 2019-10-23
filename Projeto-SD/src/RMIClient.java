@@ -2,13 +2,15 @@ import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 
-public class RMIClient {
+public class RMIClient extends UnicastRemoteObject implements ClientInterface {
+    static final long serialVersionUID = 1L;
     int clientNo;
     String typeOfClient = "anonymous";
     String username = null;
     UI userUI;
-    RMIInterface ci;
+    ServerInterface serverInterface;
     final String RMINAME = "RMIConnection";
 
     public static void main(String[] args) throws MalformedURLException, RemoteException, NotBoundException {
@@ -16,19 +18,27 @@ public class RMIClient {
     }
 
     RMIClient() throws MalformedURLException, RemoteException, NotBoundException {
+        super();
         connectToRMIServer();
         userUI = new UI(this);
         userUI.mainMenu();
     }
 
+    public void notification() {
+        System.out.println("\nNotification: Promoted to admin!");
+        this.typeOfClient = "admin";
+    }
+
     public void connectToRMIServer() throws MalformedURLException, RemoteException, NotBoundException {
         try {
-            ci = (RMIInterface) Naming.lookup(RMINAME);
+            serverInterface = (ServerInterface) Naming.lookup(RMINAME);
         } catch (java.rmi.ConnectException e) {
             System.out.println("\nConnect the server first.");
             System.exit(-1);
         }
-        String msg = ci.sayHello("client");
+        // So that RMIServer has RMIClient reference (client send subscription to
+        // server)
+        String msg = serverInterface.sayHelloFromClient(this);
         clientNo = Integer.parseInt(msg.substring(msg.length() - 1));
         System.out.println(msg);
     }
@@ -37,13 +47,13 @@ public class RMIClient {
             throws RemoteException, MalformedURLException, NotBoundException {
         try {
             // Dar para trocar o bkup pelo prim vir aqui. E so para ser + rapido
-            // ci = (RMIInterface) Naming.lookup(RMINAME);
-            String msg = ci.authentication(this.clientNo, isLogin, username, password);
+            // serverInterface = (RMIInterface) Naming.lookup(RMINAME);
+            String msg = serverInterface.authentication(this.clientNo, isLogin, username, password);
             System.out.println("Recebi a mensagem: " + msg);
 
             String[] parameters = msg.split(";");
-            String status = parameters[2].split("\\|")[1];
             int receivedClientNo = Integer.parseInt(parameters[1].split("\\|")[1]);
+            String status = parameters[2].split("\\|")[1];
             // Sera preciso esta confirmacao?
             if (this.clientNo == receivedClientNo) {
                 if (status.equals("valid")) {
@@ -54,10 +64,14 @@ public class RMIClient {
                     else
                         this.typeOfClient = "user";
 
-                    if (isLogin)
+                    if (isLogin) {
                         System.out.println("Login successful. Welcome " + usr + "\n");
-                    else
+                        boolean notification = Boolean.parseBoolean(parameters[5].split("\\|")[1]);
+                        if (notification)
+                            System.out.println("Notification: You have been promoted to admin!");
+                    } else {
                         System.out.println("Register successful. Welcome " + usr + "\n");
+                    }
 
                     this.username = usr;
                     userUI.mainMenu();
@@ -104,7 +118,7 @@ public class RMIClient {
     public void search(String[] words) throws RemoteException, MalformedURLException, NotBoundException {
         try {
             String searchTerms = String.join(" ", words);
-            String msg = ci.search(this.clientNo, username, searchTerms);
+            String msg = serverInterface.search(this.clientNo, username, searchTerms);
             System.out.println("Recebi a mensagem: " + msg);
             String[] parameters = msg.split(";");
             int receivedClientNo = Integer.parseInt(parameters[1].split("\\|")[1]);
@@ -129,7 +143,7 @@ public class RMIClient {
     public void searchHistory() throws RemoteException, MalformedURLException, NotBoundException {
         // Call RMI Server method to query all the searches
         try {
-            String msg = ci.searchHistory(this.clientNo, this.username);
+            String msg = serverInterface.searchHistory(this.clientNo, this.username);
             System.out.println("Recebi a mensagem: " + msg);
             String[] parameters = msg.split(";");
             int receivedClientNo = Integer.parseInt(parameters[1].split("\\|")[1]);
@@ -155,7 +169,7 @@ public class RMIClient {
 
     public void linksPointing(String url) throws RemoteException, MalformedURLException, NotBoundException {
         try {
-            String msg = ci.linksPointing(this.clientNo, url);
+            String msg = serverInterface.linksPointing(this.clientNo, url);
             System.out.println("Recebi a mensagem: " + msg);
             String[] parameters = msg.split(";");
             int receivedClientNo = Integer.parseInt(parameters[1].split("\\|")[1]);
@@ -182,7 +196,7 @@ public class RMIClient {
         // Send URL from RMI server to Multicast Server to be indexed
         // return to indexNewURL menu to index more
         try {
-            String msg = ci.indexNewURL(this.clientNo, url);
+            String msg = serverInterface.indexNewURL(this.clientNo, url);
             String[] parameters = msg.split(";");
             int receivedClientNo = Integer.parseInt(parameters[1].split("\\|")[1]);
             System.out.println("Recebi a mensagem: " + msg);
@@ -198,7 +212,7 @@ public class RMIClient {
 
     public void grantPrivileges(String username) throws RemoteException, MalformedURLException, NotBoundException {
         try {
-            String msg = ci.grantPrivileges(this.clientNo, username);
+            String msg = serverInterface.grantPrivileges(this.clientNo, username);
             System.out.println("Recebi a mensagem: " + msg);
             String[] parameters = msg.split(";");
             int receivedClientNo = Integer.parseInt(parameters[1].split("\\|")[1]);

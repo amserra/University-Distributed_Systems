@@ -1,7 +1,10 @@
 import java.rmi.Remote;
 
-public interface RMIInterface extends Remote {
-    public String sayHello(String type) throws java.rmi.RemoteException;
+public interface ServerInterface extends Remote {
+    public String sayHelloFromBackup() throws java.rmi.RemoteException; // For backup server
+
+    public String sayHelloFromClient(ClientInterface client) throws java.rmi.RemoteException; // For
+                                                                                              // clients
 
     public String authentication(int clientNo, boolean isLogin, String username, String password)
             throws java.rmi.RemoteException;

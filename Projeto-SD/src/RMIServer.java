@@ -9,11 +9,13 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.server.UnicastRemoteObject;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 
-public class RMIServer extends UnicastRemoteObject implements RMIInterface {
+public class RMIServer extends UnicastRemoteObject implements ServerInterface {
     static final long serialVersionUID = 1L;
     int clientNo = 1; // Id for RMIServer to indentify RMIClients
-    RMIInterface ci;
+    ServerInterface serverInterface; // So that backup server has the reference
+    HashMap<Integer, ClientInterface> clientInterfacesMap = new HashMap<>();
     boolean isBackup; // Is backup server?
     MulticastSocket socket = null;
     final String MULTICAST_ADDRESS = "224.0.224.0";
@@ -30,13 +32,22 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface {
         connectToRMIServer();
     }
 
+    public void notification(int clientNo) throws RemoteException {
+        try {
+            ClientInterface client = clientInterfacesMap.get(clientNo);
+            client.notification();
+        } catch (RemoteException e) {
+            System.out.println("ERROR #7: Something went wrong. Would you mind to try again? :)");
+        }
+    }
+
     public void connectToRMIServer() throws AccessException, RemoteException, MalformedURLException, NotBoundException {
         // So para mensagem na consola
         boolean wasBackup = false;
         try {
             // Tentar primeiro conectar ao primary RMIServer(no caso de ser backup)
-            ci = (RMIInterface) Naming.lookup(RMINAME);
-            String msg = ci.sayHello("server");
+            serverInterface = (ServerInterface) Naming.lookup(RMINAME);
+            String msg = serverInterface.sayHelloFromBackup();
             System.out.println(msg);
             wasBackup = true;
             this.isBackup = true;
@@ -65,14 +76,13 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface {
         }
     }
 
-    // OK! Dá
     // For the secondary server to check if primary failed
     public void checkPrimaryServerStatus() throws InterruptedException, AccessException, RemoteException {
         boolean run = true;
         while (run) {
             Thread.sleep(5000);
             try {
-                String res = ci.testPrimary();
+                String res = serverInterface.testPrimary();
 
                 System.out.println(LocalDateTime.now().getHour() + ":" + LocalDateTime.now().getMinute() + ":"
                         + LocalDateTime.now().getSecond() + " [Primary server] " + res);
@@ -84,7 +94,7 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface {
         }
     }
 
-    public String connectToMulticast(int clientNo, String msg) {
+    public String connectToMulticast(int clientNo, String msg) throws RemoteException {
         try {
             // Send
             socket = new MulticastSocket(PORT); // create socket and bind it
@@ -129,15 +139,16 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface {
         return null;
     }
 
-    public String sayHello(String type) throws RemoteException {
-        if (type.compareTo("client") == 0) {
-            System.out.println("[Client no " + clientNo + "] " + "Has just connected.");
-            clientNo++;
-            return "Connected to RMI Primary Server successfully!\nServer gave me the id no " + (clientNo - 1);
-        } else {
-            System.out.println("[Backup server] Has just connected.");
-            return "Connected to RMI Primary Server successfully!";
-        }
+    public String sayHelloFromBackup() throws RemoteException {
+        System.out.println("[Backup server] Has just connected.");
+        return "Connected to RMI Primary Server successfully!";
+    }
+
+    public String sayHelloFromClient(ClientInterface client) throws RemoteException {
+        clientNo++;
+        this.clientInterfacesMap.put(clientNo, client);
+        System.out.println("[Client no " + clientNo + "] " + "Has just connected.");
+        return "Connected to RMI Primary Server successfully!\nServer gave me the id no " + (clientNo - 1);
     }
 
     public String testPrimary() throws RemoteException {
