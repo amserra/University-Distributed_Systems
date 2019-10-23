@@ -11,6 +11,8 @@ import java.util.Queue;
 import java.util.StringTokenizer;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import javax.net.ssl.SSLHandshakeException;
+
 import org.jsoup.HttpStatusException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -171,6 +173,9 @@ public class WebCrawler extends Thread {
             } catch(UnknownHostException e){
                 urlList.remove(urlObject);
                 System.out.println("URL invalido. A continuar indexacao...");
+            } catch(SSLHandshakeException e){
+                urlList.remove(urlObject);
+                System.out.println("Erro de conexão. A continuar indexação...");
             }
 
             //System.out.println("Vai ser vista a pagina: " + urlQueue.peek());

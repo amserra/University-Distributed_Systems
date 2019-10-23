@@ -23,10 +23,10 @@ public class MulticastServer extends Thread {
     private HashSet<Integer> multicastServerCheckedList = new HashSet<>(); //HashSet para verificar os multicast servers que confirmaram estarem "vivos"
     private boolean checkingMulticastServers = false; //para verificar se este multicast server está a fazer a verificação
 
-    private ArrayList<User> listUsers = new ArrayList<User>();
-    private CopyOnWriteArrayList<URL> urlList = new CopyOnWriteArrayList<>();
+    private ArrayList<User> listUsers = new ArrayList<User>(); //Lista de utilizadores
+    private CopyOnWriteArrayList<URL> urlList = new CopyOnWriteArrayList<>(); //Lista de URLs
 
-    private HashMap<String, HashSet<String>> index = new HashMap<>();
+    private HashMap<String, HashSet<String>> index = new HashMap<>(); // HashMap com os URLs para cada palavra
 
     public static void main(String[] args) {
         MulticastServer server = new MulticastServer();
