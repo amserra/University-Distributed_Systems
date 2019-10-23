@@ -167,6 +167,7 @@ public class UI {
 
     public void grantPrivileges() throws RemoteException, MalformedURLException, NotBoundException {
         System.out.println("\n-----Grant admin privileges-----\n");
+        System.out.println("NOTE: Type -1 to return to the main menu\n");
         String userName = validateStringValue("Username to make admin: ",
                 "Invalid username.\nInsert a valid username (with only letters and numbers and length within 4 to 15 characters).",
                 4, 15);

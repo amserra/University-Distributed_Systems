@@ -19,6 +19,9 @@ public interface ServerInterface extends Remote {
 
     public String linksPointing(int clientNo, String url) throws java.rmi.RemoteException;
 
-    public String grantPrivileges(int clientNo, String username) throws java.rmi.RemoteException;
+    public String grantPrivileges(int clientNo, String username)
+            throws java.rmi.RemoteException, java.rmi.NotBoundException, java.net.MalformedURLException;
+
+    public String logout(int clientNo, String username) throws java.rmi.RemoteException;
 
 }

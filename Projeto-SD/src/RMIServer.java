@@ -32,7 +32,7 @@ public class RMIServer extends UnicastRemoteObject implements ServerInterface {
         connectToRMIServer();
     }
 
-    public void notification(int clientNo) throws RemoteException {
+    public void notification(int clientNo) throws RemoteException, MalformedURLException, NotBoundException {
         try {
             ClientInterface client = clientInterfacesMap.get(clientNo);
             client.notification();
@@ -145,10 +145,11 @@ public class RMIServer extends UnicastRemoteObject implements ServerInterface {
     }
 
     public String sayHelloFromClient(ClientInterface client) throws RemoteException {
-        clientNo++;
-        this.clientInterfacesMap.put(clientNo, client);
         System.out.println("[Client no " + clientNo + "] " + "Has just connected.");
-        return "Connected to RMI Primary Server successfully!\nServer gave me the id no " + (clientNo - 1);
+        this.clientInterfacesMap.put(clientNo, client);
+        String msg = "Connected to RMI Primary Server successfully!\nServer gave me the id no " + clientNo;
+        clientNo++;
+        return msg;
     }
 
     public String testPrimary() throws RemoteException {
@@ -166,6 +167,14 @@ public class RMIServer extends UnicastRemoteObject implements ServerInterface {
             msg = "type|register;clientNo|" + clientNo + ";username|" + username + ";password|" + password;
 
         System.out.println("Mensgem a ser enviada: " + msg);
+        String msgReceive = connectToMulticast(clientNo, msg);
+        System.out.println("Mensagem recebida: " + msgReceive);
+        return msgReceive;
+    }
+
+    public String logout(int clientNo, String username) throws RemoteException {
+        String msg = "type|logout;clientNo" + clientNo + ";username|" + username;
+        System.out.println("Mensagem a ser enviada: " + msg);
         String msgReceive = connectToMulticast(clientNo, msg);
         System.out.println("Mensagem recebida: " + msgReceive);
         return msgReceive;
@@ -209,14 +218,16 @@ public class RMIServer extends UnicastRemoteObject implements ServerInterface {
         return msgReceive;
     }
 
-    public String grantPrivileges(int clientNo, String username) throws RemoteException {
+    public String grantPrivileges(int clientNo, String username)
+            throws RemoteException, MalformedURLException, NotBoundException {
         String msg = "type|promote;clientNo|" + clientNo + ";username|" + username;
         System.out.println("Mensagem a ser enviada: " + msg);
         String msgReceive = connectToMulticast(clientNo, msg);
         System.out.println("Mensagem recebida: " + msgReceive);
         String[] parameters = msgReceive.split(";");
+        String status = parameters[2].split("\\|")[1];
         // Prevents ArrayIndexOutOfBounds
-        if (parameters.length > 3 && parameters[3] != null) {
+        if ((parameters.length > 3) && (parameters[3] != null) && (status.equals("valid"))) {
             int newAdminNo = Integer.parseInt(parameters[3].split("\\|")[1]);
             ClientInterface client = clientInterfacesMap.get(newAdminNo);
             client.notification();

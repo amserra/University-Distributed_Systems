@@ -24,9 +24,12 @@ public class RMIClient extends UnicastRemoteObject implements ClientInterface {
         userUI.mainMenu();
     }
 
-    public void notification() {
-        System.out.println("\nNotification: Promoted to admin!");
-        this.typeOfClient = "admin";
+    public void notification() throws MalformedURLException, RemoteException, NotBoundException {
+        if (this.typeOfClient.equals("user")) {
+            System.out.println("\nNotification: Promoted to admin!");
+            this.typeOfClient = "admin";
+            userUI.mainMenu();
+        }
     }
 
     public void connectToRMIServer() throws MalformedURLException, RemoteException, NotBoundException {
@@ -100,11 +103,18 @@ public class RMIClient extends UnicastRemoteObject implements ClientInterface {
     }
 
     public void logout(boolean result) throws RemoteException, MalformedURLException, NotBoundException {
-        if (result == true) {
-            this.typeOfClient = "anonymous";
+        try {
+            String msg = serverInterface.logout(this.clientNo, this.username);
+            System.out.println("Recebi a mensagem: " + msg);
+            if (result == true) {
+                this.typeOfClient = "anonymous";
+            }
+            System.out.println("\nLogout successful. You are now an anonymous user.\n");
+            userUI.mainMenu();
+
+        } catch (RemoteException e) {
+            System.out.println("ERROR #8: Something went wrong. Would you mind to try again? :)");
         }
-        System.out.println("\nLogout successful. You are now an anonymous user.\n");
-        userUI.mainMenu();
     }
 
     public void shutdown() {
