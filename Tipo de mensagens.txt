@@ -22,7 +22,7 @@ type | login ; clientNo | *clientNo* ; username | *username* ; password | *passw
 Respostas:
 
 Login valido:
-type | loginResult ; clientNo | *clientNo* ; status | valid ; username | *o username* ; isAdmin | *boolean*
+type | loginResult ; clientNo | *clientNo* ; status | valid ; username | *o username* ; isAdmin | *boolean* ; notification | *boolean*
 
 Login Invalido:
 type | loginResult ; clientNo | *clientNo* ; status | invalid

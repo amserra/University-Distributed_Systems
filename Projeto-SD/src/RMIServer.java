@@ -214,6 +214,14 @@ public class RMIServer extends UnicastRemoteObject implements ServerInterface {
         System.out.println("Mensagem a ser enviada: " + msg);
         String msgReceive = connectToMulticast(clientNo, msg);
         System.out.println("Mensagem recebida: " + msgReceive);
+        String[] parameters = msgReceive.split(";");
+        // Prevents ArrayIndexOutOfBounds
+        if (parameters.length > 3 && parameters[3] != null) {
+            int newAdminNo = Integer.parseInt(parameters[3].split("\\|")[1]);
+            ClientInterface client = clientInterfacesMap.get(newAdminNo);
+            client.notification();
+        }
+
         return msgReceive;
     }
 }
