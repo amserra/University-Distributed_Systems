@@ -68,6 +68,9 @@ public class MulticastServerAction extends Thread {
                     message = "type|registerResult;clientNo|" + clientNo + ";status|valid;username|"
                             + newUser.getUsername() + ";isAdmin|" + newUser.isAdmin();
 
+                    UsersSync us = new UsersSync();
+                    us.saveUsers(listUsers);
+
                 } else {
                     message = "type|registerResult;clientNo|" + clientNo + ";status|invalid";
                 }
@@ -96,6 +99,9 @@ public class MulticastServerAction extends Thread {
                     message = "type|loginResult;clientNo|" + clientNo + ";status|valid;username|" + user.getUsername()
                             + ";isAdmin|" + user.isAdmin() + ";notification|" + user.isNotification();
                     user.setNotification(false);
+
+                    UsersSync us = new UsersSync();
+                    us.saveUsers(listUsers);
                 } else {
                     message = "type|loginResult;clientNo|" + clientNo + ";status|invalid";
                 }
@@ -129,6 +135,9 @@ public class MulticastServerAction extends Thread {
 
                     if (user != null)
                         user.getSearchHistory().add(0, words);
+
+                    UsersSync us = new UsersSync();
+                    us.saveUsers(listUsers);
 
                 } catch (Exception e) {
 
@@ -265,6 +274,19 @@ public class MulticastServerAction extends Thread {
                     message = "type|promoteResult;clientNo|" + clientNo
                             + ";status|invalid;message|That user doesn't exist";
                 }
+            } else if(messageType.equals("logout")){
+                String clientNo = receivedSplit[1].split("\\|")[1];
+                String username = receivedSplit[2].split("\\|")[1];
+
+                User tempUser = new User(username);
+
+                int indexOfUser = listUsers.indexOf(tempUser);
+                User user = listUsers.get(indexOfUser);
+
+                user.setLoggedIn(false);
+
+                message = "type|logoutResult;clientNo|" + clientNo + ";status|valid";
+
             } else if (messageType.equals("checkStatusConfirm")) {
 
                 if (server.isCheckingMulticastServers()) {
