@@ -189,7 +189,7 @@ public class RMIClient extends UnicastRemoteObject implements ClientInterface {
                 // Starts at index 3
                 for (int i = startIndex; i < numOfLinks + startIndex; i++) {
                     count++;
-                    System.out.println("Link " + count + ": " + parameters[i]);
+                    System.out.println("Link " + count + ": " + parameters[i].split("\\|")[1]);
                 }
             } else if (this.clientNo == receivedClientNo && numOfLinks == 0) {
                 System.out.println("Link doesn't have any pages connected to it yet!");
