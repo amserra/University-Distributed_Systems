@@ -20,19 +20,26 @@ public class MulticastServer extends Thread {
     private String TCP_ADDRESS = "127.0.0.1";
     private int TCP_PORT = 6000;
 
-    private int multicastServerNo; //Numero do servidor
-    private ArrayList<Integer> multicastServerNoList = new ArrayList<>(); //Array List com os multicast servers
-    private CopyOnWriteArraySet<Integer> multicastServerCheckedList = new CopyOnWriteArraySet<>(); //HashSet para verificar os multicast servers que confirmaram estarem "vivos"
-    private boolean checkingMulticastServers = false; //para verificar se este multicast server está a fazer a verificação
+    private int multicastServerNo; // Numero do servidor
+    private ArrayList<Integer> multicastServerNoList = new ArrayList<>(); // Array List com os multicast servers
+    private CopyOnWriteArraySet<Integer> multicastServerCheckedList = new CopyOnWriteArraySet<>(); // HashSet para
+                                                                                                   // verificar os
+                                                                                                   // multicast servers
+                                                                                                   // que confirmaram
+                                                                                                   // estarem "vivos"
+    private boolean checkingMulticastServers = false; // para verificar se este multicast server está a fazer a
+                                                      // verificação
 
-    private CopyOnWriteArrayList<User> listUsers = new CopyOnWriteArrayList<User>(); //Lista de utilizadores
-    private CopyOnWriteArrayList<URL> urlList = new CopyOnWriteArrayList<>(); //Lista de URLs
+    private CopyOnWriteArrayList<User> listUsers = new CopyOnWriteArrayList<User>(); // Lista de utilizadores
+    private CopyOnWriteArrayList<URL> urlList = new CopyOnWriteArrayList<>(); // Lista de URLs
 
-    private ConcurrentHashMap<String, CopyOnWriteArraySet<String>> index = new ConcurrentHashMap<>(); // HashMap com os URLs para cada palavra
+    private ConcurrentHashMap<String, CopyOnWriteArraySet<String>> index = new ConcurrentHashMap<>(); // HashMap com os
+                                                                                                      // URLs para cada
+                                                                                                      // palavra
 
     public static void main(String[] args) {
         MulticastServer server = new MulticastServer();
-        server.setMulticastServerNo(Integer.parseInt(args[0]));
+        // server.setMulticastServerNo(Integer.parseInt(args[0]));
         server.start();
     }
 
@@ -48,11 +55,9 @@ public class MulticastServer extends Thread {
             InetAddress group = InetAddress.getByName(MULTICAST_ADDRESS);
             socket.joinGroup(group);
 
-            
+            // getMulticastServerNo(socket, group);
 
-           // getMulticastServerNo(socket, group);
-
-            //System.out.println("Server " + multicastServerNo + " is running!");
+            // System.out.println("Server " + multicastServerNo + " is running!");
 
             while (true) {
                 DatagramPacket packetReceived = new DatagramPacket(buf, buf.length);
@@ -72,17 +77,17 @@ public class MulticastServer extends Thread {
     }
 
     private void getMulticastServerNo(MulticastSocket socket, InetAddress group) {
-        try{
-            String message = "type|multicastServerStarted"; 
-            byte[] buffer = message.getBytes(); 
+        try {
+            String message = "type|multicastServerStarted";
+            byte[] buffer = message.getBytes();
             DatagramPacket packetSent = new DatagramPacket(buffer, buffer.length, group, PORT);
             socket.send(packetSent);
 
             String messageType;
             String[] splitReceived;
 
-            do{
-                byte[] buf = new byte[64*1024];
+            do {
+                byte[] buf = new byte[64 * 1024];
                 DatagramPacket packetReceived = new DatagramPacket(buf, buf.length);
                 socket.receive(packetReceived);
                 String received = new String(packetReceived.getData(), 0, packetReceived.getLength());
@@ -91,26 +96,23 @@ public class MulticastServer extends Thread {
 
                 messageType = splitReceived[0].split("\\|")[1];
 
-
             } while (!messageType.equals("multicastServerNo"));
 
             multicastServerNo = Integer.parseInt(splitReceived[1].split("\\|")[1]);
 
             int multicastServerCount = Integer.parseInt(splitReceived[2].split("\\|")[1]);
 
-            for(int i = 0; i < multicastServerCount; i++){
+            for (int i = 0; i < multicastServerCount; i++) {
                 multicastServerNoList.add(Integer.parseInt(splitReceived[3 + i].split("\\|")[1]));
             }
 
-            for(Integer i: multicastServerNoList)
+            for (Integer i : multicastServerNoList)
                 System.out.println("SERVER: " + i);
-
-
 
             MulticastServerControl multicastServerControl = new MulticastServerControl(this, group, socket);
             multicastServerControl.start();
 
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

@@ -13,7 +13,7 @@ import java.util.HashMap;
 
 public class RMIServer extends UnicastRemoteObject implements ServerInterface {
     static final long serialVersionUID = 1L;
-    int clientNo = 1; // Id for RMIServer to indentify RMIClients
+    int clientNo = 1; // Id for RMIServer to indentify RMIClients // ATOMIC INT
     ServerInterface serverInterface; // So that backup server has the reference
     HashMap<Integer, ClientInterface> clientInterfacesMap = new HashMap<>();
     boolean isBackup; // Is backup server?

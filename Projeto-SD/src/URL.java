@@ -8,19 +8,16 @@ public class URL implements Comparable<URL> {
     private Integer linksCount;
     private CopyOnWriteArraySet<String> urlPointingToMeList;
 
-
-
-
     public URL(String url) {
         this.url = url;
-	}
+    }
 
-	@Override
-    public boolean equals(Object o){
-        if(o instanceof URL){
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof URL) {
             URL p = (URL) o;
             return this.url.equals(p.getUrl());
-        } else if(o instanceof String){
+        } else if (o instanceof String) {
             String s = (String) o;
             return this.url.equals(s);
         } else
@@ -29,13 +26,13 @@ public class URL implements Comparable<URL> {
 
     @Override
     public int compareTo(URL url) {
-        if(url.getLinksCount() != null){
+        if (url != null && url.getLinksCount() != null && this.linksCount != null) {
             int compareLinks = url.getLinksCount();
 
             /* For Descending order do like this */
-            return compareLinks-this.linksCount;
-        } else 
-            return -1;
+            return compareLinks - this.linksCount;
+        } else
+            return 0;
     }
 
     public String getUrl() {
@@ -70,7 +67,6 @@ public class URL implements Comparable<URL> {
         this.linksCount = linksCount;
     }
 
-
     public CopyOnWriteArraySet<String> getUrlPointingToMeList() {
         return urlPointingToMeList;
     }
@@ -79,7 +75,7 @@ public class URL implements Comparable<URL> {
         this.urlPointingToMeList = urlPointingToMeList;
     }
 
-    public String toString(){
-        return "URL: " + url + "\nTitle: " +title+ "\nText: " + text + "\nNumero de referencias: " + linksCount;
+    public String toString() {
+        return "URL: " + url + "\nTitle: " + title + "\nText: " + text + "\nNumero de referencias: " + linksCount;
     }
 }

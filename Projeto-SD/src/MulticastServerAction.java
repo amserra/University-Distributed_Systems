@@ -160,7 +160,7 @@ public class MulticastServerAction extends Thread {
                     }
 
                 } catch (NullPointerException e) {
-                    e.printStackTrace();
+                    System.out.println("Word not indexed");
 
                     urlResults = null;
                 } catch (Exception e) {
@@ -267,7 +267,7 @@ public class MulticastServerAction extends Thread {
                     message = "type|promoteResult;clientNo|" + clientNo
                             + ";status|invalid;message|That user doesn't exist";
                 }
-            } else if(messageType.equals("logout")){
+            } else if (messageType.equals("logout")) {
                 String clientNo = receivedSplit[1].split("\\|")[1];
                 String username = receivedSplit[2].split("\\|")[1];
 
