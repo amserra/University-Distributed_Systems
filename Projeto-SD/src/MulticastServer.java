@@ -2,9 +2,9 @@ import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 public class MulticastServer extends Thread {
 
@@ -17,19 +17,22 @@ public class MulticastServer extends Thread {
 
     private String MULTICAST_ADDRESS = "224.0.224.0";
     private int PORT = 4369;
+    private String TCP_ADDRESS = "127.0.0.1";
+    private int TCP_PORT = 6000;
 
     private int multicastServerNo; //Numero do servidor
     private ArrayList<Integer> multicastServerNoList = new ArrayList<>(); //Array List com os multicast servers
-    private HashSet<Integer> multicastServerCheckedList = new HashSet<>(); //HashSet para verificar os multicast servers que confirmaram estarem "vivos"
+    private CopyOnWriteArraySet<Integer> multicastServerCheckedList = new CopyOnWriteArraySet<>(); //HashSet para verificar os multicast servers que confirmaram estarem "vivos"
     private boolean checkingMulticastServers = false; //para verificar se este multicast server está a fazer a verificação
 
-    private ArrayList<User> listUsers = new ArrayList<User>(); //Lista de utilizadores
+    private CopyOnWriteArrayList<User> listUsers = new CopyOnWriteArrayList<User>(); //Lista de utilizadores
     private CopyOnWriteArrayList<URL> urlList = new CopyOnWriteArrayList<>(); //Lista de URLs
 
-    private HashMap<String, HashSet<String>> index = new HashMap<>(); // HashMap com os URLs para cada palavra
+    private ConcurrentHashMap<String, CopyOnWriteArraySet<String>> index = new ConcurrentHashMap<>(); // HashMap com os URLs para cada palavra
 
     public static void main(String[] args) {
         MulticastServer server = new MulticastServer();
+        server.setMulticastServerNo(Integer.parseInt(args[0]));
         server.start();
     }
 
@@ -44,6 +47,8 @@ public class MulticastServer extends Thread {
             socket = new MulticastSocket(PORT);
             InetAddress group = InetAddress.getByName(MULTICAST_ADDRESS);
             socket.joinGroup(group);
+
+            
 
            // getMulticastServerNo(socket, group);
 
@@ -110,11 +115,11 @@ public class MulticastServer extends Thread {
         }
     }
 
-    public HashMap<String, HashSet<String>> getIndex() {
+    public ConcurrentHashMap<String, CopyOnWriteArraySet<String>> getIndex() {
         return index;
     }
 
-    public void setIndex(HashMap<String, HashSet<String>> index) {
+    public void setIndex(ConcurrentHashMap<String, CopyOnWriteArraySet<String>> index) {
         this.index = index;
     }
 
@@ -142,11 +147,11 @@ public class MulticastServer extends Thread {
         PORT = pORT;
     }
 
-    public ArrayList<User> getListUsers() {
+    public CopyOnWriteArrayList<User> getListUsers() {
         return listUsers;
     }
 
-    public void setListUsers(ArrayList<User> listUsers) {
+    public void setListUsers(CopyOnWriteArrayList<User> listUsers) {
         this.listUsers = listUsers;
     }
 
@@ -174,11 +179,11 @@ public class MulticastServer extends Thread {
         this.checkingMulticastServers = checkingMulticastServers;
     }
 
-    public HashSet<Integer> getMulticastServerCheckedList() {
+    public CopyOnWriteArraySet<Integer> getMulticastServerCheckedList() {
         return multicastServerCheckedList;
     }
 
-    public void setMulticastServerCheckedList(HashSet<Integer> multicastServerCheckedList) {
+    public void setMulticastServerCheckedList(CopyOnWriteArraySet<Integer> multicastServerCheckedList) {
         this.multicastServerCheckedList = multicastServerCheckedList;
     }
 

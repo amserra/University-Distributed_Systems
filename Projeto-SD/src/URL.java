@@ -1,4 +1,4 @@
-import java.util.ArrayList;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 public class URL implements Comparable<URL> {
 
@@ -6,7 +6,7 @@ public class URL implements Comparable<URL> {
     private String title;
     private String text;
     private Integer linksCount;
-    private ArrayList<String> urlPointingToMeList;
+    private CopyOnWriteArraySet<String> urlPointingToMeList;
 
 
 
@@ -71,11 +71,11 @@ public class URL implements Comparable<URL> {
     }
 
 
-    public ArrayList<String> getUrlPointingToMeList() {
+    public CopyOnWriteArraySet<String> getUrlPointingToMeList() {
         return urlPointingToMeList;
     }
 
-    public void setUrlPointingToMeList(ArrayList<String> urlPointingToMeList) {
+    public void setUrlPointingToMeList(CopyOnWriteArraySet<String> urlPointingToMeList) {
         this.urlPointingToMeList = urlPointingToMeList;
     }
 

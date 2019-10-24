@@ -3,7 +3,7 @@ import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 public class MulticastServerControl extends Thread {
 
@@ -50,7 +50,7 @@ public class MulticastServerControl extends Thread {
                         else
                             System.out.println("Está bom " + i);
 
-                server.setMulticastServerCheckedList(new HashSet<Integer>());
+                server.setMulticastServerCheckedList(new CopyOnWriteArraySet<Integer>());
                 
 
                 

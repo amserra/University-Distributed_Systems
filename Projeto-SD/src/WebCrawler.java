@@ -3,13 +3,13 @@ import java.io.IOException;
 import java.net.ConnectException;
 import java.net.MalformedURLException;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.StringTokenizer;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 import javax.net.ssl.SSLHandshakeException;
 
@@ -23,8 +23,6 @@ public class WebCrawler extends Thread {
 
     private MulticastServer server;
     private String url;
-    private int HashSetInitialCapacity = 10000;
-    private float HashSetLoadFactor = 0.75f;
     private int MaxWordsText = 20;
 
     private Queue<String> urlQueue = new LinkedList<>();
@@ -38,12 +36,12 @@ public class WebCrawler extends Thread {
     }
 
     public void run() {
-        HashMap<String, HashSet<String>> index = server.getIndex();
+        ConcurrentHashMap<String, CopyOnWriteArraySet<String>> index = server.getIndex();
         CopyOnWriteArrayList<URL> urlList = server.getUrlList();
         recursiveIndex(index, urlList, url);
     }
 
-    private void recursiveIndex(HashMap<String, HashSet<String>> index, CopyOnWriteArrayList<URL> urlList, String url) {
+    private void recursiveIndex(ConcurrentHashMap<String, CopyOnWriteArraySet<String>> index, CopyOnWriteArrayList<URL> urlList, String url) {
 
         String previousUrl = null;
 
@@ -69,7 +67,7 @@ public class WebCrawler extends Thread {
                 urlObject.setLinksCount(1);
 
                 // Cria uma nova Lista com os URLs a apontarem para este URL
-                ArrayList<String> urlPointingList = new ArrayList<>();
+                CopyOnWriteArraySet<String> urlPointingList = new CopyOnWriteArraySet<>();
                 urlPointingList.add(previousUrl);
                 urlObject.setUrlPointingToMeList(urlPointingList);
             }
@@ -87,9 +85,9 @@ public class WebCrawler extends Thread {
             linksCount++;
 
             // Adiciona o URL para o qual aponta
-            ArrayList<String> urlPointingList = urlObject.getUrlPointingToMeList();
+            CopyOnWriteArraySet<String> urlPointingList = urlObject.getUrlPointingToMeList();
             if (urlPointingList == null)
-                urlPointingList = new ArrayList<>();
+                urlPointingList = new CopyOnWriteArraySet<>();
             urlPointingList.add(previousUrl);
             urlObject.setUrlPointingToMeList(urlPointingList);
 
@@ -100,12 +98,11 @@ public class WebCrawler extends Thread {
         /*for(URL u: urlList)
             System.out.println(u.getUrl());*/
 
-        HashSet<String> indexURLs = new HashSet<>();
+        CopyOnWriteArraySet<String> indexURLs = new CopyOnWriteArraySet<>();
 
         // --------------------- Indexar as palavras na pagina do url, fazendo as
         // verificacoes necessarias -------------------------------
         try {
-            try {
                 Document doc = Jsoup.connect(url).get();
                 urlObject.setTitle(doc.title()); // Guardar o titulo da pagina
                 StringTokenizer tokens = new StringTokenizer(doc.text());
@@ -118,7 +115,7 @@ public class WebCrawler extends Thread {
                     indexURLs = index.get(currentToken.toLowerCase());
 
                     if (indexURLs == null) {
-                        indexURLs = new HashSet<String>(HashSetInitialCapacity, HashSetLoadFactor);
+                        indexURLs = new CopyOnWriteArraySet<String>();
                         index.put(currentToken.toLowerCase(), indexURLs);
                     } 
 
@@ -176,6 +173,12 @@ public class WebCrawler extends Thread {
             } catch(SSLHandshakeException e){
                 urlList.remove(urlObject);
                 System.out.println("Erro de conexão. A continuar indexação...");
+            } catch (IOException e) {
+                urlList.remove(urlObject);
+                System.out.println("I/O error");
+            } catch(Exception e){
+                urlList.remove(urlObject);
+                e.printStackTrace();
             }
 
             //System.out.println("Vai ser vista a pagina: " + urlQueue.peek());
@@ -183,8 +186,5 @@ public class WebCrawler extends Thread {
             if (!urlQueue.isEmpty())
                 recursiveIndex(index, urlList, urlQueue.peek());
 
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
-}

@@ -3,9 +3,9 @@ import java.net.InetAddress;
 import java.net.MulticastSocket;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 public class MulticastServerAction extends Thread {
 
@@ -16,10 +16,10 @@ public class MulticastServerAction extends Thread {
     MulticastServer server;
     String MULTICAST_ADDRESS;
     int PORT;
-    ArrayList<User> listUsers;
+    CopyOnWriteArrayList<User> listUsers;
     CopyOnWriteArrayList<URL> urlList;
 
-    HashMap<String, HashSet<String>> index;
+    ConcurrentHashMap<String, CopyOnWriteArraySet<String>> index;
 
     public MulticastServerAction(String received, MulticastSocket socket, InetAddress group, MulticastServer server) {
         this.received = received;
@@ -143,22 +143,18 @@ public class MulticastServerAction extends Thread {
 
                 }
 
-                HashSet<String> urlResults;
+                CopyOnWriteArraySet<String> urlResults;
 
                 try {
                     String[] wordList = words.split(" ");
 
-                    System.out.println(words);
+                    CopyOnWriteArraySet<String> wordUrlResults_1 = index.get(wordList[0]);
 
-                    System.out.println(wordList[0]);
-
-                    HashSet<String> wordUrlResults_1 = index.get(wordList[0]);
-
-                    urlResults = new HashSet<>(wordUrlResults_1);
+                    urlResults = new CopyOnWriteArraySet<>(wordUrlResults_1);
 
                     for (int i = 1; i < wordList.length; i++) {
-                        HashSet<String> wordUrlResults_2 = index.get(wordList[i]);
-                        for (String s : urlResults)
+                        CopyOnWriteArraySet<String> wordUrlResults_2 = index.get(wordList[i]);
+                        for (String s : wordUrlResults_1)
                             if (!wordUrlResults_2.contains(s))
                                 urlResults.remove(s);
                     }
@@ -180,10 +176,6 @@ public class MulticastServerAction extends Thread {
                     message += urlResults.size();
 
                     int urlCount = 0;
-
-                    for (URL url : urlList) {
-                        System.out.println(url.getTitle() + ": " + url.getLinksCount());
-                    }
 
                     Collections.sort(urlList);
 
@@ -214,6 +206,7 @@ public class MulticastServerAction extends Thread {
                 int searchCount = 0;
 
                 for (String s : searchList) {
+                    System.out.println(s);
                     message += ";search_" + searchCount + "|" + s;
                     searchCount++;
                 }
@@ -230,7 +223,7 @@ public class MulticastServerAction extends Thread {
                 if (urlList.contains(urlObject)) {
                     for (URL u : urlList) {
                         if (u.equals(url)) {
-                            ArrayList<String> urlPointingList = u.getUrlPointingToMeList();
+                            CopyOnWriteArraySet<String> urlPointingList = u.getUrlPointingToMeList();
                             if (urlPointingList == null) {
                                 message += "0";
                                 break;

@@ -1,11 +1,9 @@
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.ArrayList;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class UsersSync {
     String file = "files/users_";
@@ -18,7 +16,7 @@ public class UsersSync {
         file += ".txt";
     }
 
-    public void saveUsers(ArrayList<User> userList) {
+    public void saveUsers(CopyOnWriteArrayList<User> userList) {
         try {
 
             FileOutputStream f = new FileOutputStream(new File(file));
@@ -38,7 +36,6 @@ public class UsersSync {
             try {
                 arraylist = (ArrayList) ois.readObject();
             } catch (ClassNotFoundException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
 
@@ -53,6 +50,9 @@ public class UsersSync {
 		} catch (IOException e) {
 			System.out.println("Error initializing stream");
 		} 
+    }
 
+    public void syncUsers(CopyOnWriteArrayList<User> userList){
+        
     }
 }
