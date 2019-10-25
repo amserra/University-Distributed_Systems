@@ -68,8 +68,6 @@ public class MulticastServerAction extends Thread {
                     message = "type|registerResult;clientNo|" + clientNo + ";status|valid;username|"
                             + newUser.getUsername() + ";isAdmin|" + newUser.isAdmin();
 
-                    UsersSync us = new UsersSync();
-                    us.saveUsers(listUsers);
 
                 } else {
                     message = "type|registerResult;clientNo|" + clientNo + ";status|invalid";
@@ -100,8 +98,6 @@ public class MulticastServerAction extends Thread {
                             + ";isAdmin|" + user.isAdmin() + ";notification|" + user.isNotification();
                     user.setNotification(false);
 
-                    UsersSync us = new UsersSync();
-                    us.saveUsers(listUsers);
                 } else {
                     message = "type|loginResult;clientNo|" + clientNo + ";status|invalid";
                 }
@@ -126,6 +122,17 @@ public class MulticastServerAction extends Thread {
                 String clientNo = receivedSplit[1].split("\\|")[1];
                 String words = receivedSplit[2].split("\\|")[1].toLowerCase();
 
+                CopyOnWriteArrayList<Search> searchList = server.getSearchList();
+
+                if(searchList.contains(words)){
+
+                    int indexWords = searchList.indexOf(words);
+                    Search search = searchList.get(indexWords);
+                    search.setnSearches((search.getnSearches()) + 1);
+                } else{
+                    searchList.add(new Search(words, 1));
+                }
+
                 try {
                     String username = receivedSplit[3].split("\\|")[1];
 
@@ -140,8 +147,6 @@ public class MulticastServerAction extends Thread {
                     if (user != null)
                         user.getSearchHistory().add(0, words);
 
-                    UsersSync us = new UsersSync();
-                    us.saveUsers(listUsers);
 
                 } catch (Exception e) {
 
@@ -184,8 +189,9 @@ public class MulticastServerAction extends Thread {
                     Collections.sort(urlList);
 
                     for (URL url : urlList) {
-                        if (urlResults.contains(url.getUrl()))
+                        if (urlResults.contains(url.getUrl())){
                             message += ";url_" + urlCount++ + "|" + url.getUrl();
+                        }
                     }
                 } else
                     message += 0;

@@ -1,3 +1,8 @@
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
@@ -31,6 +36,7 @@ public class MulticastServer extends Thread {
 
     private CopyOnWriteArrayList<User> listUsers = new CopyOnWriteArrayList<User>(); // Lista de utilizadores
     private CopyOnWriteArrayList<URL> urlList = new CopyOnWriteArrayList<>(); // Lista de URLs
+    private CopyOnWriteArrayList<Search> searchList = new CopyOnWriteArrayList<>(); //Lista de pesquisas
 
     private ConcurrentHashMap<String, CopyOnWriteArraySet<String>> index = new ConcurrentHashMap<>(); // HashMap com os
                                                                                                       // URLs para cada
@@ -50,12 +56,14 @@ public class MulticastServer extends Thread {
     public void run() {
         MulticastSocket socket = null;
         try {
-            byte[] buf = new byte[256];
+            byte[] buf = new byte[64*1024];
             socket = new MulticastSocket(PORT);
             InetAddress group = InetAddress.getByName(MULTICAST_ADDRESS);
             socket.joinGroup(group);
 
             getMulticastServerNo(socket, group);
+
+            getMulticastServerFiles();
 
             new IndexSync(this);
 
@@ -121,6 +129,46 @@ public class MulticastServer extends Thread {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void getMulticastServerFiles() {
+        String index_file = "files/index_" + getMulticastServerNo() + ".txt";
+        String url_file = "files/urls_" + getMulticastServerNo() + ".txt";
+
+        //Ler ficheiro do servidor com o hashmap
+        try {
+            FileInputStream f = new FileInputStream(new File(index_file));
+            ObjectInputStream o = new ObjectInputStream(f);
+
+            index = (ConcurrentHashMap<String, CopyOnWriteArraySet<String>>) o.readObject();
+
+            o.close();
+            f.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found");
+        } catch (IOException e) {
+            System.out.println("Error initializing stream");
+        } catch(ClassNotFoundException e){
+            System.out.println("Error transfering HashMap");
+        }
+
+        //Ler ficheiro do servidor com a lista de URLs
+        try {
+            FileInputStream f = new FileInputStream(new File(url_file));
+            ObjectInputStream o = new ObjectInputStream(f);
+
+            urlList = (CopyOnWriteArrayList<URL>) o.readObject();
+
+            o.close();
+            f.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found");
+        } catch (IOException e) {
+            System.out.println("Error initializing stream");
+        } catch(ClassNotFoundException e){
+            System.out.println("Error transfering URL List");
+        }
+
     }
 
     public ConcurrentHashMap<String, CopyOnWriteArraySet<String>> getIndex() {
@@ -209,6 +257,14 @@ public class MulticastServer extends Thread {
 
     public void setTCP_PORT(int tCP_PORT) {
         TCP_PORT = tCP_PORT;
+    }
+
+    public CopyOnWriteArrayList<Search> getSearchList() {
+        return searchList;
+    }
+
+    public void setSearchList(CopyOnWriteArrayList<Search> searchList) {
+        this.searchList = searchList;
     }
 
 }

@@ -152,7 +152,6 @@ class Connection extends Thread{
                     ConcurrentHashMap<String, CopyOnWriteArraySet<String>> receivedIndex = (ConcurrentHashMap<String, CopyOnWriteArraySet<String>>) data;
 
                     for(String s: receivedIndex.keySet()){
-                        System.out.println(s);
                         if(index.containsKey(s)){
                             CopyOnWriteArraySet<String> indexValue = index.get(s);
                             CopyOnWriteArraySet<String> receivedIndexValue = receivedIndex.get(s);
