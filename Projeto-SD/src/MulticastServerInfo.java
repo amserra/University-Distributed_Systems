@@ -43,6 +43,10 @@ public class MulticastServerInfo {
         this.carga = carga;
     }
 
+    public void incrementCarga() {
+        this.carga++;
+    }
+
     public int compareTo(int otherServerNo) {
         return this.serverNo - otherServerNo;
     }

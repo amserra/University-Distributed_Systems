@@ -222,8 +222,28 @@ public class RMIServer extends UnicastRemoteObject implements ServerInterface {
         return msgReceive;
     }
 
+    public int getLowestLoadedServer() {
+        // To initialize the vars, in case nothing found the first server is taken
+        int serverNo = 1;
+        MulticastServerInfo ref = multicastServers.get(1);
+        // Start at a big number
+        int min = 100000;
+
+        for (int i = 0; i < multicastServers.size(); i++) {
+            MulticastServerInfo s = multicastServers.get(i);
+            if (s.getCarga() < min) {
+                serverNo = s.getServerNo();
+                min = s.getCarga();
+                ref = s;
+            }
+        }
+        ref.incrementCarga();
+        return serverNo;
+    }
+
     public String indexNewURL(int clientNo, String url) throws RemoteException {
-        String msg = "type|index;clientNo|" + clientNo + ";url|" + url;
+        int serverNo = getLowestLoadedServer();
+        String msg = "type|index;clientNo|" + clientNo + ";serverNo|" + serverNo + ";url|" + url;
         System.out.println("Mensagem a ser enviada: " + msg);
         String msgReceive = connectToMulticast(clientNo, msg);
         System.out.println("Mensagem recebida: " + msgReceive);
