@@ -3,12 +3,14 @@ import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
 
 public class RMIClient extends UnicastRemoteObject implements ClientInterface {
     static final long serialVersionUID = 1L;
     int clientNo;
     String typeOfClient = "anonymous";
     String username = null;
+    boolean inRealTimeStatistics = false; // Tells if user is in realtime statistics
     UI userUI;
     ServerInterface serverInterface;
     final String RMINAME = "RMIConnection";
@@ -20,8 +22,28 @@ public class RMIClient extends UnicastRemoteObject implements ClientInterface {
     RMIClient() throws MalformedURLException, RemoteException, NotBoundException {
         super();
         connectToRMIServer();
+        controlCTRLC();
         userUI = new UI(this);
         userUI.mainMenu();
+    }
+
+    public void controlCTRLC() {
+        Runtime.getRuntime().addShutdownHook(new Thread() {
+            public void run() {
+                try {
+                    Thread.sleep(200);
+                    System.out.println("\nShutting down...");
+                    // some cleaning up code...
+                    serverInterface.logout(clientNo, username);
+
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    System.out.println("ERROR #10: Something went wrong.");
+                } catch (RemoteException e) {
+                    System.out.println("ERROR #11: Something went wrong.");
+                }
+            }
+        });
     }
 
     public void notification() throws MalformedURLException, RemoteException, NotBoundException {
@@ -114,12 +136,14 @@ public class RMIClient extends UnicastRemoteObject implements ClientInterface {
         }
     }
 
-    public void shutdown() {
-        // Save previous typeOfClient in case of change? How about when force shutdown?
-        // Or is this info in Multicast?
-        // Desligar conexao
-        System.out.println("\nShutdown complete.\nHope to see you again soon! :)");
-        System.exit(1);
+    public void shutdown() throws RemoteException {
+        try {
+            serverInterface.logout(this.clientNo, this.username);
+            System.out.println("\nShutdown complete.\nHope to see you again soon! :)");
+            System.exit(1);
+        } catch (RemoteException e) {
+            System.out.println("ERROR #9: Something went wrong.");
+        }
     }
 
     public void search(String[] words) throws RemoteException, MalformedURLException, NotBoundException {
@@ -246,10 +270,60 @@ public class RMIClient extends UnicastRemoteObject implements ClientInterface {
     public void realTimeStatistics() {
         // Ask to the multicast server?
         // Callback!
+        try {
+            String msg = serverInterface.realTimeStatistics(this.clientNo);
+            this.inRealTimeStatistics = true;
+            System.out.println("Recebi a mensagem: " + msg);
+            String[] parameters = msg.split(";");
+            int receivedClientNo = Integer.parseInt(parameters[1].split("\\|")[1]);
+            System.out.println("Recieved client no: " + receivedClientNo);
+            if (this.clientNo == receivedClientNo) {
+                System.out.println("Started receiving updates...");
+                ArrayList<MulticastServerInfo> servers = serverInterface.activeMulticastServers();
+                printTop10(parameters, servers);
+
+            }
+        } catch (RemoteException e) {
+            System.out.println("ERROR #12: Something went wrong. Would you mind to try again? :)");
+        }
     }
 
     public void establishConnection() throws MalformedURLException, RemoteException, NotBoundException {
         // Dar para trocar o bkup pelo prim vir aqui. E so para ser + rapido
         serverInterface = (ServerInterface) Naming.lookup(RMINAME);
+    }
+
+    public void printTop10(String[] parameters, ArrayList<MulticastServerInfo> servers) {
+        int cont = 1;
+        for (int i = 2; i < parameters.length; i++, cont++) {
+            if (i == 2) {
+                cont = 1;
+                System.out.println("\nTop 10 - Most relevant pages:\n");
+            } else if (i == 12) {
+                cont = 1;
+                System.out.println("\nTop 10 - Most searched terms:\n");
+            }
+
+            System.out.println(cont + ". " + parameters[i]);
+        }
+
+        System.out.println("\nActive multicast servers:\n");
+        for (int i = 1; i <= servers.size(); i++) {
+            MulticastServerInfo s = servers.get(i);
+            System.out.println(i + ". Ip: " + s.getTCP_ADDRESS() + " Port: " + s.getTCP_PORT());
+        }
+    }
+
+    public void rtsUpdate(String msg) throws RemoteException {
+        try {
+            if (this.inRealTimeStatistics) {
+                System.out.println("\n[Update]\n");
+                String[] parameters = msg.split(";");
+                ArrayList<MulticastServerInfo> servers = serverInterface.activeMulticastServers();
+                printTop10(parameters, servers);
+            }
+        } catch (RemoteException e) {
+            System.out.println("ERROR #13: Something went wrong. Would you mind to try again? :)");
+        }
     }
 }

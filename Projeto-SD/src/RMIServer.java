@@ -93,17 +93,26 @@ public class RMIServer extends UnicastRemoteObject implements ServerInterface {
         return this.clientInterfacesMap;
     }
 
+    public ArrayList<MulticastServerInfo> getMulticastServersFromPrimary() throws RemoteException {
+        return this.multicastServers;
+    }
+
+    public int getClientNoFromPrimary() throws RemoteException {
+        return this.clientNo;
+    }
+
     // For the secondary server to check if primary failed
     public void checkPrimaryServerStatus() throws InterruptedException, AccessException, RemoteException {
         boolean run = true;
         while (run) {
             Thread.sleep(1000);
             try {
-                String[] res = serverInterface.testPrimary();
-                this.clientNo = Integer.parseInt(res[1]);
+                String res = serverInterface.testPrimary();
                 System.out.println(LocalDateTime.now().getHour() + ":" + LocalDateTime.now().getMinute() + ":"
-                        + LocalDateTime.now().getSecond() + " [Primary server] " + res[0]);
+                        + LocalDateTime.now().getSecond() + " [Primary server] " + res);
+                this.clientNo = serverInterface.getClientNoFromPrimary();
                 this.clientInterfacesMap = serverInterface.getHashMapFromPrimary();
+                this.multicastServers = serverInterface.getMulticastServersFromPrimary();
             } catch (RemoteException e) {
                 System.out.println("Primary server not responding. Assuming primary functions...");
                 run = false;
@@ -171,11 +180,10 @@ public class RMIServer extends UnicastRemoteObject implements ServerInterface {
         return msg;
     }
 
-    public String[] testPrimary() throws RemoteException {
+    public String testPrimary() throws RemoteException {
         // Called by backup to test
         // Message from primary to backup to confirm that all is ok
-        String[] res = { "All good", String.valueOf(this.clientNo) };
-        return res;
+        return "All good";
     }
 
     public String authentication(int clientNo, boolean isLogin, String username, String password)
@@ -254,5 +262,24 @@ public class RMIServer extends UnicastRemoteObject implements ServerInterface {
         }
 
         return msgReceive;
+    }
+
+    public void sendRtsToAll(String msg) throws MalformedURLException, RemoteException, NotBoundException {
+        for (HashMap.Entry<Integer, ClientInterface> entry : clientInterfacesMap.entrySet()) {
+            ClientInterface client = entry.getValue();
+            client.rtsUpdate(msg);
+        }
+    }
+
+    public String realTimeStatistics(int clientNo) throws RemoteException {
+        String msg = "type|rts;clientNo|" + clientNo;
+        System.out.println("Mensagem a ser enviada: " + msg);
+        String msgReceive = connectToMulticast(clientNo, msg);
+        System.out.println("Mensagem recebida: " + msgReceive);
+        return msgReceive;
+    }
+
+    public ArrayList<MulticastServerInfo> activeMulticastServers() {
+        return multicastServers;
     }
 }

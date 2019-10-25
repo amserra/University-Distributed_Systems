@@ -152,22 +152,30 @@ public class UI {
     public void indexNewURL() throws RemoteException, MalformedURLException, NotBoundException {
         // Verificar se e um URL valido
         System.out.println("\n-----Index new URLs-----\n");
-        System.out.println("NOTE: Type -1 to return to the main menu\n");
+        System.out.println("NOTE: Type -1 to return to the admin page\n");
 
         String url = validateURL();
         client.indexNewURL(url);
     }
 
-    public void realTimeStatistics() {
+    public void realTimeStatistics() throws RemoteException, MalformedURLException, NotBoundException {
         // Vai receber as estatisticas(ns ainda que tipo de dados) através do Client
         // E vai imprimir aqui
         System.out.println("\n-----Real-time Statistics-----\n");
-        // imprimir aqui
+        System.out.println("NOTE: Type anything to return to the admin page menu\n");
+
+        // E has next?
+        if (sc.hasNext()) {
+            administrationPage();
+            this.client.inRealTimeStatistics = false;
+            return;
+        }
+        client.realTimeStatistics();
     }
 
     public void grantPrivileges() throws RemoteException, MalformedURLException, NotBoundException {
         System.out.println("\n-----Grant admin privileges-----\n");
-        System.out.println("NOTE: Type -1 to return to the main menu\n");
+        System.out.println("NOTE: Type -1 to return to the admin page\n");
 
         String userName = validateStringValue("Username to make admin: ",
                 "Invalid username.\nInsert a valid username (with only letters and numbers and length within 4 to 15 characters).",

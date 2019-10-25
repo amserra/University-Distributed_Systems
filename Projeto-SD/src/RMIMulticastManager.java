@@ -39,27 +39,17 @@ public class RMIMulticastManager extends Thread {
 
                 String[] parameters = msgReceive.split(";");
                 type = parameters[0].split("\\|")[1];
-                System.out.println("[Thread] Type = " + type);
 
                 if (type.equals("multicastServerStarter")) {
+                    System.out.println("[Thread] Type = " + type);
                     // Read message
                     String ipAddress = parameters[1].split("\\|")[1];
                     int port = Integer.parseInt(parameters[2].split("\\|")[1]);
                     // Process message
                     int serverNo = getBestServerNo();
-                    System.out.println("IpAddress: " + ipAddress + "Port: " + port + "Server No: " + serverNo);
-
-                    System.out.println("1");
-                    System.out.println(Arrays.toString(this.server.multicastServers.toArray()));
-
                     this.server.multicastServers.add(new MulticastServerInfo(serverNo, ipAddress, port));
-
-                    System.out.println("2");
-                    System.out.println(Arrays.toString(this.server.multicastServers.toArray()));
-
                     sortArrayList();
-                    System.out.println("3");
-                    System.out.println(Arrays.toString(this.server.multicastServers.toArray()));
+
                     // Send message
                     int serverCount = this.server.multicastServers.size();
                     String msg = "type|multicastServerStarterResult;serverNo|" + serverNo + ";serverCount|"
@@ -76,23 +66,18 @@ public class RMIMulticastManager extends Thread {
                     socket.send(packetSend);
 
                 } else if (type.equals("multicastServerDown")) {
+                    System.out.println("[Thread] Type = " + type);
                     // Read message
                     int serverNo = Integer.parseInt(parameters[1].split("\\|")[1]);
                     // Process message
-                    System.out.println("4");
-                    System.out.println(Arrays.toString(this.server.multicastServers.toArray()));
-
                     deleteMulticastServer(serverNo);
-
-                    System.out.println("5");
-                    System.out.println(Arrays.toString(this.server.multicastServers.toArray()));
+                } else if (type.equals("rtsResult")) {
+                    this.server.sendRtsToAll(msgReceive);
                 }
             }
-
         } catch (Exception e) {
             socket.close();
-            System.out.println(
-                    "[Thread] ERROR: Something went wrong. Did you forget the flag? Are there any multicast servers? Aborting program...");
+            System.out.println("[Thread] ERROR: Something went wrong. Aborting program...");
             System.exit(-1);
         } finally {
             socket.close();

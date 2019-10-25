@@ -95,7 +95,7 @@ O multicast server avisa o rmi server que se ligou:
 
 type | multicastServerStarter ; ipAddress | *endereço ip do pc onde está a correr o multicast server* ; porto | *porto definido*
 
-O RMI responde com o numero atribuido a este multicast server:
+O RMI responde com o numero atribuído a este multicast server:
 
 type | multicastServerStarterResult ; serverNo | *o numero do multicast server* ; serverCount | *numero de multicast servers existentes* ; serverNo_0 | *nº do 1º* ; ip_0 | *ip do 1º* ; porto_0 | *porto do 1º*
 
@@ -106,9 +106,15 @@ type | multicastServerDown ; serverNo | *serverNo*
 
 
 
+--------------------- REAL TIME STATISTICS ------------------------------
 
+Quando entra nessa opção: 
 
+type | rts ; clientNo | *clientNo*
 
+Resposta:
+ 
+type | rtsResult ; clientNo | *clientNo* ; url_0 | *1º url* ; ... ; url_9 | *9º url* ; search_0 | *1ª word no top* ; ... ; search_9 | *Última word no top*
 
 
 
