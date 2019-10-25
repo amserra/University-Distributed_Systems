@@ -34,11 +34,20 @@ public class RMIMulticastManager extends Thread {
 
                 String[] parameters = msgReceive.split(";");
                 type = parameters[0].split("\\|")[1];
-                receivedClientNo = Integer.parseInt(parameters[1].split("\\|")[1]);
-
                 System.out.println("Type = " + type);
 
+                if (type.equals("multicastServerStarter")) {
+                    String ipAddress = parameters[1].split("\\|")[1];
+                    int port = Integer.parseInt(parameters[2].split("\\|")[1]);
+
+                } else if (type.equals("multicastServerDown")) {
+                    // Como sei se foi abaixo?
+                }
+
+                // receivedClientNo = Integer.parseInt(parameters[1].split("\\|")[1]);
+
                 // Opercao de adicionar/remover a hashmap
+                // msg e a mensagem que quero enviar
                 // byte[] bufferSend = msg.getBytes();
                 // DatagramPacket packetSend = new DatagramPacket(bufferSend, bufferSend.length,
                 // group, PORT);
