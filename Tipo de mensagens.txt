@@ -32,7 +32,7 @@ type | loginResult ; clientNo | *clientNo* ; status | invalid
 
 Pedido:
 
-type | index ; clientNo | *clientNo* ; serverNo | *serverNo ; url | *url*
+type | index ; clientNo | *clientNo* ; serverNo | *serverNo* ; url | *url*
 
 Resposta:
 
