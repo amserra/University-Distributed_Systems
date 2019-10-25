@@ -39,7 +39,7 @@ public class RMIMulticastManager extends Thread {
 
                 String[] parameters = msgReceive.split(";");
                 type = parameters[0].split("\\|")[1];
-                System.out.println("Type = " + type);
+                System.out.println("[Thread] Type = " + type);
 
                 if (type.equals("multicastServerStarter")) {
                     // Read message
@@ -50,16 +50,16 @@ public class RMIMulticastManager extends Thread {
                     System.out.println("IpAddress: " + ipAddress + "Port: " + port + "Server No: " + serverNo);
 
                     System.out.println("1");
-                    Arrays.toString(this.server.multicastServers.toArray());
+                    System.out.println(Arrays.toString(this.server.multicastServers.toArray()));
 
                     this.server.multicastServers.add(new MulticastServerInfo(serverNo, ipAddress, port));
 
                     System.out.println("2");
-                    Arrays.toString(this.server.multicastServers.toArray());
+                    System.out.println(Arrays.toString(this.server.multicastServers.toArray()));
 
                     sortArrayList();
                     System.out.println("3");
-                    Arrays.toString(this.server.multicastServers.toArray());
+                    System.out.println(Arrays.toString(this.server.multicastServers.toArray()));
                     // Send message
                     int serverCount = this.server.multicastServers.size();
                     String msg = "type|multicastServerStarterResult;serverNo|" + serverNo + ";serverCount|"
@@ -69,7 +69,7 @@ public class RMIMulticastManager extends Thread {
                         msg += ";serverNo_" + i + "|" + s.getServerNo() + ";ip_" + i + "|" + s.getTCP_ADDRESS()
                                 + ";porto_" + i + "|" + s.getTCP_PORT();
                     }
-                    System.out.println("Msg sent: " + msg);
+                    System.out.println("[Thread] Msg sent: " + msg);
 
                     byte[] bufferSend = msg.getBytes();
                     DatagramPacket packetSend = new DatagramPacket(bufferSend, bufferSend.length, group, PORT);
@@ -80,19 +80,19 @@ public class RMIMulticastManager extends Thread {
                     int serverNo = Integer.parseInt(parameters[1].split("\\|")[1]);
                     // Process message
                     System.out.println("4");
-                    Arrays.toString(this.server.multicastServers.toArray());
+                    System.out.println(Arrays.toString(this.server.multicastServers.toArray()));
 
                     deleteMulticastServer(serverNo);
 
                     System.out.println("5");
-                    Arrays.toString(this.server.multicastServers.toArray());
+                    System.out.println(Arrays.toString(this.server.multicastServers.toArray()));
                 }
             }
 
         } catch (Exception e) {
             socket.close();
             System.out.println(
-                    "ERROR: Something went wrong. Did you forget the flag? Are there any multicast servers? Aborting program...");
+                    "[Thread] ERROR: Something went wrong. Did you forget the flag? Are there any multicast servers? Aborting program...");
             System.exit(-1);
         } finally {
             socket.close();
