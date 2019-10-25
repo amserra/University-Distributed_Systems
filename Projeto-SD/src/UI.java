@@ -20,7 +20,7 @@ public class UI {
     public void mainMenu() throws RemoteException, MalformedURLException, NotBoundException {
         System.out.println("\n-----Main Menu-----");
         System.out.println("Type of client: " + client.typeOfClient + "\n");
-        if (client.typeOfClient.compareTo("anonymous") == 0) {
+        if (client.typeOfClient.equals("anonymous")) {
             System.out.println("1. Login");
             System.out.println("2. Register");
             System.out.println("3. Search");
@@ -44,7 +44,7 @@ public class UI {
                 System.out.println("CRITICAL ERROR. SHUTTING DOWN");
                 System.exit(1);
             }
-        } else if (client.typeOfClient.compareTo("user") == 0) {
+        } else if (client.typeOfClient.equals("user")) {
             System.out.println("1. Search");
             System.out.println("2. Search history");
             System.out.println("3. List of pages with connection to another page");
@@ -71,7 +71,7 @@ public class UI {
                 System.out.println("CRITICAL ERROR. SHUTTING DOWN");
                 System.exit(1);
             }
-        } else if (client.typeOfClient.compareTo("admin") == 0) {
+        } else if (client.typeOfClient.equals("admin")) {
             System.out.println("1. Search");
             System.out.println("2. Search history");
             System.out.println("3. List of pages with connection to another page");
@@ -238,9 +238,9 @@ public class UI {
         while (true) {
             String line = sc.nextLine();
             try {
-                if ((line.toLowerCase().compareTo("yes") == 0) || (line.toLowerCase().compareTo("y") == 0)) {
+                if ((line.toLowerCase().equals("yes")) || (line.toLowerCase().equals("y"))) {
                     return true;
-                } else if ((line.toLowerCase().compareTo("no") == 0) || (line.toLowerCase().compareTo("n") == 0)) {
+                } else if ((line.toLowerCase().equals("no")) || (line.toLowerCase().equals("n"))) {
                     return false;
                 }
             } catch (NumberFormatException e) {
@@ -256,7 +256,7 @@ public class UI {
             String line = sc.nextLine();
 
             try {
-                if (line.compareTo("-1") == 0) {
+                if (line.equals("-1")) {
                     mainMenu();
                     return null;
                 } else if ((line != null) && (!line.equals("")) && (line.matches("[a-zA-Z0-9]*"))
@@ -277,7 +277,7 @@ public class UI {
             System.out.println("Note that, for security reasons, your password doesn't happear as you type it.");
             String line = new String(console.readPassword("Password: "));
             try {
-                if (line.compareTo("-1") == 0) {
+                if (line.equals("-1")) {
                     mainMenu();
                     return null;
                 } else if ((line != null) && (!line.equals("")) && (line.matches("[a-zA-Z0-9]*"))
@@ -298,7 +298,7 @@ public class UI {
             System.out.print("Search terms: ");
             String line = sc.nextLine();
             try {
-                if (line.compareTo("-1") == 0) {
+                if (line.equals("-1")) {
                     mainMenu();
                     return null;
                 } else if ((line != null) && (!line.equals(""))) {
@@ -329,7 +329,7 @@ public class UI {
             System.out.print("Insert URL: ");
             String line = sc.nextLine();
             try {
-                if (line.compareTo("-1") == 0) {
+                if (line.equals("-1")) {
                     mainMenu();
                     return null;
                 } else {

@@ -1,13 +1,18 @@
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Arrays;
 
 public class RMIMulticastManager extends Thread {
+    RMIServer server;
     MulticastSocket socket = null;
     final String MULTICAST_ADDRESS = "224.0.224.0";
     final int PORT = 4369;
 
     RMIMulticastManager(RMIServer server) {
+        this.server = server;
         this.start();
     }
 
@@ -37,26 +42,52 @@ public class RMIMulticastManager extends Thread {
                 System.out.println("Type = " + type);
 
                 if (type.equals("multicastServerStarter")) {
+                    // Read message
                     String ipAddress = parameters[1].split("\\|")[1];
                     int port = Integer.parseInt(parameters[2].split("\\|")[1]);
+                    // Process message
+                    int serverNo = getBestServerNo();
+                    System.out.println("IpAddress: " + ipAddress + "Port: " + port + "Server No: " + serverNo);
+
+                    System.out.println("1");
+                    Arrays.toString(this.server.multicastServers.toArray());
+
+                    this.server.multicastServers.add(new MulticastServerInfo(serverNo, ipAddress, port));
+
+                    System.out.println("2");
+                    Arrays.toString(this.server.multicastServers.toArray());
+
+                    sortArrayList();
+                    System.out.println("3");
+                    Arrays.toString(this.server.multicastServers.toArray());
+                    // Send message
+                    int serverCount = this.server.multicastServers.size();
+                    String msg = "type|multicastServerStarterResult;serverNo|" + serverNo + ";serverCount|"
+                            + serverCount;
+                    for (int i = 0; i < this.server.multicastServers.size(); i++) {
+                        MulticastServerInfo s = this.server.multicastServers.get(i);
+                        msg += ";serverNo_" + i + "|" + s.getServerNo() + ";ip_" + i + "|" + s.getTCP_ADDRESS()
+                                + ";porto_" + i + "|" + s.getTCP_PORT();
+                    }
+                    System.out.println("Msg sent: " + msg);
+
+                    byte[] bufferSend = msg.getBytes();
+                    DatagramPacket packetSend = new DatagramPacket(bufferSend, bufferSend.length, group, PORT);
+                    socket.send(packetSend);
 
                 } else if (type.equals("multicastServerDown")) {
-                    // Como sei se foi abaixo?
+                    // Read message
+                    int serverNo = Integer.parseInt(parameters[1].split("\\|")[1]);
+                    // Process message
+                    System.out.println("4");
+                    Arrays.toString(this.server.multicastServers.toArray());
+
+                    deleteMulticastServer(serverNo);
+
+                    System.out.println("5");
+                    Arrays.toString(this.server.multicastServers.toArray());
                 }
-
-                // receivedClientNo = Integer.parseInt(parameters[1].split("\\|")[1]);
-
-                // Opercao de adicionar/remover a hashmap
-                // msg e a mensagem que quero enviar
-                // byte[] bufferSend = msg.getBytes();
-                // DatagramPacket packetSend = new DatagramPacket(bufferSend, bufferSend.length,
-                // group, PORT);
-                // socket.send(packetSend);
-
             }
-
-            // System.out.println("Mensagem final: " + msgReceive);
-            // dar return de msgReceive
 
         } catch (Exception e) {
             socket.close();
@@ -66,5 +97,31 @@ public class RMIMulticastManager extends Thread {
         } finally {
             socket.close();
         }
+    }
+
+    public void deleteMulticastServer(int serverNo) {
+        if (this.server.multicastServers.stream().filter(o -> o.getServerNo() == serverNo).findFirst().isPresent()) {
+            this.server.multicastServers.removeIf(t -> t.getServerNo() == serverNo);
+        }
+    }
+
+    public int getBestServerNo() {
+        // Ns se ta a dar
+        int finalValue = 1;
+        boolean foundValue = false;
+        int j = 1;
+        while (!foundValue) {
+            final int i = j;
+            if (!this.server.multicastServers.stream().filter(o -> o.getServerNo() == i).findFirst().isPresent()) {
+                finalValue = i;
+                foundValue = true;
+            }
+            j++;
+        }
+        return finalValue;
+    }
+
+    public void sortArrayList() {
+        Collections.sort(this.server.multicastServers, (o1, o2) -> o1.compareTo(o2.getServerNo()));
     }
 }

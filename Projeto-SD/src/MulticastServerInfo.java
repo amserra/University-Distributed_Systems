@@ -1,8 +1,9 @@
-public class MulticastServerInfo{
+public class MulticastServerInfo {
 
     private int serverNo;
     private String TCP_ADDRESS;
     private int TCP_PORT;
+    private int carga = 0;
 
     public MulticastServerInfo(int serverNo, String TCP_ADDRESS, int TCP_PORT) {
         this.serverNo = serverNo;
@@ -34,5 +35,16 @@ public class MulticastServerInfo{
         TCP_PORT = tCP_PORT;
     }
 
-    
+    public int getCarga() {
+        return carga;
+    }
+
+    public void setCarga(int carga) {
+        this.carga = carga;
+    }
+
+    public int compareTo(int otherServerNo) {
+        return this.serverNo - otherServerNo;
+    }
+
 }

@@ -97,10 +97,10 @@ type | multicastServerStarter ; ipAddress | *endereço ip do pc onde está a cor
 
 O RMI responde com o numero atribuido a este multicast server:
 
-type | multicastServerStarterResult ; serverNo | *o numero do multicast server* ; serverCount | *numero de multicast servers existentes* ; serverNo_0 | *nº do 1º* ; ip_0 | *ip do 1º* ; porto | *porto do 1º*
+type | multicastServerStarterResult ; serverNo | *o numero do multicast server* ; serverCount | *numero de multicast servers existentes* ; serverNo_0 | *nº do 1º* ; ip_0 | *ip do 1º* ; porto_0 | *porto do 1º*
 
 
---------------------- QUANDO UM MULTICAST SERVER VAI ABAIXO: ------------------------------
+--------------------- QUANDO UM MULTICAST SERVER VAI ABAIXO:----------------------
 
 type | multicastServerDown ; serverNo | *serverNo*
 

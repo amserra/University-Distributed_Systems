@@ -10,12 +10,14 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.server.UnicastRemoteObject;
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.ArrayList;
 
 public class RMIServer extends UnicastRemoteObject implements ServerInterface {
     static final long serialVersionUID = 1L;
     int clientNo = 1; // Id for RMIServer to indentify RMIClients // ATOMIC INT
     ServerInterface serverInterface; // So that backup server has the reference
     HashMap<Integer, ClientInterface> clientInterfacesMap = new HashMap<>();
+    ArrayList<MulticastServerInfo> multicastServers = new ArrayList<>();
     boolean isBackup; // Is backup server?
     MulticastSocket socket = null;
     final String MULTICAST_ADDRESS = "224.0.224.0";
@@ -70,6 +72,7 @@ public class RMIServer extends UnicastRemoteObject implements ServerInterface {
                         System.out.println("Primary RMIServer ready...");
                     }
                     System.out.println("Print model: \"[Message responsible] Message\"");
+                    new RMIMulticastManager(this);
                 } catch (Exception err) {
                     System.out.println("\nERROR: Something went wrong. Aborting program...");
                     err.printStackTrace();
