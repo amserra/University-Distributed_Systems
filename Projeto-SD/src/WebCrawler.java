@@ -49,51 +49,49 @@ public class WebCrawler extends Thread {
             previousUrl = linkPointing.get(url).peek();
             linkPointing.get(url).remove();
         }
-        //System.out.println(previousUrl);
-
         String saveURL = url;
-
-        //System.out.println(saveURL);
 
         if (!urlQueue.isEmpty())
             urlQueue.remove();
 
         // ------------------------------ Adiciona o Url à lista de URLs ou vai busca lo
         // a lista (se ja la estiver) ---------------------------------
-        URL urlObject = new URL(url);
-        if (!urlList.contains(urlObject)) {
+        URL urlObject;
+        if (!urlList.contains(url)) {
+
             if(previousUrl != null){
-                // Atualiza a contagem de links a apontar para 1, visto que é o primeiro
-                urlObject.setLinksCount(1);
+                //Cria um novo objeto url. Coloca o url e o link count a 1
+                urlObject = new URL(url,1);
 
                 // Cria uma nova Lista com os URLs a apontarem para este URL
-                CopyOnWriteArraySet<String> urlPointingList = new CopyOnWriteArraySet<>();
+                CopyOnWriteArraySet<String> urlPointingList = urlObject.getUrlPointingToMeList();
                 urlPointingList.add(previousUrl);
                 urlObject.setUrlPointingToMeList(urlPointingList);
+
+            } else{
+                urlObject = new URL(url, 0);
             }
 
             // Adiciona o URL à lista de URLs
             urlList.add(urlObject);
-        } else if (previousUrl != null){
-            int indexOfUrl = urlList.indexOf(urlObject);
+        } else {
+            int indexOfUrl = urlList.indexOf(url);
             urlObject = urlList.get(indexOfUrl);
 
-            // Vê se tem a contagem de links a apontar
-            Integer linksCount = urlObject.getLinksCount();
-            if (linksCount == null)
-                linksCount = 0;
-            linksCount++;
+            if(previousUrl != null){
+                //Incrementar os links a apontar para este url
+                urlObject.setLinksCount(urlObject.getLinksCount() + 1);
 
-            // Adiciona o URL para o qual aponta
-            CopyOnWriteArraySet<String> urlPointingList = urlObject.getUrlPointingToMeList();
-            if (urlPointingList == null)
-                urlPointingList = new CopyOnWriteArraySet<>();
-            urlPointingList.add(previousUrl);
-            urlObject.setUrlPointingToMeList(urlPointingList);
+                // Adiciona o URL para o qual aponta
+                CopyOnWriteArraySet<String> urlPointingList = urlObject.getUrlPointingToMeList();
+                if (urlPointingList == null)
+                    urlPointingList = new CopyOnWriteArraySet<>();
+                urlPointingList.add(previousUrl);
+                urlObject.setUrlPointingToMeList(urlPointingList);
+            }
 
-            urlObject.setLinksCount(linksCount);
         }
-        
+    
 
         /*for(URL u: urlList)
             System.out.println(u.getUrl());*/
@@ -128,6 +126,8 @@ public class WebCrawler extends Thread {
                 }
 
                 urlObject.setText(text);
+
+               // System.out.println(urlObject);
 
                 // ------------------------------ Verificar os links na pagina
                 // ----------------------------------

@@ -88,7 +88,7 @@ public class MulticastServer extends Thread {
 
     private void getMulticastServerNo(MulticastSocket socket, InetAddress group) {
         try {
-            String message = "type|multicastServerStarted;ipAddress|" + this.getTCP_ADDRESS() + ";port|" + this.getTCP_PORT();
+            String message = "type|multicastServerStarter;ipAddress|" + this.getTCP_ADDRESS() + ";port|" + this.getTCP_PORT();
             byte[] buffer = message.getBytes();
             DatagramPacket packetSent = new DatagramPacket(buffer, buffer.length, group, PORT);
             socket.send(packetSent);

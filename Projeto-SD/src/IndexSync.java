@@ -23,23 +23,25 @@ public class IndexSync extends Thread {
 
     private ConcurrentHashMap<String, CopyOnWriteArraySet<String>> index;
 
+    private MulticastServer server;
+
+    private int TCP_PORT;
+    private String TCP_ADDRESS;
+
     public IndexSync(MulticastServer server) {
         this.serverNo = server.getMulticastServerNo();
         this.serversList = server.getMulticastServerList();
         this.index = server.getIndex();
         this.urlList = server.getUrlList();
+        this.server = server;
+
+        this.TCP_PORT = server.getTCP_PORT();
+        this.TCP_ADDRESS = server.getTCP_ADDRESS();
 
         index_file += serverNo + ".txt";
         url_file += serverNo + ".txt";
 
-        int PORT = 0;
-
-        for(MulticastServerInfo msi: serversList){
-            if(msi.getServerNo() == this.serverNo)
-                PORT = msi.getTCP_PORT();
-        }
-
-        new IndexReceiveSync(index, urlList, PORT);
+        new IndexReceiveSync(index, urlList, TCP_PORT);
 
         this.start();
     }
@@ -69,24 +71,27 @@ public class IndexSync extends Thread {
                 Socket s = null;
                 ObjectOutputStream out = null;
 
+                serversList = server.getMulticastServerList();
+
                 for (MulticastServerInfo msi : serversList) {
-                    // Abre o socket
-                    System.out.println(msi.getTCP_ADDRESS());
-                    System.out.println(msi.getTCP_PORT());
-                    s = new Socket(msi.getTCP_ADDRESS(), msi.getTCP_PORT());
+                    System.out.println("Server: " + msi.getTCP_ADDRESS() + ": " + msi.getTCP_PORT());
+                    if(!(msi.getTCP_ADDRESS().equals(TCP_ADDRESS) && msi.getTCP_PORT() == TCP_PORT)){
+                        // Abre o socket
+                        System.out.println("A mandar para: " + msi.getTCP_ADDRESS() + ": " + msi.getTCP_PORT());
 
-                    System.out.println(s);
+                        s = new Socket(msi.getTCP_ADDRESS(), msi.getTCP_PORT());
 
-                    // Stream para mandar
-                    out = new ObjectOutputStream(s.getOutputStream());
+                        // Stream para mandar
+                        out = new ObjectOutputStream(s.getOutputStream());
 
-                    // Manda o objeto
-                    out.writeObject(index);
-                    out.writeObject(urlList);
+                        // Manda o objeto
+                        out.writeObject(index);
+                        out.writeObject(urlList);
+
+                        out.close();
+                        s.close();
+                    }
                 }
-
-                out.close();
-                s.close();
 
                 Thread.sleep(TIME_PERIOD);
 
@@ -97,6 +102,8 @@ public class IndexSync extends Thread {
             } catch (IOException e) {
                 e.printStackTrace();
                 System.out.println("Error initializing stream");
+            } catch(Exception e){
+                System.out.print(e.getMessage());
             }
         }
 
@@ -151,6 +158,8 @@ class Connection extends Thread{
                 if(data instanceof ConcurrentHashMap<?,?>){
                     ConcurrentHashMap<String, CopyOnWriteArraySet<String>> receivedIndex = (ConcurrentHashMap<String, CopyOnWriteArraySet<String>>) data;
 
+                   // System.out.println(receivedIndex);
+
                     for(String s: receivedIndex.keySet()){
                         if(index.containsKey(s)){
                             CopyOnWriteArraySet<String> indexValue = index.get(s);
@@ -164,10 +173,15 @@ class Connection extends Thread{
                 } else if(data instanceof CopyOnWriteArrayList<?>){
                     CopyOnWriteArrayList<URL> receivedUrlList = (CopyOnWriteArrayList<URL>) data;
 
+                    //System.out.println(receivedUrlList);
+
                     for(URL url: receivedUrlList){
+                        //System.out.println(url);
                         if(urlList.contains(url)){
                             int urlIndex = urlList.indexOf(url);
                             URL editedURL = urlList.get(urlIndex);
+
+                            //System.out.println(editedURL);
                             
                             editedURL.setLinksCount(editedURL.getLinksCount() + url.getLinksCount());
                             editedURL.getUrlPointingToMeList().addAll(url.getUrlPointingToMeList());

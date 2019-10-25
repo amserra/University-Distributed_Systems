@@ -12,7 +12,15 @@ public class URL implements Comparable<URL>, Serializable {
 
     public URL(String url) {
         this.url = url;
+        urlPointingToMeList = new CopyOnWriteArraySet<>();
     }
+
+    public URL(String url, Integer linksCount) {
+        this.url = url;
+        this.linksCount = linksCount;
+        urlPointingToMeList = new CopyOnWriteArraySet<>();
+    }
+
 
     @Override
     public boolean equals(Object o) {

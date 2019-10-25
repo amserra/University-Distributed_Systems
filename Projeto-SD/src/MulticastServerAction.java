@@ -3,6 +3,7 @@ import java.net.InetAddress;
 import java.net.MulticastSocket;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
@@ -119,6 +120,9 @@ public class MulticastServerAction extends Thread {
             }
 
             else if (messageType.equals("search")) {
+
+                //System.out.println(index);
+
                 String clientNo = receivedSplit[1].split("\\|")[1];
                 String words = receivedSplit[2].split("\\|")[1].toLowerCase();
 
@@ -188,8 +192,11 @@ public class MulticastServerAction extends Thread {
 
                     Collections.sort(urlList);
 
+                    HashSet<String> check = new HashSet<>();
+            
                     for (URL url : urlList) {
-                        if (urlResults.contains(url.getUrl())){
+                        if (urlResults.contains(url.getUrl()) && !check.contains(url.getUrl())){
+                            check.add(url.getUrl());
                             message += ";url_" + urlCount++ + "|" + url.getUrl();
                         }
                     }
@@ -228,9 +235,7 @@ public class MulticastServerAction extends Thread {
                 message = "type|linksPointingResult;clientNo|" + clientNo + ";linkCount|";
                 String saveMessage = message;
 
-                URL urlObject = new URL(url);
-
-                if (urlList.contains(urlObject)) {
+                if (urlList.contains(url)) {
                     for (URL u : urlList) {
                         if (u.equals(url)) {
                             CopyOnWriteArraySet<String> urlPointingList = u.getUrlPointingToMeList();
@@ -310,17 +315,17 @@ public class MulticastServerAction extends Thread {
 
                 int multicastServerCount = Integer.parseInt(receivedSplit[2].split("\\|")[1]);
 
-                CopyOnWriteArrayList<MulticastServerInfo> newMulticastServerNoList = new CopyOnWriteArrayList<>();
+                CopyOnWriteArrayList<MulticastServerInfo> newMulticastServerList = new CopyOnWriteArrayList<>();
 
                 for (int i = 3; i < (multicastServerCount * 3 + 3); i = i + 3) {
                     int serverNo = Integer.parseInt(receivedSplit[i].split("\\|")[1]);
                     String address = receivedSplit[i + 1].split("\\|")[1];
                     int port = Integer.parseInt(receivedSplit[i + 2].split("\\|")[1]);
                     MulticastServerInfo msi = new MulticastServerInfo(serverNo, address, port);
-                    newMulticastServerNoList.add(msi);
+                    newMulticastServerList.add(msi);
                 }
-
-                server.setMulticastServerList(newMulticastServerNoList);
+                
+                server.setMulticastServerList(newMulticastServerList);
 
                 for (MulticastServerInfo msi : server.getMulticastServerList())
                     System.out.println("SERVER: " + msi.getServerNo() + "\nEndereço: " + msi.getTCP_ADDRESS() + "\nPorto: " + msi.getTCP_PORT());
