@@ -1,7 +1,6 @@
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
-import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
@@ -17,11 +16,11 @@ public class MulticastServer extends Thread {
 
     private String MULTICAST_ADDRESS = "224.0.224.0";
     private int PORT = 4369;
-    private String TCP_ADDRESS = "127.0.0.1";
-    private int TCP_PORT = 6000;
+    private String TCP_ADDRESS;
+    private int TCP_PORT;
 
     private int multicastServerNo; // Numero do servidor
-    private ArrayList<Integer> multicastServerNoList = new ArrayList<>(); // Array List com os multicast servers
+    private CopyOnWriteArrayList<MulticastServerInfo> multicastServerList = new CopyOnWriteArrayList<>(); // Array List com os multicast servers
     private CopyOnWriteArraySet<Integer> multicastServerCheckedList = new CopyOnWriteArraySet<>(); // HashSet para
                                                                                                    // verificar os
                                                                                                    // multicast servers
@@ -39,7 +38,8 @@ public class MulticastServer extends Thread {
 
     public static void main(String[] args) {
         MulticastServer server = new MulticastServer();
-        // server.setMulticastServerNo(Integer.parseInt(args[0]));
+        server.setTCP_ADDRESS(args[0]);
+        server.setTCP_PORT(Integer.parseInt(args[1]));
         server.start();
     }
 
@@ -55,9 +55,11 @@ public class MulticastServer extends Thread {
             InetAddress group = InetAddress.getByName(MULTICAST_ADDRESS);
             socket.joinGroup(group);
 
-            // getMulticastServerNo(socket, group);
+            getMulticastServerNo(socket, group);
 
-            // System.out.println("Server " + multicastServerNo + " is running!");
+            new IndexSync(this);
+
+            System.out.println("Server " + multicastServerNo + " is running!");
 
             while (true) {
                 DatagramPacket packetReceived = new DatagramPacket(buf, buf.length);
@@ -78,7 +80,7 @@ public class MulticastServer extends Thread {
 
     private void getMulticastServerNo(MulticastSocket socket, InetAddress group) {
         try {
-            String message = "type|multicastServerStarted";
+            String message = "type|multicastServerStarted;ipAddress|" + this.getTCP_ADDRESS() + ";port|" + this.getTCP_PORT();
             byte[] buffer = message.getBytes();
             DatagramPacket packetSent = new DatagramPacket(buffer, buffer.length, group, PORT);
             socket.send(packetSent);
@@ -96,18 +98,22 @@ public class MulticastServer extends Thread {
 
                 messageType = splitReceived[0].split("\\|")[1];
 
-            } while (!messageType.equals("multicastServerNo"));
+            } while (!messageType.equals("multicastServerStarterResult"));
 
             multicastServerNo = Integer.parseInt(splitReceived[1].split("\\|")[1]);
 
             int multicastServerCount = Integer.parseInt(splitReceived[2].split("\\|")[1]);
 
-            for (int i = 0; i < multicastServerCount; i++) {
-                multicastServerNoList.add(Integer.parseInt(splitReceived[3 + i].split("\\|")[1]));
+            for (int i = 3; i < (multicastServerCount * 3 + 3); i = i + 3) {
+                int serverNo = Integer.parseInt(splitReceived[i].split("\\|")[1]);
+                String address = splitReceived[i + 1].split("\\|")[1];
+                int port = Integer.parseInt(splitReceived[i + 2].split("\\|")[1]);
+                MulticastServerInfo msi = new MulticastServerInfo(serverNo, address, port);
+                multicastServerList.add(msi);
             }
 
-            for (Integer i : multicastServerNoList)
-                System.out.println("SERVER: " + i);
+            for (MulticastServerInfo msi : multicastServerList)
+                System.out.println("SERVER: " + msi.getServerNo() + "\nEndereço: " + msi.getTCP_ADDRESS() + "\nPorto: " + msi.getTCP_PORT());
 
             MulticastServerControl multicastServerControl = new MulticastServerControl(this, group, socket);
             multicastServerControl.start();
@@ -165,12 +171,12 @@ public class MulticastServer extends Thread {
         this.multicastServerNo = multicastServerNo;
     }
 
-    public ArrayList<Integer> getMulticastServerNoList() {
-        return multicastServerNoList;
+    public CopyOnWriteArrayList<MulticastServerInfo> getMulticastServerList() {
+        return multicastServerList;
     }
 
-    public void setMulticastServerNoList(ArrayList<Integer> multicastServerNoList) {
-        this.multicastServerNoList = multicastServerNoList;
+    public void setMulticastServerList(CopyOnWriteArrayList<MulticastServerInfo> multicastServerList) {
+        this.multicastServerList = multicastServerList;
     }
 
     public boolean isCheckingMulticastServers() {
@@ -187,6 +193,22 @@ public class MulticastServer extends Thread {
 
     public void setMulticastServerCheckedList(CopyOnWriteArraySet<Integer> multicastServerCheckedList) {
         this.multicastServerCheckedList = multicastServerCheckedList;
+    }
+
+    public String getTCP_ADDRESS() {
+        return TCP_ADDRESS;
+    }
+
+    public void setTCP_ADDRESS(String tCP_ADDRESS) {
+        TCP_ADDRESS = tCP_ADDRESS;
+    }
+
+    public int getTCP_PORT() {
+        return TCP_PORT;
+    }
+
+    public void setTCP_PORT(int tCP_PORT) {
+        TCP_PORT = tCP_PORT;
     }
 
 }

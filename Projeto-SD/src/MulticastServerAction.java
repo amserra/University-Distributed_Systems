@@ -110,17 +110,21 @@ public class MulticastServerAction extends Thread {
 
             else if (messageType.equals("index")) {
                 String clientNo = receivedSplit[1].split("\\|")[1];
-                String url = receivedSplit[2].split("\\|")[1];
+                String serverNo = receivedSplit[2].split("\\|")[1];
+                String url = receivedSplit[3].split("\\|")[1];
 
-                WebCrawler getUrls = new WebCrawler(server, url);
-                getUrls.start();
+                if(Integer.parseInt(serverNo) == server.getMulticastServerNo()){
 
-                message = "type|indexResult;clientNo|" + clientNo + ";status|started";
+                    WebCrawler getUrls = new WebCrawler(server, url);
+                    getUrls.start();
+
+                    message = "type|indexResult;clientNo|" + clientNo + ";status|started";
+                }
             }
 
             else if (messageType.equals("search")) {
                 String clientNo = receivedSplit[1].split("\\|")[1];
-                String words = receivedSplit[2].split("\\|")[1];
+                String words = receivedSplit[2].split("\\|")[1].toLowerCase();
 
                 try {
                     String username = receivedSplit[3].split("\\|")[1];
@@ -286,29 +290,34 @@ public class MulticastServerAction extends Thread {
 
                     int serverNo = Integer.parseInt(receivedSplit[1].split("\\|")[1]);
 
+                    System.out.println("SERVER CHECKED: " + serverNo);
+
                     server.getMulticastServerCheckedList().add(serverNo);
                 }
 
-                for (Integer i : server.getMulticastServerCheckedList())
-                    System.out.println("SERVER CHECKED: " + i);
-
             } else if (messageType.equals("checkStatus")) {
+
                 message = "type|checkStatusConfirm;serverNo|" + server.getMulticastServerNo();
-            } else if (messageType.equals("multicastServerNo")) {
+
+            } else if (messageType.equals("multicastServerStarterResult")) {
                 // Atualizar o array dos multicast servers que estão up
 
                 int multicastServerCount = Integer.parseInt(receivedSplit[2].split("\\|")[1]);
 
-                ArrayList<Integer> newMulticastServerNoList = new ArrayList<>();
+                CopyOnWriteArrayList<MulticastServerInfo> newMulticastServerNoList = new CopyOnWriteArrayList<>();
 
-                for (int i = 0; i < multicastServerCount; i++) {
-                    newMulticastServerNoList.add(Integer.parseInt(receivedSplit[3 + i].split("\\|")[1]));
+                for (int i = 3; i < (multicastServerCount * 3 + 3); i = i + 3) {
+                    int serverNo = Integer.parseInt(receivedSplit[i].split("\\|")[1]);
+                    String address = receivedSplit[i + 1].split("\\|")[1];
+                    int port = Integer.parseInt(receivedSplit[i + 2].split("\\|")[1]);
+                    MulticastServerInfo msi = new MulticastServerInfo(serverNo, address, port);
+                    newMulticastServerNoList.add(msi);
                 }
 
-                server.setMulticastServerNoList(newMulticastServerNoList);
+                server.setMulticastServerList(newMulticastServerNoList);
 
-                for (Integer i : server.getMulticastServerNoList())
-                    System.out.println("SERVER: " + i);
+                for (MulticastServerInfo msi : server.getMulticastServerList())
+                    System.out.println("SERVER: " + msi.getServerNo() + "\nEndereço: " + msi.getTCP_ADDRESS() + "\nPorto: " + msi.getTCP_PORT());
 
             }
 
