@@ -134,6 +134,7 @@ public class MulticastServer extends Thread {
     private void getMulticastServerFiles() {
         String index_file = "files/index_" + getMulticastServerNo() + ".txt";
         String url_file = "files/urls_" + getMulticastServerNo() + ".txt";
+        String users_file = "files/users_" + getMulticastServerNo() + ".txt";
 
         //Ler ficheiro do servidor com o hashmap
         try {
@@ -158,6 +159,26 @@ public class MulticastServer extends Thread {
             ObjectInputStream o = new ObjectInputStream(f);
 
             urlList = (CopyOnWriteArrayList<URL>) o.readObject();
+
+            for(URL url: urlList)
+                System.out.println(url);
+
+            o.close();
+            f.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found");
+        } catch (IOException e) {
+            System.out.println("Error initializing stream");
+        } catch(ClassNotFoundException e){
+            System.out.println("Error transfering URL List");
+        }
+
+        //Ler ficheiro do servidor com a lista de utilizadores
+        try {
+            FileInputStream f = new FileInputStream(new File(users_file));
+            ObjectInputStream o = new ObjectInputStream(f);
+
+            listUsers = (CopyOnWriteArrayList<User>) o.readObject();
 
             o.close();
             f.close();

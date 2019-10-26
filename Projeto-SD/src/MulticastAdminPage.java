@@ -54,25 +54,18 @@ public class MulticastAdminPage extends Thread {
                         checkUrlList = true;
                 }
 
-                //Se tiver havido alguma alteracao no top 10 pesquisas
-                if(checkSearchList){
-                    String message = "type|top10searchUpdate";
-                    for(int i = 0; i < 10; i++){
-                        top10search[i] = searchList.get(i).getWords();
-                        message += "search_" + i + "|" + top10search[i];
-                    }
-                    byte[] buffer = message.getBytes();
-                    DatagramPacket packetSent = new DatagramPacket(buffer, buffer.length, group, PORT);
-                    socket.send(packetSent);
-                }
-
-                //Se tiver havido alguma alteracao no top 10 urls
-                if(checkUrlList){
-                    String message = "type|top10urlUpdate";
+                //Se tiver havido alguma alteracao no top 10 pesquisas ou no top 10 urls
+                if(checkSearchList || checkUrlList){
+                    String message = "type|rtsResult;clientNo|0";
                     for(int i = 0; i < 10; i++){
                         top10url[i] = urlList.get(i).getUrl();
                         message += "url_" + i + "|" + top10url[i];
                     }
+                    for(int i = 0; i < 10; i++){
+                        top10search[i] = searchList.get(i).getWords();
+                        message += "search_" + i + "|" + top10search[i];
+                    }
+            
                     byte[] buffer = message.getBytes();
                     DatagramPacket packetSent = new DatagramPacket(buffer, buffer.length, group, PORT);
                     socket.send(packetSent);

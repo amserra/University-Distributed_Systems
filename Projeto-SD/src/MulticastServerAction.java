@@ -1,3 +1,8 @@
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
@@ -69,6 +74,7 @@ public class MulticastServerAction extends Thread {
                     message = "type|registerResult;clientNo|" + clientNo + ";status|valid;username|"
                             + newUser.getUsername() + ";isAdmin|" + newUser.isAdmin();
 
+                    saveUsers();
 
                 } else {
                     message = "type|registerResult;clientNo|" + clientNo + ";status|invalid";
@@ -99,6 +105,8 @@ public class MulticastServerAction extends Thread {
                             + ";isAdmin|" + user.isAdmin() + ";notification|" + user.isNotification();
                     user.setNotification(false);
 
+                    saveUsers();
+
                 } else {
                     message = "type|loginResult;clientNo|" + clientNo + ";status|invalid";
                 }
@@ -110,7 +118,7 @@ public class MulticastServerAction extends Thread {
                 String serverNo = receivedSplit[2].split("\\|")[1];
                 String url = receivedSplit[3].split("\\|")[1];
 
-                if(Integer.parseInt(serverNo) == server.getMulticastServerNo()){
+                if (Integer.parseInt(serverNo) == server.getMulticastServerNo()) {
 
                     WebCrawler getUrls = new WebCrawler(server, url);
                     getUrls.start();
@@ -121,19 +129,19 @@ public class MulticastServerAction extends Thread {
 
             else if (messageType.equals("search")) {
 
-                //System.out.println(index);
+                // System.out.println(index);
 
                 String clientNo = receivedSplit[1].split("\\|")[1];
                 String words = receivedSplit[2].split("\\|")[1].toLowerCase();
 
                 CopyOnWriteArrayList<Search> searchList = server.getSearchList();
 
-                if(searchList.contains(words)){
+                if (searchList.contains(words)) {
 
                     int indexWords = searchList.indexOf(words);
                     Search search = searchList.get(indexWords);
                     search.setnSearches((search.getnSearches()) + 1);
-                } else{
+                } else {
                     searchList.add(new Search(words, 1));
                 }
 
@@ -151,6 +159,7 @@ public class MulticastServerAction extends Thread {
                     if (user != null)
                         user.getSearchHistory().add(0, words);
 
+                    saveUsers();
 
                 } catch (Exception e) {
 
@@ -190,12 +199,20 @@ public class MulticastServerAction extends Thread {
 
                     int urlCount = 0;
 
-                    Collections.sort(urlList);
+                    for (URL url : urlList) {
+                        System.out.println(url.getUrl() + "   : " + url.getLinksCount());
+                    }
+
+                    try {
+                        Collections.sort(urlList);
+                    } catch (Exception e) {
+
+                    }
 
                     HashSet<String> check = new HashSet<>();
-            
+
                     for (URL url : urlList) {
-                        if (urlResults.contains(url.getUrl()) && !check.contains(url.getUrl())){
+                        if (urlResults.contains(url.getUrl()) && !check.contains(url.getUrl())) {
                             check.add(url.getUrl());
                             message += ";url_" + urlCount++ + "|" + url.getUrl();
                         }
@@ -277,11 +294,32 @@ public class MulticastServerAction extends Thread {
                         else
                             user.setNotification(true);
 
+                        saveUsers();
+
                     }
                 } else {
                     message = "type|promoteResult;clientNo|" + clientNo
                             + ";status|invalid;message|That user doesn't exist";
                 }
+            } else if (messageType.equals("rts")) {
+                String clientNo = receivedSplit[1].split("\\|")[1];
+
+                CopyOnWriteArrayList<Search> searchList = server.getSearchList();
+
+                Collections.sort(searchList);
+
+                Collections.sort(urlList);
+
+                message = "type|rtsResult;clientNo|" + clientNo;
+
+                for (int i = 0; i < 10; i++) {
+                    message += ";url_" + i + "|" + urlList.get(i);
+                }
+
+                for (int i = 0; i < 10; i++) {
+                    message += ";search_" + i + "|" + searchList.get(i);
+                }
+
             } else if (messageType.equals("logout")) {
                 String clientNo = receivedSplit[1].split("\\|")[1];
                 String username = receivedSplit[2].split("\\|")[1];
@@ -294,6 +332,8 @@ public class MulticastServerAction extends Thread {
                 user.setLoggedIn(false);
 
                 message = "type|logoutResult;clientNo|" + clientNo + ";status|valid";
+
+                saveUsers();
 
             } else if (messageType.equals("checkStatusConfirm")) {
 
@@ -324,11 +364,12 @@ public class MulticastServerAction extends Thread {
                     MulticastServerInfo msi = new MulticastServerInfo(serverNo, address, port);
                     newMulticastServerList.add(msi);
                 }
-                
+
                 server.setMulticastServerList(newMulticastServerList);
 
                 for (MulticastServerInfo msi : server.getMulticastServerList())
-                    System.out.println("SERVER: " + msi.getServerNo() + "\nEndereço: " + msi.getTCP_ADDRESS() + "\nPorto: " + msi.getTCP_PORT());
+                    System.out.println("SERVER: " + msi.getServerNo() + "\nEndereço: " + msi.getTCP_ADDRESS()
+                            + "\nPorto: " + msi.getTCP_PORT());
 
             }
 
@@ -342,6 +383,29 @@ public class MulticastServerAction extends Thread {
             e.printStackTrace();
         }
 
+    }
+
+    private void saveUsers() {
+        try {
+
+            String file = "files/users_" + server.getMulticastServerNo() + ".txt";
+
+            FileOutputStream f = new FileOutputStream(new File(file));
+            ObjectOutputStream o = new ObjectOutputStream(f);
+
+            
+            o.writeObject(server.getListUsers());
+
+            o.close();
+            f.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found");
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Error initializing stream");
+        } catch(Exception e){
+            System.out.print(e.getMessage());
+        }
     }
 
 }

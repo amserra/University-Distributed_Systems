@@ -225,7 +225,7 @@ public class RMIServer extends UnicastRemoteObject implements ServerInterface {
     public int getLowestLoadedServer() {
         // To initialize the vars, in case nothing found the first server is taken
         int serverNo = 1;
-        MulticastServerInfo ref = multicastServers.get(1);
+        MulticastServerInfo ref = multicastServers.get(0);
         // Start at a big number
         int min = 100000;
 
