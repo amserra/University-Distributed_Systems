@@ -15,7 +15,7 @@ public class IndexSync extends Thread {
     private String index_file = "files/index_";
     private String url_file = "files/urls_";
 
-    private int TIME_PERIOD = 10000;
+    private int TIME_PERIOD = 1000;
 
     private int serverNo;
     private CopyOnWriteArrayList<MulticastServerInfo> serversList;
