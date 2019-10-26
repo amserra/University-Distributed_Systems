@@ -331,7 +331,7 @@ public class MulticastServerAction extends Thread {
                 int msiCount = 0;
 
                 for(MulticastServerInfo msi: server.getMulticastServerList()){
-                    message += ";serverNo_" + msiCount + "|" + msi.getServerNo() + ";address|" + msi.getTCP_ADDRESS() + ";port|" + msi.getTCP_PORT();
+                    message += ";address|" + msi.getTCP_ADDRESS() + ";port|" + msi.getTCP_PORT();
                     msiCount++;
                 }
 
