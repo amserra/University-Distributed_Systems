@@ -56,8 +56,9 @@ public class WebCrawler extends Thread {
 
         // ------------------------------ Adiciona o Url à lista de URLs ou vai busca lo
         // a lista (se ja la estiver) ---------------------------------
-        URL urlObject;
-        if (!urlList.contains(url)) {
+
+        URL urlObject = new URL(url);
+        if (!urlList.contains(urlObject)) {
 
             if(previousUrl != null){
                 //Cria um novo objeto url. Coloca o url e o link count a 1
@@ -75,7 +76,8 @@ public class WebCrawler extends Thread {
             // Adiciona o URL à lista de URLs
             urlList.add(urlObject);
         } else {
-            int indexOfUrl = urlList.indexOf(url);
+
+            int indexOfUrl = urlList.indexOf(urlObject);
             urlObject = urlList.get(indexOfUrl);
 
             if(previousUrl != null){
@@ -89,7 +91,7 @@ public class WebCrawler extends Thread {
                 urlPointingList.add(previousUrl);
                 urlObject.setUrlPointingToMeList(urlPointingList);
             }
-
+            
         }
     
 

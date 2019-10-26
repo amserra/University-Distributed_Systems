@@ -14,14 +14,17 @@ import java.util.concurrent.CopyOnWriteArraySet;
 public class IndexSync extends Thread {
     private String index_file = "files/index_";
     private String url_file = "files/urls_";
+    private String user_file = "files/users_";
 
-    private int TIME_PERIOD = 10000;
+    private int TIME_PERIOD = 1000;
 
     private int serverNo;
     private CopyOnWriteArrayList<MulticastServerInfo> serversList;
     private CopyOnWriteArrayList<URL> urlList;
 
     private ConcurrentHashMap<String, CopyOnWriteArraySet<String>> index;
+
+    private CopyOnWriteArrayList<User> usersList;
 
     private MulticastServer server;
 
@@ -33,6 +36,7 @@ public class IndexSync extends Thread {
         this.serversList = server.getMulticastServerList();
         this.index = server.getIndex();
         this.urlList = server.getUrlList();
+        this.usersList = server.getListUsers();
         this.server = server;
 
         this.TCP_PORT = server.getTCP_PORT();
@@ -40,8 +44,9 @@ public class IndexSync extends Thread {
 
         index_file += serverNo + ".txt";
         url_file += serverNo + ".txt";
+        user_file += serverNo + ".txt";
 
-        new IndexReceiveSync(index, urlList, TCP_PORT);
+        new IndexReceiveSync(index, urlList, TCP_PORT, usersList);
 
         this.start();
     }
@@ -67,6 +72,15 @@ public class IndexSync extends Thread {
                 o.close();
                 f.close();
 
+                //Guardar no ficheiro de objetos a lista de utilizadores
+                f = new FileOutputStream(new File(user_file));
+                o = new ObjectOutputStream(f);
+
+                o.writeObject(usersList);
+
+                o.close();
+                f.close();
+
                 //Enviar para os restantes Multicast Servers
                 Socket s = null;
                 ObjectOutputStream out = null;
@@ -74,10 +88,10 @@ public class IndexSync extends Thread {
                 serversList = server.getMulticastServerList();
 
                 for (MulticastServerInfo msi : serversList) {
-                    System.out.println("Server: " + msi.getTCP_ADDRESS() + ": " + msi.getTCP_PORT());
+                    //System.out.println("Server: " + msi.getTCP_ADDRESS() + ": " + msi.getTCP_PORT());
                     if(!(msi.getTCP_ADDRESS().equals(TCP_ADDRESS) && msi.getTCP_PORT() == TCP_PORT)){
                         // Abre o socket
-                        System.out.println("A mandar para: " + msi.getTCP_ADDRESS() + ": " + msi.getTCP_PORT());
+                        //System.out.println("A mandar para: " + msi.getTCP_ADDRESS() + ": " + msi.getTCP_PORT());
 
                         s = new Socket(msi.getTCP_ADDRESS(), msi.getTCP_PORT());
 
@@ -87,6 +101,8 @@ public class IndexSync extends Thread {
                         // Manda o objeto
                         out.writeObject(index);
                         out.writeObject(urlList);
+                        out.writeObject(usersList);
+                        System.out.println("Mandou objetos");
 
                         out.close();
                         s.close();
@@ -95,12 +111,13 @@ public class IndexSync extends Thread {
 
                 Thread.sleep(TIME_PERIOD);
 
+                System.out.println("Vai mandar objetos");
+
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                System.out.println("Thread interrupted");
             } catch (FileNotFoundException e) {
                 System.out.println("File not found");
             } catch (IOException e) {
-                e.printStackTrace();
                 System.out.println("Error initializing stream");
             } catch(Exception e){
                 System.out.print(e.getMessage());
@@ -114,11 +131,13 @@ class IndexReceiveSync extends Thread {
 
     private CopyOnWriteArrayList<URL> urlList;
     private ConcurrentHashMap<String, CopyOnWriteArraySet<String>> index;
+    private CopyOnWriteArrayList<User> usersList;
     private int TCP_PORT;
 
-    public IndexReceiveSync(ConcurrentHashMap<String, CopyOnWriteArraySet<String>> index, CopyOnWriteArrayList<URL> urlList, int TCP_PORT){
+    public IndexReceiveSync(ConcurrentHashMap<String, CopyOnWriteArraySet<String>> index, CopyOnWriteArrayList<URL> urlList, int TCP_PORT, CopyOnWriteArrayList<User> usersList){
         this.index = index;
         this.urlList = urlList;
+        this.usersList = usersList;
         this.TCP_PORT = TCP_PORT;
         this.start();
     }
@@ -130,7 +149,7 @@ class IndexReceiveSync extends Thread {
             while(true) {
                 Socket clientSocket = listenSocket.accept(); // BLOQUEANTE
                 System.out.println("CLIENT_SOCKET (created at accept())="+clientSocket);
-                new Connection(clientSocket,index, urlList);
+                new Connection(clientSocket,index, urlList, usersList);
             }
         }catch(IOException e){
             System.out.println("Listen:" + e.getMessage());
@@ -142,18 +161,20 @@ class Connection extends Thread{
     Socket clientSocket;
     private ConcurrentHashMap<String, CopyOnWriteArraySet<String>> index;
     private CopyOnWriteArrayList<URL> urlList;
+    private CopyOnWriteArrayList<User> usersList;
 
-    public Connection(Socket clientSocket, ConcurrentHashMap<String, CopyOnWriteArraySet<String>> index, CopyOnWriteArrayList<URL> urlList){
+    public Connection(Socket clientSocket, ConcurrentHashMap<String, CopyOnWriteArraySet<String>> index, CopyOnWriteArrayList<URL> urlList, CopyOnWriteArrayList<User> usersList){
         this.clientSocket = clientSocket;
         this.index = index;
         this.urlList = urlList;
+        this.usersList = usersList;
         this.start();
     }
 
     public void run(){
         try{
             ObjectInputStream in = new ObjectInputStream(clientSocket.getInputStream());
-            for(int i = 0; i < 2; i++){ //Vai receber o HashMap com os indices e a lista de URLs
+            for(int i = 0; i < 3; i++){ //Vai receber o HashMap com os indices e a lista de URLs
                 Object data = in.readObject();
                 if(data instanceof ConcurrentHashMap<?,?>){
                     ConcurrentHashMap<String, CopyOnWriteArraySet<String>> receivedIndex = (ConcurrentHashMap<String, CopyOnWriteArraySet<String>>) data;
@@ -171,25 +192,38 @@ class Connection extends Thread{
                         }
                     }
                 } else if(data instanceof CopyOnWriteArrayList<?>){
-                    CopyOnWriteArrayList<URL> receivedUrlList = (CopyOnWriteArrayList<URL>) data;
+                    try{
+                        CopyOnWriteArrayList<URL> receivedList = (CopyOnWriteArrayList<URL>) data;
+
+                        for(URL url: receivedList){
+                            //System.out.println(url);
+                            if(urlList.contains(url)){
+                                int urlIndex = urlList.indexOf(url);
+                                URL editedURL = urlList.get(urlIndex);
+    
+                                //System.out.println(editedURL);
+                                editedURL.getUrlPointingToMeList().addAll(url.getUrlPointingToMeList());
+
+                                editedURL.setLinksCount(editedURL.getUrlPointingToMeList().size());
+    
+                            }else{
+                                urlList.add(url);
+                            }
+                        } 
+                    } catch(ClassCastException e){
+                        CopyOnWriteArrayList<User> receivedList = (CopyOnWriteArrayList<User>) data;
+
+                        for(User user: receivedList){
+
+                            if(!usersList.contains(user))
+                                usersList.add(user);
+
+                        } 
+                    }
 
                     //System.out.println(receivedUrlList);
 
-                    for(URL url: receivedUrlList){
-                        //System.out.println(url);
-                        if(urlList.contains(url)){
-                            int urlIndex = urlList.indexOf(url);
-                            URL editedURL = urlList.get(urlIndex);
-
-                            //System.out.println(editedURL);
-                            
-                            editedURL.setLinksCount(editedURL.getLinksCount() + url.getLinksCount());
-                            editedURL.getUrlPointingToMeList().addAll(url.getUrlPointingToMeList());
-
-                        }else{
-                            urlList.add(url);
-                        }
-                    }
+                   
                 }
 
             }
