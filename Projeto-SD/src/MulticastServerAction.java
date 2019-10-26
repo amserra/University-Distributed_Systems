@@ -314,14 +314,14 @@ public class MulticastServerAction extends Thread {
 
                 for (int i = 0; i < 10; i++) {
                     if(urlList.get(i) != null)
-                        message += ";url_" + i + "|" + urlList.get(i);
+                        message += ";url_" + i + "|" + urlList.get(i).getUrl();
                     else
                         message += ";url_" + i + "|N/A";
                 }
 
                 for (int i = 0; i < 10; i++) {
                     if(searchList.get(i) != null)
-                        message += ";search_" + i + "|" + searchList.get(i);
+                        message += ";search_" + i + "|" + searchList.get(i).getWords();
                     else
                         message += ";search_" + i + "|N/A";
                 }
