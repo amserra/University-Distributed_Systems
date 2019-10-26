@@ -315,7 +315,7 @@ public class MulticastServerAction extends Thread {
                 for (int i = 0; i < 10; i++) {
                     try{
                         message += ";url_" + i + "|" + urlList.get(i).getUrl();
-                    } catch(NullPointerException e){
+                    } catch(ArrayIndexOutOfBoundsException e){
                         message += ";url_" + i + "|N/A";
                     }
                 }
@@ -323,7 +323,7 @@ public class MulticastServerAction extends Thread {
                 for (int i = 0; i < 10; i++) {
                     try{
                         message += ";search_" + i + "|" + searchList.get(i).getWords();
-                    } catch(NullPointerException e){
+                    } catch(ArrayIndexOutOfBoundsException e){
                         message += ";search_" + i + "|N/A";
                     }
                 }
