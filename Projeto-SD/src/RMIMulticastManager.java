@@ -51,19 +51,21 @@ public class RMIMulticastManager extends Thread {
                     sortArrayList();
 
                     // Send message
-                    int serverCount = this.server.multicastServers.size();
-                    String msg = "type|multicastServerStarterResult;serverNo|" + serverNo + ";serverCount|"
-                            + serverCount;
-                    for (int i = 0; i < this.server.multicastServers.size(); i++) {
-                        MulticastServerInfo s = this.server.multicastServers.get(i);
-                        msg += ";serverNo_" + i + "|" + s.getServerNo() + ";ip_" + i + "|" + s.getTCP_ADDRESS()
-                                + ";porto_" + i + "|" + s.getTCP_PORT();
-                    }
-                    System.out.println("[Thread] Msg sent: " + msg);
+                    if (!this.server.isBackup) {
+                        int serverCount = this.server.multicastServers.size();
+                        String msg = "type|multicastServerStarterResult;serverNo|" + serverNo + ";serverCount|"
+                                + serverCount;
+                        for (int i = 0; i < this.server.multicastServers.size(); i++) {
+                            MulticastServerInfo s = this.server.multicastServers.get(i);
+                            msg += ";serverNo_" + i + "|" + s.getServerNo() + ";ip_" + i + "|" + s.getTCP_ADDRESS()
+                                    + ";porto_" + i + "|" + s.getTCP_PORT();
+                        }
+                        System.out.println("[Thread] Msg sent: " + msg);
 
-                    byte[] bufferSend = msg.getBytes();
-                    DatagramPacket packetSend = new DatagramPacket(bufferSend, bufferSend.length, group, PORT);
-                    socket.send(packetSend);
+                        byte[] bufferSend = msg.getBytes();
+                        DatagramPacket packetSend = new DatagramPacket(bufferSend, bufferSend.length, group, PORT);
+                        socket.send(packetSend);
+                    }
 
                 } else if (type.equals("multicastServerDown")) {
                     System.out.println("[Thread] Type = " + type);
@@ -71,7 +73,7 @@ public class RMIMulticastManager extends Thread {
                     int serverNo = Integer.parseInt(parameters[1].split("\\|")[1]);
                     // Process message
                     deleteMulticastServer(serverNo);
-                } else if (type.equals("rtsResult")) {
+                } else if (type.equals("rtsResult") && !this.server.isBackup) {
                     this.server.sendRtsToAll(msgReceive);
                 }
             }

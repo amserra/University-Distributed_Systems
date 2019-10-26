@@ -1,6 +1,7 @@
 import java.rmi.Remote;
 import java.util.HashMap;
 import java.util.ArrayList;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public interface ServerInterface extends Remote {
         public String sayHelloFromBackup() throws java.rmi.RemoteException; // For backup server
@@ -14,8 +15,6 @@ public interface ServerInterface extends Remote {
         public String testPrimary() throws java.rmi.RemoteException;
 
         public HashMap<Integer, ClientInterface> getHashMapFromPrimary() throws java.rmi.RemoteException;
-
-        public ArrayList<MulticastServerInfo> getMulticastServersFromPrimary() throws java.rmi.RemoteException;
 
         public int getClientNoFromPrimary() throws java.rmi.RemoteException;
 
@@ -34,6 +33,6 @@ public interface ServerInterface extends Remote {
 
         public String realTimeStatistics(int clientNo) throws java.rmi.RemoteException;
 
-        public ArrayList<MulticastServerInfo> activeMulticastServers() throws java.rmi.RemoteException;
+        public CopyOnWriteArrayList<MulticastServerInfo> activeMulticastServers() throws java.rmi.RemoteException;
 
 }

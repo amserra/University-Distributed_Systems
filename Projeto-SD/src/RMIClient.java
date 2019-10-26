@@ -4,6 +4,7 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class RMIClient extends UnicastRemoteObject implements ClientInterface {
     static final long serialVersionUID = 1L;
@@ -279,7 +280,7 @@ public class RMIClient extends UnicastRemoteObject implements ClientInterface {
             System.out.println("Recieved client no: " + receivedClientNo);
             if (this.clientNo == receivedClientNo) {
                 System.out.println("Started receiving updates...");
-                ArrayList<MulticastServerInfo> servers = serverInterface.activeMulticastServers();
+                CopyOnWriteArrayList<MulticastServerInfo> servers = serverInterface.activeMulticastServers();
                 printTop10(parameters, servers);
 
             }
@@ -293,7 +294,7 @@ public class RMIClient extends UnicastRemoteObject implements ClientInterface {
         serverInterface = (ServerInterface) Naming.lookup(RMINAME);
     }
 
-    public void printTop10(String[] parameters, ArrayList<MulticastServerInfo> servers) {
+    public void printTop10(String[] parameters, CopyOnWriteArrayList<MulticastServerInfo> servers) {
         int cont = 1;
         for (int i = 2; i < parameters.length; i++, cont++) {
             if (i == 2) {
@@ -319,7 +320,7 @@ public class RMIClient extends UnicastRemoteObject implements ClientInterface {
             if (this.inRealTimeStatistics) {
                 System.out.println("\n[Update]\n");
                 String[] parameters = msg.split(";");
-                ArrayList<MulticastServerInfo> servers = serverInterface.activeMulticastServers();
+                CopyOnWriteArrayList<MulticastServerInfo> servers = serverInterface.activeMulticastServers();
                 printTop10(parameters, servers);
             }
         } catch (RemoteException e) {

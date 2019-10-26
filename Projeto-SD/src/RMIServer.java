@@ -11,16 +11,19 @@ import java.rmi.server.UnicastRemoteObject;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.ArrayList;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class RMIServer extends UnicastRemoteObject implements ServerInterface {
     static final long serialVersionUID = 1L;
     int clientNo = 1; // Id for RMIServer to indentify RMIClients // ATOMIC INT
     ServerInterface serverInterface; // So that backup server has the reference
     HashMap<Integer, ClientInterface> clientInterfacesMap = new HashMap<>();
-    ArrayList<MulticastServerInfo> multicastServers = new ArrayList<>();
+    CopyOnWriteArrayList<MulticastServerInfo> multicastServers = new CopyOnWriteArrayList<>();
     boolean isBackup; // Is backup server?
     MulticastSocket socket = null;
     final String MULTICAST_ADDRESS = "224.0.224.0";
+    boolean isWriting = false;
+
     final int PORT = 4369;
     final int RMIPORT = 1099;
     final String RMINAME = "RMIConnection";
@@ -69,10 +72,10 @@ public class RMIServer extends UnicastRemoteObject implements ServerInterface {
                         reconnectClients();
                         System.out.println("Done! Backup server is now Primary Server.");
                     } else {
+                        new RMIMulticastManager(this);
                         System.out.println("Primary RMIServer ready...");
                     }
                     System.out.println("Print model: \"[Message responsible] Message\"");
-                    new RMIMulticastManager(this);
                 } catch (Exception err) {
                     System.out.println("\nERROR: Something went wrong. Aborting program...");
                     err.printStackTrace();
@@ -83,18 +86,16 @@ public class RMIServer extends UnicastRemoteObject implements ServerInterface {
     }
 
     public void reconnectClients() throws MalformedURLException, RemoteException, NotBoundException {
-        for (HashMap.Entry<Integer, ClientInterface> entry : clientInterfacesMap.entrySet()) {
-            ClientInterface client = entry.getValue();
-            client.establishConnection();
+        if (!clientInterfacesMap.isEmpty()) {
+            for (HashMap.Entry<Integer, ClientInterface> entry : clientInterfacesMap.entrySet()) {
+                ClientInterface client = entry.getValue();
+                client.establishConnection();
+            }
         }
     }
 
     public HashMap<Integer, ClientInterface> getHashMapFromPrimary() throws RemoteException {
         return this.clientInterfacesMap;
-    }
-
-    public ArrayList<MulticastServerInfo> getMulticastServersFromPrimary() throws RemoteException {
-        return this.multicastServers;
     }
 
     public int getClientNoFromPrimary() throws RemoteException {
@@ -103,6 +104,8 @@ public class RMIServer extends UnicastRemoteObject implements ServerInterface {
 
     // For the secondary server to check if primary failed
     public void checkPrimaryServerStatus() throws InterruptedException, AccessException, RemoteException {
+        new RMIMulticastManager(this);
+
         boolean run = true;
         while (run) {
             Thread.sleep(1000);
@@ -112,7 +115,10 @@ public class RMIServer extends UnicastRemoteObject implements ServerInterface {
                         + LocalDateTime.now().getSecond() + " [Primary server] " + res);
                 this.clientNo = serverInterface.getClientNoFromPrimary();
                 this.clientInterfacesMap = serverInterface.getHashMapFromPrimary();
-                this.multicastServers = serverInterface.getMulticastServersFromPrimary();
+
+                // this.multicastServers = serverInterface.getMulticastServersFromPrimary(); //
+                // AQUI
+
             } catch (RemoteException e) {
                 System.out.println("Primary server not responding. Assuming primary functions...");
                 run = false;
@@ -299,7 +305,8 @@ public class RMIServer extends UnicastRemoteObject implements ServerInterface {
         return msgReceive;
     }
 
-    public ArrayList<MulticastServerInfo> activeMulticastServers() {
+    public CopyOnWriteArrayList<MulticastServerInfo> activeMulticastServers() {
         return multicastServers;
     }
+
 }
