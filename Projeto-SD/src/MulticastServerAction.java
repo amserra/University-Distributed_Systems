@@ -328,6 +328,15 @@ public class MulticastServerAction extends Thread {
                     }
                 }
 
+                message += ";multicastServerCount|" + server.getMulticastServerList().size();
+
+                int msiCount = 0;
+
+                for(MulticastServerInfo msi: server.getMulticastServerList()){
+                    message += ";serverNo_" + msiCount + "|" + msi.getServerNo() + ";address|" + msi.getTCP_ADDRESS() + ";port|" + msi.getTCP_PORT();
+                    msiCount++;
+                }
+
             } else if (messageType.equals("logout")) {
                 String clientNo = receivedSplit[1].split("\\|")[1];
                 String username = receivedSplit[2].split("\\|")[1];
