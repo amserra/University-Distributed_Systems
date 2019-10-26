@@ -328,8 +328,6 @@ public class MulticastServerAction extends Thread {
                     }
                 }
 
-                message += ";multicastServerCount|" + server.getMulticastServerList().size();
-
                 int msiCount = 0;
 
                 for(MulticastServerInfo msi: server.getMulticastServerList()){
