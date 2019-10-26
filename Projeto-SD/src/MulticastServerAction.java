@@ -313,11 +313,17 @@ public class MulticastServerAction extends Thread {
                 message = "type|rtsResult;clientNo|" + clientNo;
 
                 for (int i = 0; i < 10; i++) {
-                    message += ";url_" + i + "|" + urlList.get(i);
+                    if(urlList.get(i) != null)
+                        message += ";url_" + i + "|" + urlList.get(i);
+                    else
+                        message += ";url_" + i + "|N/A";
                 }
 
                 for (int i = 0; i < 10; i++) {
-                    message += ";search_" + i + "|" + searchList.get(i);
+                    if(searchList.get(i) != null)
+                        message += ";search_" + i + "|" + searchList.get(i);
+                    else
+                        message += ";search_" + i + "|N/A";
                 }
 
             } else if (messageType.equals("logout")) {
