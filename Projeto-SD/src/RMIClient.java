@@ -39,7 +39,7 @@ public class RMIClient extends UnicastRemoteObject implements ClientInterface {
                     Thread.currentThread().interrupt();
                     System.out.println("ERROR #10: Something went wrong.");
                 } catch (RemoteException e) {
-                    System.out.println("ERROR #11: Something went wrong.");
+                    System.out.println("ERROR #11: Something went wrong. Are there any RMIServers?");
                 }
             }
         });
