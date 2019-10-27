@@ -108,7 +108,20 @@ public class RMIServer extends UnicastRemoteObject implements ServerInterface {
 
     // For the secondary server to check if primary failed
     public void checkPrimaryServerStatus() throws InterruptedException, AccessException, RemoteException {
-        this.multicastServers = serverInterface.activeMulticastServers();
+        String msg = connectToMulticast(0, "type|rmiServerStarter;clientNo|0");
+        String[] parameters = msg.split(";");
+        int receivedClientNo = Integer.parseInt(parameters[1].split("\\|")[1]);
+        int noOfServers = Integer.parseInt(parameters[2].split("\\|")[1]);
+        int init = 3;
+        for (int i = 0; i < noOfServers; i++) {
+            int serverNo = Integer.parseInt(parameters[init++].split("\\|")[1]);
+            String ip = parameters[init++].split("\\|")[1];
+            int port = Integer.parseInt(parameters[init++].split("\\|")[1]);
+            int carga = Integer.parseInt(parameters[init++].split("\\|")[1]);
+            this.multicastServers.add(new MulticastServerInfo(serverNo, ip, port, carga));
+            System.out.println(this.multicastServers.get(i).toString());
+        }
+
         new RMIMulticastManager(this);
 
         boolean run = true;
@@ -313,10 +326,6 @@ public class RMIServer extends UnicastRemoteObject implements ServerInterface {
         String msgReceive = connectToMulticast(clientNo, msg);
         System.out.println("Mensagem recebida: " + msgReceive);
         return msgReceive;
-    }
-
-    public CopyOnWriteArrayList<MulticastServerInfo> activeMulticastServers() {
-        return this.multicastServers;
     }
 
 }

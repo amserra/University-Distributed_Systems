@@ -33,6 +33,4 @@ public interface ServerInterface extends Remote {
 
         public String realTimeStatistics(int clientNo) throws java.rmi.RemoteException;
 
-        public CopyOnWriteArrayList<MulticastServerInfo> activeMulticastServers() throws java.rmi.RemoteException;
-
 }
