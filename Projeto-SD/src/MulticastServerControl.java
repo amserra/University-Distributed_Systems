@@ -41,7 +41,7 @@ public class MulticastServerControl extends Thread {
         while (true) {
             try {
 
-                String message = "type|checkStatus";
+                String message = "type|||checkStatus";
                 byte[] buffer = message.getBytes();
                 DatagramPacket packetSent = new DatagramPacket(buffer, buffer.length, group, PORT);
                 socket.send(packetSent);
@@ -65,7 +65,7 @@ public class MulticastServerControl extends Thread {
                         }
 
                         if(!check_server){
-                            String messageServerDown = "type|multicastServerDown;serverNo|" + msi.getServerNo();
+                            String messageServerDown = "type|||multicastServerDown;;serverNo|||" + msi.getServerNo();
                             byte[] bufferServerDown = messageServerDown.getBytes();
                             DatagramPacket packetSentServerDown = new DatagramPacket(bufferServerDown, bufferServerDown.length, group, PORT);
                             socket.send(packetSentServerDown);

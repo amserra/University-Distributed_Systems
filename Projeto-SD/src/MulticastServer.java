@@ -99,7 +99,7 @@ public class MulticastServer extends Thread {
      */
     private void getMulticastServerNo(MulticastSocket socket, InetAddress group) {
         try {
-            String message = "type|multicastServerStarter;ipAddress|" + this.getTCP_ADDRESS() + ";port|" + this.getTCP_PORT();
+            String message = "type|||multicastServerStarter;;ipAddress|||" + this.getTCP_ADDRESS() + ";;port|||" + this.getTCP_PORT();
             byte[] buffer = message.getBytes();
             DatagramPacket packetSent = new DatagramPacket(buffer, buffer.length, group, PORT);
             socket.send(packetSent);
@@ -115,18 +115,18 @@ public class MulticastServer extends Thread {
 
                 splitReceived = received.split(";");
 
-                messageType = splitReceived[0].split("\\|")[1];
+                messageType = splitReceived[0].split("\\|\\|\\|")[1];
 
             } while (!messageType.equals("multicastServerStarterResult"));
 
-            multicastServerNo = Integer.parseInt(splitReceived[1].split("\\|")[1]);
+            multicastServerNo = Integer.parseInt(splitReceived[1].split("\\|\\|\\|")[1]);
 
-            int multicastServerCount = Integer.parseInt(splitReceived[2].split("\\|")[1]);
+            int multicastServerCount = Integer.parseInt(splitReceived[2].split("\\|\\|\\|")[1]);
 
             for (int i = 3; i < (multicastServerCount * 3 + 3); i = i + 3) {
-                int serverNo = Integer.parseInt(splitReceived[i].split("\\|")[1]);
-                String address = splitReceived[i + 1].split("\\|")[1];
-                int port = Integer.parseInt(splitReceived[i + 2].split("\\|")[1]);
+                int serverNo = Integer.parseInt(splitReceived[i].split("\\|\\|\\|")[1]);
+                String address = splitReceived[i + 1].split("\\|\\|\\|")[1];
+                int port = Integer.parseInt(splitReceived[i + 2].split("\\|\\|\\|")[1]);
                 MulticastServerInfo msi = new MulticastServerInfo(serverNo, address, port);
                 multicastServerList.add(msi);
             }

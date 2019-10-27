@@ -54,8 +54,8 @@ public class MulticastServerAction extends Thread {
         try {
             System.out.println("RECEIVED: " + received);
 
-            String[] receivedSplit = received.split(";");
-            String[] type = receivedSplit[0].split("\\|");
+            String[] receivedSplit = received.split(";;");
+            String[] type = receivedSplit[0].split("\\|\\|\\|");
             String messageType = type[1];
 
             String message = "";
@@ -64,9 +64,9 @@ public class MulticastServerAction extends Thread {
                 User newUser;
                 boolean checkUser = false;
 
-                String clientNo = receivedSplit[1].split("\\|")[1];
-                String username = receivedSplit[2].split("\\|")[1];
-                String password = receivedSplit[3].split("\\|")[1];
+                String clientNo = receivedSplit[1].split("\\|\\|\\|")[1];
+                String username = receivedSplit[2].split("\\|\\|\\|")[1];
+                String password = receivedSplit[3].split("\\|\\|\\|")[1];
 
                 for (User u : listUsers) {
                     if (u.getUsername().equals(username))
@@ -82,13 +82,13 @@ public class MulticastServerAction extends Thread {
                         newUser = new User(username, password, false, true, Integer.parseInt(clientNo), false);
 
                     listUsers.add(newUser);
-                    message = "type|registerResult;clientNo|" + clientNo + ";status|valid;username|"
-                            + newUser.getUsername() + ";isAdmin|" + newUser.isAdmin();
+                    message = "type|||registerResult;;clientNo|||" + clientNo + ";;status|||valid;;username|||"
+                            + newUser.getUsername() + ";;isAdmin|||" + newUser.isAdmin();
 
                     saveUsers();
 
                 } else {
-                    message = "type|registerResult;clientNo|" + clientNo + ";status|invalid";
+                    message = "type|||registerResult;;clientNo|||" + clientNo + ";;status|||invalid";
                 }
 
             } else if (messageType.equals("login")) { // Verifies username and password and validates login
@@ -97,9 +97,9 @@ public class MulticastServerAction extends Thread {
 
                 User user = null;
 
-                String clientNo = receivedSplit[1].split("\\|")[1];
-                String username = receivedSplit[2].split("\\|")[1];
-                String password = receivedSplit[3].split("\\|")[1];
+                String clientNo = receivedSplit[1].split("\\|\\|\\|")[1];
+                String username = receivedSplit[2].split("\\|\\|\\|")[1];
+                String password = receivedSplit[3].split("\\|\\|\\|")[1];
 
                 for (User u : listUsers) {
                     if (u.getUsername().equals(username) && u.getPassword().equals(password)) {
@@ -112,23 +112,23 @@ public class MulticastServerAction extends Thread {
                 if (checkUser) {
                     user.setLoggedIn(true);
                     user.setClientNo(Integer.parseInt(clientNo));
-                    message = "type|loginResult;clientNo|" + clientNo + ";status|valid;username|" + user.getUsername()
-                            + ";isAdmin|" + user.isAdmin() + ";notification|" + user.isNotification();
+                    message = "type|||loginResult;;clientNo|||" + clientNo + ";;status|||valid;;username|||" + user.getUsername()
+                            + ";;isAdmin|||" + user.isAdmin() + ";;notification|||" + user.isNotification();
                     user.setNotification(false);
 
                     saveUsers();
 
                 } else {
-                    message = "type|loginResult;clientNo|" + clientNo + ";status|invalid";
+                    message = "type|||loginResult;;clientNo|||" + clientNo + ";;status|||invalid";
                 }
 
             }
 
             else if (messageType.equals("index")) { // Index a new URL
 
-                String clientNo = receivedSplit[1].split("\\|")[1];
-                String serverNo = receivedSplit[2].split("\\|")[1];
-                String url = receivedSplit[3].split("\\|")[1];
+                String clientNo = receivedSplit[1].split("\\|\\|\\|")[1];
+                String serverNo = receivedSplit[2].split("\\|\\|\\|")[1];
+                String url = receivedSplit[3].split("\\|\\|\\|")[1];
 
                 for(MulticastServerInfo msi: server.getMulticastServerList())
                     if(msi.getServerNo() == Integer.parseInt(serverNo))
@@ -139,14 +139,14 @@ public class MulticastServerAction extends Thread {
                     WebCrawler getUrls = new WebCrawler(server, url);
                     getUrls.start();
 
-                    message = "type|indexResult;clientNo|" + clientNo + ";status|started";
+                    message = "type|||indexResult;;clientNo|||" + clientNo + ";;status|||started";
                 }
             }
 
             else if (messageType.equals("search")) { // Search word or word set in the HashMap index
 
-                String clientNo = receivedSplit[1].split("\\|")[1];
-                String words = receivedSplit[2].split("\\|")[1].toLowerCase();
+                String clientNo = receivedSplit[1].split("\\|\\|\\|")[1];
+                String words = receivedSplit[2].split("\\|\\|\\|")[1].toLowerCase();
 
                 CopyOnWriteArrayList<Search> searchList = server.getSearchList();
 
@@ -160,7 +160,7 @@ public class MulticastServerAction extends Thread {
                 }
 
                 try {
-                    String username = receivedSplit[3].split("\\|")[1];
+                    String username = receivedSplit[3].split("\\|\\|\\|")[1];
 
                     User user = null;
 
@@ -206,7 +206,7 @@ public class MulticastServerAction extends Thread {
 
                 }
 
-                message = "type|searchResult;clientNo|" + clientNo + ";urlCount|";
+                message = "type|||searchResult;;clientNo|||" + clientNo + ";;urlCount|||";
 
                 if (urlResults != null) {
                     message += urlResults.size();
@@ -228,7 +228,7 @@ public class MulticastServerAction extends Thread {
                     for (URL url : urlList) {
                         if (urlResults.contains(url.getUrl()) && !check.contains(url.getUrl())) {
                             check.add(url.getUrl());
-                            message += ";title_" + urlCount + "|" + url.getTitle() + ";url_" + urlCount + "|" + url.getUrl() + ";text_" + urlCount + "|" + url.getText();
+                            message += ";;title_" + urlCount + "|||" + url.getTitle() + ";;url_" + urlCount + "|||" + url.getUrl() + ";;text_" + urlCount + "|||" + url.getText();
                             urlCount++;
                         }
                     }
@@ -239,8 +239,8 @@ public class MulticastServerAction extends Thread {
 
             } else if (messageType.equals("searchHistory")) { // Gets user search history
 
-                String clientNo = receivedSplit[1].split("\\|")[1];
-                String username = receivedSplit[2].split("\\|")[1];
+                String clientNo = receivedSplit[1].split("\\|\\|\\|")[1];
+                String username = receivedSplit[2].split("\\|\\|\\|")[1];
 
                 User user = null;
 
@@ -252,21 +252,21 @@ public class MulticastServerAction extends Thread {
 
                 ArrayList<String> searchList = user.getSearchHistory();
 
-                message = "type|searchHistoryResult;clientNo|" + clientNo + ";searchCount|" + searchList.size();
+                message = "type|||searchHistoryResult;;clientNo|||" + clientNo + ";;searchCount|||" + searchList.size();
 
                 int searchCount = 0;
 
                 for (String s : searchList) {
                     System.out.println(s);
-                    message += ";search_" + searchCount + "|" + s;
+                    message += ";;search_" + searchCount + "|||" + s;
                     searchCount++;
                 }
 
             } else if (messageType.equals("linksPointing")) { //Get URL's pointing to URL asked by the user
-                String clientNo = receivedSplit[1].split("\\|")[1];
-                String url = receivedSplit[2].split("\\|")[1];
+                String clientNo = receivedSplit[1].split("\\|\\|\\|")[1];
+                String url = receivedSplit[2].split("\\|\\|\\|")[1];
 
-                message = "type|linksPointingResult;clientNo|" + clientNo + ";linkCount|";
+                message = "type|||linksPointingResult;;clientNo|||" + clientNo + ";;linkCount|||";
                 String saveMessage = message;
 
                 if (urlList.contains(url)) {
@@ -280,7 +280,7 @@ public class MulticastServerAction extends Thread {
                             message += urlPointingList.size();
                             int linkCount = 0;
                             for (String s : urlPointingList) {
-                                message += ";link_" + linkCount + "|" + s;
+                                message += ";;link_" + linkCount + "|||" + s;
                                 linkCount++;
                             }
                             break;
@@ -292,8 +292,8 @@ public class MulticastServerAction extends Thread {
                     message += "0";
 
             } else if (messageType.equals("promote")) { //Promotes user to admin, making the necessary verifications
-                String clientNo = receivedSplit[1].split("\\|")[1];
-                String username = receivedSplit[2].split("\\|")[1];
+                String clientNo = receivedSplit[1].split("\\|\\|\\|")[1];
+                String username = receivedSplit[2].split("\\|\\|\\|")[1];
 
                 User tempUser = new User(username);
 
@@ -301,13 +301,13 @@ public class MulticastServerAction extends Thread {
                     int indexOfUser = listUsers.indexOf(tempUser);
                     User user = listUsers.get(indexOfUser);
                     if (user.isAdmin())
-                        message = "type|promoteResult;clientNo|" + clientNo
-                                + ";status|invalid;message|User is already admin";
+                        message = "type|||promoteResult;;clientNo|||" + clientNo
+                                + ";;status|||invalid;;message|||User is already admin";
                     else {
-                        message = "type|promoteResult;clientNo|" + clientNo + ";status|valid";
+                        message = "type|||promoteResult;;clientNo|||" + clientNo + ";;status|||valid";
                         user.setAdmin(true);
                         if (user.isLoggedIn())
-                            message += ";newAdminNo|" + user.getClientNo();
+                            message += ";;newAdminNo|||" + user.getClientNo();
                         else
                             user.setNotification(true);
 
@@ -315,11 +315,11 @@ public class MulticastServerAction extends Thread {
 
                     }
                 } else {
-                    message = "type|promoteResult;clientNo|" + clientNo
-                            + ";status|invalid;message|That user doesn't exist";
+                    message = "type|||promoteResult;;clientNo|||" + clientNo
+                            + ";;status|||invalid;;message|||That user doesn't exist";
                 }
             } else if (messageType.equals("rts")) { // Sorts Search List and URL list, gets Multicast Servers Info and sends to RMI server
-                String clientNo = receivedSplit[1].split("\\|")[1];
+                String clientNo = receivedSplit[1].split("\\|\\|\\|")[1];
 
                 CopyOnWriteArrayList<Search> searchList = server.getSearchList();
 
@@ -327,31 +327,31 @@ public class MulticastServerAction extends Thread {
 
                 Collections.sort(urlList);
 
-                message = "type|rtsResult;clientNo|" + clientNo;
+                message = "type|||rtsResult;;clientNo|||" + clientNo;
 
                 for (int i = 0; i < 10; i++) {
                     try{
-                        message += ";url_" + i + "|" + urlList.get(i).getUrl();
+                        message += ";;url_" + i + "|||" + urlList.get(i).getUrl();
                     } catch(ArrayIndexOutOfBoundsException e){
-                        message += ";url_" + i + "|N/A";
+                        message += ";;url_" + i + "|||N/A";
                     }
                 }
 
                 for (int i = 0; i < 10; i++) {
                     try{
-                        message += ";search_" + i + "|" + searchList.get(i).getWords();
+                        message += ";;search_" + i + "|||" + searchList.get(i).getWords();
                     } catch(ArrayIndexOutOfBoundsException e){
-                        message += ";search_" + i + "|N/A";
+                        message += ";;search_" + i + "|||N/A";
                     }
                 }
 
                 for(MulticastServerInfo msi: server.getMulticastServerList())
-                    message += ";address|" + msi.getTCP_ADDRESS() + ";port|" + msi.getTCP_PORT();
+                    message += ";;address|||" + msi.getTCP_ADDRESS() + ";;port|||" + msi.getTCP_PORT();
                 
 
             } else if (messageType.equals("logout")) { // Receive information that an user has logged out
-                String clientNo = receivedSplit[1].split("\\|")[1];
-                String username = receivedSplit[2].split("\\|")[1];
+                String clientNo = receivedSplit[1].split("\\|\\|\\|")[1];
+                String username = receivedSplit[2].split("\\|\\|\\|")[1];
 
                 User tempUser = new User(username);
 
@@ -360,7 +360,7 @@ public class MulticastServerAction extends Thread {
 
                 user.setLoggedIn(false);
 
-                message = "type|logoutResult;clientNo|" + clientNo + ";status|valid";
+                message = "type|||logoutResult;;clientNo|||" + clientNo + ";;status|||valid";
 
                 saveUsers();
 
@@ -368,25 +368,25 @@ public class MulticastServerAction extends Thread {
 
                 if (server.isCheckingMulticastServers()) {
 
-                    int serverNo = Integer.parseInt(receivedSplit[1].split("\\|")[1]);
+                    int serverNo = Integer.parseInt(receivedSplit[1].split("\\|\\|\\|")[1]);
 
                     server.getMulticastServerCheckedList().add(serverNo);
                 }
 
             } else if (messageType.equals("checkStatus")) { // Sends message to other multicast so that they answer if they're alive
 
-                message = "type|checkStatusConfirm;serverNo|" + server.getMulticastServerNo();
+                message = "type|||checkStatusConfirm;;serverNo|||" + server.getMulticastServerNo();
 
             } else if (messageType.equals("multicastServerStarterResult")) { // Receive message from RMI server when a Multicast server starts and updates list of Multicast Servers Info
 
-                int multicastServerCount = Integer.parseInt(receivedSplit[2].split("\\|")[1]);
+                int multicastServerCount = Integer.parseInt(receivedSplit[2].split("\\|\\|\\|")[1]);
 
                 CopyOnWriteArrayList<MulticastServerInfo> newMulticastServerList = new CopyOnWriteArrayList<>();
 
                 for (int i = 3; i < (multicastServerCount * 3 + 3); i = i + 3) {
-                    int serverNo = Integer.parseInt(receivedSplit[i].split("\\|")[1]);
-                    String address = receivedSplit[i + 1].split("\\|")[1];
-                    int port = Integer.parseInt(receivedSplit[i + 2].split("\\|")[1]);
+                    int serverNo = Integer.parseInt(receivedSplit[i].split("\\|\\|\\|")[1]);
+                    String address = receivedSplit[i + 1].split("\\|\\|\\|")[1];
+                    int port = Integer.parseInt(receivedSplit[i + 2].split("\\|\\|\\|")[1]);
                     MulticastServerInfo msi = new MulticastServerInfo(serverNo, address, port);
                     newMulticastServerList.add(msi);
                 }
@@ -399,12 +399,12 @@ public class MulticastServerAction extends Thread {
 
             } else if(messageType.equals("rmiServerStarter")){
 
-                message = "type|rmiServerStarterResult;clientNo|0;serverCount|" + server.getMulticastServerList().size();
+                message = "type|||rmiServerStarterResult;;clientNo|||0;;serverCount|||" + server.getMulticastServerList().size();
 
                 int count = 0;
 
                 for(MulticastServerInfo msi: server.getMulticastServerList()){
-                    message += ";serverNo_" + count + "|" + msi.getServerNo() + ";address_" + count + "|" + msi.getTCP_ADDRESS() + ";port_" + count + "|" + msi.getTCP_PORT() + ";carga_" + count + "|" + msi.getCarga();
+                    message += ";;serverNo_" + count + "|||" + msi.getServerNo() + ";;address_" + count + "|||" + msi.getTCP_ADDRESS() + ";;port_" + count + "|||" + msi.getTCP_PORT() + ";;carga_" + count + "|||" + msi.getCarga();
                     count++;
                 }
             }

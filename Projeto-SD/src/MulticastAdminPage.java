@@ -68,14 +68,14 @@ public class MulticastAdminPage extends Thread {
 
                 //Se tiver havido alguma alteracao no top 10 pesquisas ou no top 10 urls
                 if(checkSearchList || checkUrlList){
-                    String message = "type|rtsUpdate;clientNo|0";
+                    String message = "type|||rtsUpdate;;clientNo|||0";
                     for(int i = 0; i < 10; i++){
                         top10url[i] = urlList.get(i).getUrl();
-                        message += "url_" + i + "|" + top10url[i];
+                        message += ";;url_" + i + "|||" + top10url[i];
                     }
                     for(int i = 0; i < 10; i++){
                         top10search[i] = searchList.get(i).getWords();
-                        message += "search_" + i + "|" + top10search[i];
+                        message += ";;search_" + i + "|||" + top10search[i];
                     }
             
                     byte[] buffer = message.getBytes();
