@@ -3,8 +3,6 @@ import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.ArrayList;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 public class RMIClient extends UnicastRemoteObject implements ClientInterface {
     static final long serialVersionUID = 1L;
@@ -35,7 +33,7 @@ public class RMIClient extends UnicastRemoteObject implements ClientInterface {
                     Thread.sleep(200);
                     System.out.println("\nShutting down...");
                     // some cleaning up code...
-                    serverInterface.logout(clientNo, username);
+                    serverInterface.logout(clientNo, username, true);
 
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
@@ -124,7 +122,7 @@ public class RMIClient extends UnicastRemoteObject implements ClientInterface {
 
     public void logout(boolean result) throws RemoteException, MalformedURLException, NotBoundException {
         try {
-            String msg = serverInterface.logout(this.clientNo, this.username);
+            String msg = serverInterface.logout(this.clientNo, this.username, false);
             System.out.println("Recebi a mensagem: " + msg);
             if (result == true) {
                 this.typeOfClient = "anonymous";
@@ -139,7 +137,7 @@ public class RMIClient extends UnicastRemoteObject implements ClientInterface {
 
     public void shutdown() throws RemoteException {
         try {
-            serverInterface.logout(this.clientNo, this.username);
+            serverInterface.logout(this.clientNo, this.username, true);
             System.out.println("\nShutdown complete.\nHope to see you again soon! :)");
             System.exit(1);
         } catch (RemoteException e) {
@@ -280,8 +278,7 @@ public class RMIClient extends UnicastRemoteObject implements ClientInterface {
             System.out.println("Recieved client no: " + receivedClientNo);
             if (this.clientNo == receivedClientNo) {
                 System.out.println("Started receiving updates...");
-                CopyOnWriteArrayList<MulticastServerInfo> servers = serverInterface.activeMulticastServers();
-                printTop10(parameters, servers);
+                printTop10(parameters);
 
             }
         } catch (RemoteException e) {
@@ -294,7 +291,7 @@ public class RMIClient extends UnicastRemoteObject implements ClientInterface {
         serverInterface = (ServerInterface) Naming.lookup(RMINAME);
     }
 
-    public void printTop10(String[] parameters, CopyOnWriteArrayList<MulticastServerInfo> servers) {
+    public void printTop10(String[] parameters) {
         int cont = 1;
         for (int i = 2; i < parameters.length; i++, cont++) {
             if (i == 2) {
@@ -303,28 +300,25 @@ public class RMIClient extends UnicastRemoteObject implements ClientInterface {
             } else if (i == 12) {
                 cont = 1;
                 System.out.println("\nTop 10 - Most searched terms:\n");
+            } else if (i == 22) {
+                cont = 1;
+                System.out.println("\nActive multicast servers:\n");
             }
 
-            System.out.println(cont + ". " + parameters[i]);
-        }
-
-        System.out.println("\nActive multicast servers:\n");
-        for (int i = 1; i <= servers.size(); i++) {
-            MulticastServerInfo s = servers.get(i);
-            System.out.println(i + ". Ip: " + s.getTCP_ADDRESS() + " Port: " + s.getTCP_PORT());
+            if (i < 22) {
+                System.out.println(cont + ". " + parameters[i].split("\\|")[1]);
+            } else {
+                System.out.println(cont + ". Ip: " + parameters[i++].split("\\|")[1] + " Port: "
+                        + parameters[i++].split("\\|")[1]);
+            }
         }
     }
 
-    public void rtsUpdate(String msg) throws RemoteException {
-        try {
-            if (this.inRealTimeStatistics) {
-                System.out.println("\n[Update]\n");
-                String[] parameters = msg.split(";");
-                CopyOnWriteArrayList<MulticastServerInfo> servers = serverInterface.activeMulticastServers();
-                printTop10(parameters, servers);
-            }
-        } catch (RemoteException e) {
-            System.out.println("ERROR #13: Something went wrong. Would you mind to try again? :)");
+    public void rtsUpdate(String msg) {
+        if (this.inRealTimeStatistics) {
+            System.out.println("\n[Update]\n");
+            String[] parameters = msg.split(";");
+            printTop10(parameters);
         }
     }
 }

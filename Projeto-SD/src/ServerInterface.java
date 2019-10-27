@@ -29,7 +29,7 @@ public interface ServerInterface extends Remote {
         public String grantPrivileges(int clientNo, String username)
                         throws java.rmi.RemoteException, java.rmi.NotBoundException, java.net.MalformedURLException;
 
-        public String logout(int clientNo, String username) throws java.rmi.RemoteException;
+        public String logout(int clientNo, String username, boolean exit) throws java.rmi.RemoteException;
 
         public String realTimeStatistics(int clientNo) throws java.rmi.RemoteException;
 

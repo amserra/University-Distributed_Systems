@@ -164,13 +164,12 @@ public class UI {
         System.out.println("\n-----Real-time Statistics-----\n");
         System.out.println("NOTE: Type anything to return to the admin page menu\n");
 
-        // E has next?
-        if (sc.hasNext()) {
-            administrationPage();
-            this.client.inRealTimeStatistics = false;
-            return;
-        }
         client.realTimeStatistics();
+
+        sc.nextLine();
+        administrationPage();
+        this.client.inRealTimeStatistics = false;
+        return;
     }
 
     public void grantPrivileges() throws RemoteException, MalformedURLException, NotBoundException {

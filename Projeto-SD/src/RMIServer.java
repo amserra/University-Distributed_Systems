@@ -10,7 +10,6 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.server.UnicastRemoteObject;
 import java.time.LocalDateTime;
 import java.util.HashMap;
-import java.util.ArrayList;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class RMIServer extends UnicastRemoteObject implements ServerInterface {
@@ -69,8 +68,13 @@ public class RMIServer extends UnicastRemoteObject implements ServerInterface {
                         wasBackup = false;
                         System.out.println("I am now the primary server!");
                         System.out.println("Reconnecting to clients, please wait...");
-                        reconnectClients();
-                        System.out.println("Done! Backup server is now Primary Server.");
+                        if (this.clientInterfacesMap.isEmpty()) {
+                            System.out.println("No clients connected.");
+                        } else {
+                            reconnectClients();
+                            System.out.println("Done! Reconnected to " + this.clientInterfacesMap.size() + " clients.");
+                        }
+                        System.out.println("Backup server is now Primary Server.");
                     } else {
                         new RMIMulticastManager(this);
                         System.out.println("Primary RMIServer ready...");
@@ -104,6 +108,7 @@ public class RMIServer extends UnicastRemoteObject implements ServerInterface {
 
     // For the secondary server to check if primary failed
     public void checkPrimaryServerStatus() throws InterruptedException, AccessException, RemoteException {
+        this.multicastServers = serverInterface.activeMulticastServers();
         new RMIMulticastManager(this);
 
         boolean run = true;
@@ -206,11 +211,16 @@ public class RMIServer extends UnicastRemoteObject implements ServerInterface {
         return msgReceive;
     }
 
-    public String logout(int clientNo, String username) throws RemoteException {
+    public String logout(int clientNo, String username, boolean exit) throws RemoteException {
         String msg = "type|logout;clientNo|" + clientNo + ";username|" + username;
         System.out.println("Mensagem a ser enviada: " + msg);
         String msgReceive = connectToMulticast(clientNo, msg);
         System.out.println("Mensagem recebida: " + msgReceive);
+        if (exit) {
+            String[] parameters = msgReceive.split(";");
+            int receivedClientNo = Integer.parseInt(parameters[1].split("\\|")[1]);
+            this.clientInterfacesMap.remove(receivedClientNo);
+        }
         return msgReceive;
     }
 
@@ -306,7 +316,7 @@ public class RMIServer extends UnicastRemoteObject implements ServerInterface {
     }
 
     public CopyOnWriteArrayList<MulticastServerInfo> activeMulticastServers() {
-        return multicastServers;
+        return this.multicastServers;
     }
 
 }

@@ -1,9 +1,7 @@
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Arrays;
 
 public class RMIMulticastManager extends Thread {
     RMIServer server;
@@ -73,7 +71,7 @@ public class RMIMulticastManager extends Thread {
                     int serverNo = Integer.parseInt(parameters[1].split("\\|")[1]);
                     // Process message
                     deleteMulticastServer(serverNo);
-                } else if (type.equals("rtsResult") && !this.server.isBackup) {
+                } else if (type.equals("rtsUpdate") && !this.server.isBackup) {
                     this.server.sendRtsToAll(msgReceive);
                 }
             }
