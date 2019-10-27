@@ -228,7 +228,8 @@ public class MulticastServerAction extends Thread {
                     for (URL url : urlList) {
                         if (urlResults.contains(url.getUrl()) && !check.contains(url.getUrl())) {
                             check.add(url.getUrl());
-                            message += ";url_" + urlCount++ + "|" + url.getUrl();
+                            message += ";url_" + urlCount + "|" + url.getUrl() + ";title_" + urlCount + "|" + url.getTitle() + ";text_" + urlCount + "|" + url.getText();
+                            urlCount++;
                         }
                     }
                 } else
@@ -342,12 +343,9 @@ public class MulticastServerAction extends Thread {
                     }
                 }
 
-                int msiCount = 0;
-
-                for(MulticastServerInfo msi: server.getMulticastServerList()){
+                for(MulticastServerInfo msi: server.getMulticastServerList())
                     message += ";address|" + msi.getTCP_ADDRESS() + ";port|" + msi.getTCP_PORT();
-                    msiCount++;
-                }
+                
 
             } else if (messageType.equals("logout")) { // Receive information that an user has logged out
                 String clientNo = receivedSplit[1].split("\\|")[1];
