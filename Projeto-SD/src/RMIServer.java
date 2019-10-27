@@ -82,7 +82,6 @@ public class RMIServer extends UnicastRemoteObject implements ServerInterface {
                     System.out.println("Print model: \"[Message responsible] Message\"");
                 } catch (Exception err) {
                     System.out.println("\nERROR: Something went wrong. Aborting program...");
-                    err.printStackTrace();
                     System.exit(-1);
                 }
             }
@@ -154,9 +153,9 @@ public class RMIServer extends UnicastRemoteObject implements ServerInterface {
 
                 // System.out.println("Mensagem recebida: " + msgReceive);
 
-                String[] parameters = msgReceive.split(";");
-                type = parameters[0].split("\\|")[1];
-                receivedClientNo = Integer.parseInt(parameters[1].split("\\|")[1]);
+                String[] parameters = msgReceive.split(";;");
+                type = parameters[0].split("\\|\\|\\|")[1];
+                receivedClientNo = Integer.parseInt(parameters[1].split("\\|\\|\\|")[1]);
 
                 System.out.println("Type = " + type);
 
@@ -200,9 +199,9 @@ public class RMIServer extends UnicastRemoteObject implements ServerInterface {
             throws RemoteException {
         String msg;
         if (isLogin)
-            msg = "type|login;clientNo|" + clientNo + ";username|" + username + ";password|" + password;
+            msg = "type|||login;;clientNo|||" + clientNo + ";;username|||" + username + ";;password|||" + password;
         else
-            msg = "type|register;clientNo|" + clientNo + ";username|" + username + ";password|" + password;
+            msg = "type|||register;;clientNo|||" + clientNo + ";;username|||" + username + ";;password|||" + password;
 
         System.out.println("Mensgem a ser enviada: " + msg);
         String msgReceive = connectToMulticast(clientNo, msg);
@@ -211,13 +210,13 @@ public class RMIServer extends UnicastRemoteObject implements ServerInterface {
     }
 
     public String logout(int clientNo, String username, boolean exit) throws RemoteException {
-        String msg = "type|logout;clientNo|" + clientNo + ";username|" + username;
+        String msg = "type|||logout;;clientNo|||" + clientNo + ";;username|||" + username;
         System.out.println("Mensagem a ser enviada: " + msg);
         String msgReceive = connectToMulticast(clientNo, msg);
         System.out.println("Mensagem recebida: " + msgReceive);
         if (exit) {
-            String[] parameters = msgReceive.split(";");
-            int receivedClientNo = Integer.parseInt(parameters[1].split("\\|")[1]);
+            String[] parameters = msgReceive.split(";;");
+            int receivedClientNo = Integer.parseInt(parameters[1].split("\\|\\|\\|")[1]);
             this.clientInterfacesMap.remove(receivedClientNo);
         }
         return msgReceive;
@@ -227,9 +226,9 @@ public class RMIServer extends UnicastRemoteObject implements ServerInterface {
         String msg;
 
         if (username != null)
-            msg = "type|search;clientNo|" + clientNo + ";word|" + searchTerms + ";username|" + username;
+            msg = "type|||search;;clientNo|||" + clientNo + ";;word|||" + searchTerms + ";;username|||" + username;
         else
-            msg = "type|search;clientNo|" + clientNo + ";word|" + searchTerms;
+            msg = "type|||search;;clientNo|||" + clientNo + ";;word|||" + searchTerms;
 
         System.out.println("Mensagem a ser enviada: " + msg);
         String msgReceive = connectToMulticast(clientNo, msg);
@@ -258,7 +257,7 @@ public class RMIServer extends UnicastRemoteObject implements ServerInterface {
 
     public String indexNewURL(int clientNo, String url) throws RemoteException {
         int serverNo = getLowestLoadedServer();
-        String msg = "type|index;clientNo|" + clientNo + ";serverNo|" + serverNo + ";url|" + url;
+        String msg = "type|||index;;clientNo|||" + clientNo + ";;serverNo|||" + serverNo + ";;url|||" + url;
         System.out.println("Mensagem a ser enviada: " + msg);
         String msgReceive = connectToMulticast(clientNo, msg);
         System.out.println("Mensagem recebida: " + msgReceive);
@@ -266,7 +265,7 @@ public class RMIServer extends UnicastRemoteObject implements ServerInterface {
     }
 
     public String searchHistory(int clientNo, String username) throws RemoteException {
-        String msg = "type|searchHistory;clientNo|" + clientNo + ";username|" + username;
+        String msg = "type|||searchHistory;;clientNo|||" + clientNo + ";;username|||" + username;
         System.out.println("Mensagem a ser enviada: " + msg);
         String msgReceive = connectToMulticast(clientNo, msg);
         System.out.println("Mensagem recebida: " + msgReceive);
@@ -274,7 +273,7 @@ public class RMIServer extends UnicastRemoteObject implements ServerInterface {
     }
 
     public String linksPointing(int clientNo, String url) throws RemoteException {
-        String msg = "type|linksPointing;clientNo|" + clientNo + ";url|" + url;
+        String msg = "type|||linksPointing;;clientNo|||" + clientNo + ";;url|||" + url;
         System.out.println("Mensagem a ser enviada: " + msg);
         String msgReceive = connectToMulticast(clientNo, msg);
         System.out.println("Mensagem recebida: " + msgReceive);
@@ -283,15 +282,15 @@ public class RMIServer extends UnicastRemoteObject implements ServerInterface {
 
     public String grantPrivileges(int clientNo, String username)
             throws RemoteException, MalformedURLException, NotBoundException {
-        String msg = "type|promote;clientNo|" + clientNo + ";username|" + username;
+        String msg = "type|||promote;;clientNo|||" + clientNo + ";;username|||" + username;
         System.out.println("Mensagem a ser enviada: " + msg);
         String msgReceive = connectToMulticast(clientNo, msg);
         System.out.println("Mensagem recebida: " + msgReceive);
-        String[] parameters = msgReceive.split(";");
-        String status = parameters[2].split("\\|")[1];
+        String[] parameters = msgReceive.split(";;");
+        String status = parameters[2].split("\\|\\|\\|")[1];
         // Erro esta aqui
         if ((parameters.length > 3) && (parameters[3] != null) && (status.equals("valid"))) {
-            int newAdminNo = Integer.parseInt(parameters[3].split("\\|")[1]);
+            int newAdminNo = Integer.parseInt(parameters[3].split("\\|\\|\\|")[1]);
             ClientInterface client = clientInterfacesMap.get(newAdminNo);
             client.notification();
         }
@@ -307,7 +306,7 @@ public class RMIServer extends UnicastRemoteObject implements ServerInterface {
     }
 
     public String realTimeStatistics(int clientNo) throws RemoteException {
-        String msg = "type|rts;clientNo|" + clientNo;
+        String msg = "type|||rts;;clientNo|||" + clientNo;
         System.out.println("Mensagem a ser enviada: " + msg);
         String msgReceive = connectToMulticast(clientNo, msg);
         System.out.println("Mensagem recebida: " + msgReceive);

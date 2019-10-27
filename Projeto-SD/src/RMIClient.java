@@ -72,14 +72,14 @@ public class RMIClient extends UnicastRemoteObject implements ClientInterface {
             String msg = serverInterface.authentication(this.clientNo, isLogin, username, password);
             System.out.println("Recebi a mensagem: " + msg);
 
-            String[] parameters = msg.split(";");
-            int receivedClientNo = Integer.parseInt(parameters[1].split("\\|")[1]);
-            String status = parameters[2].split("\\|")[1];
+            String[] parameters = msg.split(";;");
+            int receivedClientNo = Integer.parseInt(parameters[1].split("\\|\\|\\|")[1]);
+            String status = parameters[2].split("\\|\\|\\|")[1];
             // Sera preciso esta confirmacao?
             if (this.clientNo == receivedClientNo) {
                 if (status.equals("valid")) {
-                    String usr = parameters[3].split("\\|")[1];
-                    boolean isAdmin = Boolean.parseBoolean(parameters[4].split("\\|")[1]);
+                    String usr = parameters[3].split("\\|\\|\\|")[1];
+                    boolean isAdmin = Boolean.parseBoolean(parameters[4].split("\\|\\|\\|")[1]);
                     if (isAdmin)
                         this.typeOfClient = "admin";
                     else
@@ -87,7 +87,7 @@ public class RMIClient extends UnicastRemoteObject implements ClientInterface {
 
                     if (isLogin) {
                         System.out.println("Login successful. Welcome " + usr + "\n");
-                        boolean notification = Boolean.parseBoolean(parameters[5].split("\\|")[1]);
+                        boolean notification = Boolean.parseBoolean(parameters[5].split("\\|\\|\\|")[1]);
                         if (notification)
                             System.out.println("Notification: You have been promoted to admin!");
                     } else {
@@ -116,7 +116,8 @@ public class RMIClient extends UnicastRemoteObject implements ClientInterface {
                 }
             }
         } catch (RemoteException e) {
-            System.out.println("ERROR #2: Something went wrong. Would you mind to try again? :)");
+            System.out.println("ERROR #2: Something went wrong. Returning to main menu");
+            userUI.mainMenu();
         }
     }
 
@@ -131,7 +132,7 @@ public class RMIClient extends UnicastRemoteObject implements ClientInterface {
             userUI.mainMenu();
 
         } catch (RemoteException e) {
-            System.out.println("ERROR #8: Something went wrong. Would you mind to try again? :)");
+            System.out.println("ERROR #8: Something went wrong.");
         }
     }
 
@@ -150,33 +151,38 @@ public class RMIClient extends UnicastRemoteObject implements ClientInterface {
             String searchTerms = String.join(" ", words);
             String msg = serverInterface.search(this.clientNo, username, searchTerms);
             System.out.println("Recebi a mensagem: " + msg);
-            String[] parameters = msg.split(";");
-            int receivedClientNo = Integer.parseInt(parameters[1].split("\\|")[1]);
-            int numOfURLs = Integer.parseInt(parameters[2].split("\\|")[1]);
+            String[] parameters = msg.split(";;");
+            int receivedClientNo = Integer.parseInt(parameters[1].split("\\|\\|\\|")[1]);
+            int numOfURLs = Integer.parseInt(parameters[2].split("\\|\\|\\|")[1]);
 
             if (this.clientNo == receivedClientNo) {
-                if (numOfURLs == 0)
+                if (numOfURLs == 0) {
                     System.out.println("Nothing came up! Ask an admin to index more pages.");
-                int count = 0;
-                int j = 3;
-                // Starts at index 3
-                for (int i = 0; i < numOfURLs; i++) {
-                    count++;
-                    System.out.println("\n" + count + "\n");
-                    System.out.println("Title: " + parameters[j++].split("\\|")[1]);
-                    System.out.println("Url: " + parameters[j++].split("\\|")[1]);
-                    System.out.println("Text: " + parameters[j++].split("\\|")[1]);
-                }
-                // for (int i = startIndex; i < numOfURLs + startIndex; i++) {
-                // count++;
-                // System.out.println("Url " + count + ": " + parameters[i].split("\\|")[1]);
-                // }
-            }
-        } catch (RemoteException e) {
-            System.out.println("ERROR #3: Something went wrong. Would you mind to try again? :)");
-        }
+                } else {
+                    int count = 0;
+                    // Starts at index 3
+                    int j = 3;
+                    int max;
+                    if (numOfURLs < 100)
+                        max = numOfURLs;
+                    else
+                        max = 100;
 
-        userUI.search();
+                    System.out.println("Found " + numOfURLs + "results. Showing only the first " + max);
+                    for (int i = 0; i < max; i++) {
+                        count++;
+                        System.out.println("\n" + count + "\n");
+                        System.out.println("Title: " + parameters[j++].split("\\|\\|\\|")[1]);
+                        System.out.println("Url: " + parameters[j++].split("\\|\\|\\|")[1]);
+                        System.out.println("Text: " + parameters[j++].split("\\|\\|\\|")[1]);
+                    }
+                }
+            }
+            userUI.search();
+        } catch (RemoteException e) {
+            System.out.println("ERROR #3: Something went wrong. Returnig to main menu.");
+            userUI.mainMenu();
+        }
     }
 
     public void searchHistory() throws RemoteException, MalformedURLException, NotBoundException {
@@ -184,9 +190,9 @@ public class RMIClient extends UnicastRemoteObject implements ClientInterface {
         try {
             String msg = serverInterface.searchHistory(this.clientNo, this.username);
             System.out.println("Recebi a mensagem: " + msg);
-            String[] parameters = msg.split(";");
-            int receivedClientNo = Integer.parseInt(parameters[1].split("\\|")[1]);
-            int searchCount = Integer.parseInt(parameters[2].split("\\|")[1]);
+            String[] parameters = msg.split(";;");
+            int receivedClientNo = Integer.parseInt(parameters[1].split("\\|\\|\\|")[1]);
+            int searchCount = Integer.parseInt(parameters[2].split("\\|\\|\\|")[1]);
 
             if (this.clientNo == receivedClientNo && searchCount != 0) {
                 int count = 0;
@@ -194,7 +200,7 @@ public class RMIClient extends UnicastRemoteObject implements ClientInterface {
                 // Starts at index 3
                 for (int i = startIndex; i < searchCount + startIndex; i++) {
                     count++;
-                    System.out.println("Url " + count + ": " + parameters[i]);
+                    System.out.println("Url " + count + ": " + parameters[i].split("\\|\\|\\|"));
                 }
             } else if (this.clientNo == receivedClientNo && searchCount == 0) {
                 System.out.println("You haven't searched for anything yet!");
@@ -210,16 +216,16 @@ public class RMIClient extends UnicastRemoteObject implements ClientInterface {
         try {
             String msg = serverInterface.linksPointing(this.clientNo, url);
             System.out.println("Recebi a mensagem: " + msg);
-            String[] parameters = msg.split(";");
-            int receivedClientNo = Integer.parseInt(parameters[1].split("\\|")[1]);
-            int numOfLinks = Integer.parseInt(parameters[2].split("\\|")[1]);
+            String[] parameters = msg.split(";;");
+            int receivedClientNo = Integer.parseInt(parameters[1].split("\\|\\|\\|")[1]);
+            int numOfLinks = Integer.parseInt(parameters[2].split("\\|\\|\\|")[1]);
             if (this.clientNo == receivedClientNo && numOfLinks != 0) {
                 int count = 0;
                 int startIndex = 3;
                 // Starts at index 3
                 for (int i = startIndex; i < numOfLinks + startIndex; i++) {
                     count++;
-                    System.out.println("Link " + count + ": " + parameters[i].split("\\|")[1]);
+                    System.out.println("Link " + count + ": " + parameters[i].split("\\|\\|\\|")[1]);
                 }
             } else if (this.clientNo == receivedClientNo && numOfLinks == 0) {
                 System.out.println("Link doesn't have any pages connected to it yet!");
@@ -236,8 +242,8 @@ public class RMIClient extends UnicastRemoteObject implements ClientInterface {
         // return to indexNewURL menu to index more
         try {
             String msg = serverInterface.indexNewURL(this.clientNo, url);
-            String[] parameters = msg.split(";");
-            int receivedClientNo = Integer.parseInt(parameters[1].split("\\|")[1]);
+            String[] parameters = msg.split(";;");
+            int receivedClientNo = Integer.parseInt(parameters[1].split("\\|\\|\\|")[1]);
             System.out.println("Recebi a mensagem: " + msg);
             if (this.clientNo == receivedClientNo) {
                 System.out.println("Started indexing the requested url!");
@@ -253,17 +259,17 @@ public class RMIClient extends UnicastRemoteObject implements ClientInterface {
         try {
             String msg = serverInterface.grantPrivileges(this.clientNo, username);
             System.out.println("Recebi a mensagem: " + msg);
-            String[] parameters = msg.split(";");
-            int receivedClientNo = Integer.parseInt(parameters[1].split("\\|")[1]);
+            String[] parameters = msg.split(";;");
+            int receivedClientNo = Integer.parseInt(parameters[1].split("\\|\\|\\|")[1]);
             System.out.println("Recieved client no: " + receivedClientNo);
-            String status = parameters[2].split("\\|")[1];
+            String status = parameters[2].split("\\|\\|\\|")[1];
             System.out.println("Status: " + status);
             if (this.clientNo == receivedClientNo) {
                 if (status.equals("valid")) {
                     System.out.println("Conceded admin privileges to " + username + " successfully");
                     // Falta o outro receber essa notificacao
                 } else if (status.equals("invalid")) {
-                    String errorMsg = parameters[3].split("\\|")[1];
+                    String errorMsg = parameters[3].split("\\|\\|\\|")[1];
                     System.out.println("ERROR: " + errorMsg + "\nTry again.");
                 }
             }
@@ -274,14 +280,12 @@ public class RMIClient extends UnicastRemoteObject implements ClientInterface {
     }
 
     public void realTimeStatistics() {
-        // Ask to the multicast server?
-        // Callback!
         try {
             String msg = serverInterface.realTimeStatistics(this.clientNo);
             this.inRealTimeStatistics = true;
             System.out.println("Recebi a mensagem: " + msg);
-            String[] parameters = msg.split(";");
-            int receivedClientNo = Integer.parseInt(parameters[1].split("\\|")[1]);
+            String[] parameters = msg.split(";;");
+            int receivedClientNo = Integer.parseInt(parameters[1].split("\\|\\|\\|")[1]);
             System.out.println("Recieved client no: " + receivedClientNo);
             if (this.clientNo == receivedClientNo) {
                 System.out.println("Started receiving updates...");
@@ -313,10 +317,10 @@ public class RMIClient extends UnicastRemoteObject implements ClientInterface {
             }
 
             if (i < 22) {
-                System.out.println(cont + ". " + parameters[i].split("\\|")[1]);
+                System.out.println(cont + ". " + parameters[i].split("\\|\\|\\|")[1]);
             } else {
-                System.out.println(cont + ". Ip: " + parameters[i++].split("\\|")[1] + " Port: "
-                        + parameters[i++].split("\\|")[1]);
+                System.out.println(cont + ". Ip: " + parameters[i++].split("\\|\\|\\|")[1] + " Port: "
+                        + parameters[i++].split("\\|\\|\\|")[1]);
             }
         }
     }
@@ -324,7 +328,7 @@ public class RMIClient extends UnicastRemoteObject implements ClientInterface {
     public void rtsUpdate(String msg) {
         if (this.inRealTimeStatistics) {
             System.out.println("\n[Update]\n");
-            String[] parameters = msg.split(";");
+            String[] parameters = msg.split(";;");
             printTop10(parameters);
         }
     }
