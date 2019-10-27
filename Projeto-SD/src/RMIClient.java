@@ -158,12 +158,19 @@ public class RMIClient extends UnicastRemoteObject implements ClientInterface {
                 if (numOfURLs == 0)
                     System.out.println("Nothing came up! Ask an admin to index more pages.");
                 int count = 0;
-                int startIndex = 3;
+                int j = 3;
                 // Starts at index 3
-                for (int i = startIndex; i < numOfURLs + startIndex; i++) {
+                for (int i = 0; i < numOfURLs; i++) {
                     count++;
-                    System.out.println("Url " + count + ": " + parameters[i].split("\\|")[1]);
+                    System.out.println("\n" + count + "\n");
+                    System.out.println("Title: " + parameters[j++].split("\\|")[1]);
+                    System.out.println("Url: " + parameters[j++].split("\\|")[1]);
+                    System.out.println("Text: " + parameters[j++].split("\\|")[1]);
                 }
+                // for (int i = startIndex; i < numOfURLs + startIndex; i++) {
+                // count++;
+                // System.out.println("Url " + count + ": " + parameters[i].split("\\|")[1]);
+                // }
             }
         } catch (RemoteException e) {
             System.out.println("ERROR #3: Something went wrong. Would you mind to try again? :)");
