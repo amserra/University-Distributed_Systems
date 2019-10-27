@@ -200,7 +200,7 @@ public class RMIClient extends UnicastRemoteObject implements ClientInterface {
                 // Starts at index 3
                 for (int i = startIndex; i < searchCount + startIndex; i++) {
                     count++;
-                    System.out.println("Url " + count + ": " + parameters[i].split("\\|\\|\\|"));
+                    System.out.println("Url " + count + ": " + parameters[i].split("\\|\\|\\|")[1]);
                 }
             } else if (this.clientNo == receivedClientNo && searchCount == 0) {
                 System.out.println("You haven't searched for anything yet!");
