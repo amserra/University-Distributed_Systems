@@ -228,7 +228,7 @@ public class MulticastServerAction extends Thread {
                     for (URL url : urlList) {
                         if (urlResults.contains(url.getUrl()) && !check.contains(url.getUrl())) {
                             check.add(url.getUrl());
-                            message += ";url_" + urlCount + "|" + url.getUrl() + ";title_" + urlCount + "|" + url.getTitle() + ";text_" + urlCount + "|" + url.getText();
+                            message += ";title_" + urlCount + "|" + url.getTitle() + ";url_" + urlCount + "|" + url.getUrl() + ";text_" + urlCount + "|" + url.getText();
                             urlCount++;
                         }
                     }
