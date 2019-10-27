@@ -11,7 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
 
-public class IndexSync extends Thread {
+public class Synchronization extends Thread {
 
     private String index_file = "files/index_"; //Name of file with index
     private String url_file = "files/urls_"; //Name of file with URLs
@@ -39,7 +39,7 @@ public class IndexSync extends Thread {
      * 
      * Saves information in files and sends it to another Multicast Servers
      */
-    public IndexSync(MulticastServer server) {
+    public Synchronization(MulticastServer server) {
         this.serverNo = server.getMulticastServerNo();
         this.serversList = server.getMulticastServerList();
         this.index = server.getIndex();

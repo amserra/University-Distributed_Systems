@@ -62,11 +62,14 @@ public class MulticastServer extends Thread {
             InetAddress group = InetAddress.getByName(MULTICAST_ADDRESS);
             socket.joinGroup(group);
 
-            getMulticastServerNo(socket, group);
+            getMulticastServerNo(socket, group); //Get server number and information about other multicast servers
 
-            getMulticastServerFiles();
+            getMulticastServerFiles(); //Get information in files
 
-            new IndexSync(this);
+            MulticastServerControl multicastServerControl = new MulticastServerControl(this, group, socket);
+            multicastServerControl.start(); //Thread that checks status of other multicast servers
+
+            new Synchronization(this); //Thread that takes care of synchronization
 
             System.out.println("Server " + multicastServerNo + " is running!");
 
@@ -130,9 +133,6 @@ public class MulticastServer extends Thread {
 
             for (MulticastServerInfo msi : multicastServerList)
                 System.out.println("SERVER: " + msi.getServerNo() + "\nEndereço: " + msi.getTCP_ADDRESS() + "\nPorto: " + msi.getTCP_PORT());
-
-            MulticastServerControl multicastServerControl = new MulticastServerControl(this, group, socket);
-            multicastServerControl.start();
 
         } catch (Exception e) {
             e.printStackTrace();

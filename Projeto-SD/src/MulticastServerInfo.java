@@ -16,6 +16,7 @@ public class MulticastServerInfo {
         this.serverNo = serverNo;
         this.TCP_ADDRESS = TCP_ADDRESS;
         this.TCP_PORT = TCP_PORT;
+        this.carga = 0;
     }
 
     
