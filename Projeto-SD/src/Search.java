@@ -1,19 +1,35 @@
 public class Search implements Comparable<Search>{
     
-    private String words;
-    private int nSearches;
+    private String words; // Search made by the user
+    private int nSearches; // Number of time the search has been made
 
+    
+    /** 
+     * @param words
+     * @param nSearches
+     * @return 
+     */
     public Search(String words, int nSearches) {
         this.words = words;
         this.nSearches = nSearches;
     }
     
+    
+    /** 
+     * @param search
+     * @return int
+     */
     @Override
     public int compareTo(Search search){
         return search.getnSearches() - this.nSearches;
     }
 
-	@Override
+	
+    /** 
+     * @param o
+     * @return boolean
+     */
+    @Override
     public boolean equals(Object o){
         if (o instanceof Search) {
             Search p = (Search) o;
@@ -25,18 +41,34 @@ public class Search implements Comparable<Search>{
             return false;
     }
 
+    
+    /** 
+     * @return String
+     */
     public String getWords() {
         return words;
     }
 
+    
+    /** 
+     * @param words
+     */
     public void setWords(String words) {
         this.words = words;
     }
 
+    
+    /** 
+     * @return int
+     */
     public int getnSearches() {
         return nSearches;
     }
 
+    
+    /** 
+     * @param nSearches
+     */
     public void setnSearches(int nSearches) {
         this.nSearches = nSearches;
     }

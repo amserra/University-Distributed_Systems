@@ -6,10 +6,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class MulticastServerControl extends Thread {
 
-    // Thread que peridodicamente verifica se os multicast servers foram abaixo
-
-    int CHECK_PERIOD = 15000;
-    int WAIT_TIME = 5000;
+    int CHECK_PERIOD = 15000; //Time period between multicast server check
+    int WAIT_TIME = 5000; // Time to wait for an answer from multicast serveres
 
     int PORT;
     InetAddress group;
@@ -19,6 +17,13 @@ public class MulticastServerControl extends Thread {
 
     MulticastServer server;
 
+    
+    /** 
+     * @param server
+     * @param group
+     * @param socket
+     * @return 
+     */
     public MulticastServerControl(MulticastServer server, InetAddress group, MulticastSocket socket) {
         this.multicastServerNoList = server.getMulticastServerList();
         this.server = server;
@@ -27,6 +32,11 @@ public class MulticastServerControl extends Thread {
         this.socket = socket;
     }
 
+    /**
+     * First sends multicast message to other multicast servers
+     * Then waits for their response and checks which ones have answered
+     * The one who didn't answer, it sends a message to RMI server
+     */
     public void run() {
         while (true) {
             try {
