@@ -6,8 +6,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class MulticastServerControl extends Thread {
 
-    int CHECK_PERIOD = 15000; //Time period between multicast server check
-    int WAIT_TIME = 5000; // Time to wait for an answer from multicast serveres
+    int CHECK_PERIOD = 1000; //Time period between multicast server check
+    int WAIT_TIME = 2000; // Time to wait for an answer from multicast serveres
 
     int PORT;
     InetAddress group;
@@ -30,6 +30,8 @@ public class MulticastServerControl extends Thread {
         this.PORT = server.getPORT();
         this.group = group;
         this.socket = socket;
+
+        this.start();
     }
 
     /**
@@ -55,11 +57,8 @@ public class MulticastServerControl extends Thread {
                 if(server.getMulticastServerCheckedList().size() != server.getMulticastServerList().size()){
                     for(MulticastServerInfo msi: server.getMulticastServerList()){
                         boolean check_server = false;
-                        System.out.println("A verificar servidor: " + msi.getServerNo());
                         for(Integer i : server.getMulticastServerCheckedList()){
-                            System.out.println(i);
                             if(i == msi.getServerNo()){
-                                System.out.println("VERIFICADO");
                                 check_server = true;
                             }
                         }

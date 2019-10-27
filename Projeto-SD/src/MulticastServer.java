@@ -74,10 +74,11 @@ public class MulticastServer extends Thread {
 
             getMulticastServerFiles(); // Get information in files
 
-            MulticastServerControl multicastServerControl = new MulticastServerControl(this, group, socket);
-            multicastServerControl.start(); // Thread that checks status of other multicast servers
+            new MulticastServerControl(this, group, socket); // Thread that checks status of other multicast servers
 
             new Synchronization(this); // Thread that takes care of synchronization
+
+            new MulticastAdminPage(this, group, PORT, socket); // Thread to update statistic in real time
 
             System.out.println("Server " + multicastServerNo + " is running!");
 
@@ -138,9 +139,6 @@ public class MulticastServer extends Thread {
                 multicastServerList.add(msi);
             }
 
-            for (MulticastServerInfo msi : multicastServerList)
-                System.out.println("SERVER: " + msi.getServerNo() + "\nEndereço: " + msi.getTCP_ADDRESS() + "\nPorto: "
-                        + msi.getTCP_PORT());
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -155,6 +153,7 @@ public class MulticastServer extends Thread {
         String index_file = "files/index_" + getMulticastServerNo() + ".txt";
         String url_file = "files/urls_" + getMulticastServerNo() + ".txt";
         String users_file = "files/users_" + getMulticastServerNo() + ".txt";
+        String search_file = "files/search_" + getMulticastServerNo() + ".txt";
 
         // Ler ficheiro do servidor com o hashmap
         try {
@@ -180,8 +179,6 @@ public class MulticastServer extends Thread {
 
             urlList = (CopyOnWriteArrayList<URL>) o.readObject();
 
-            for (URL url : urlList)
-                System.out.println(url);
 
             o.close();
             f.close();
@@ -199,6 +196,23 @@ public class MulticastServer extends Thread {
             ObjectInputStream o = new ObjectInputStream(f);
 
             listUsers = (CopyOnWriteArrayList<User>) o.readObject();
+
+            o.close();
+            f.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found");
+        } catch (IOException e) {
+            System.out.println("Error initializing stream");
+        } catch (ClassNotFoundException e) {
+            System.out.println("Error transfering URL List");
+        }
+
+        // Ler ficheiro do servidor com a lista de procuras
+        try {
+            FileInputStream f = new FileInputStream(new File(search_file));
+            ObjectInputStream o = new ObjectInputStream(f);
+
+            searchList = (CopyOnWriteArrayList<Search>) o.readObject();
 
             o.close();
             f.close();

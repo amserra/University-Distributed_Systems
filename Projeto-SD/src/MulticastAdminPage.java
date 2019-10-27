@@ -11,6 +11,7 @@ public class MulticastAdminPage extends Thread {
 
     private CopyOnWriteArrayList<Search> searchList;
     private CopyOnWriteArrayList<URL> urlList;
+    private CopyOnWriteArrayList<MulticastServerInfo> msiList;
 
     private String[] top10search = new String[10]; //Top 10 searches
     private String[] top10url = new String[10]; //Top 10 URLs with most links pointing
@@ -30,6 +31,7 @@ public class MulticastAdminPage extends Thread {
     public MulticastAdminPage(MulticastServer server, InetAddress group, int PORT, MulticastSocket socket) {
         searchList = server.getSearchList();
         urlList = server.getUrlList();
+        msiList = server.getMulticastServerList();
 
         this.group = group;
         this.PORT = PORT;
@@ -60,23 +62,41 @@ public class MulticastAdminPage extends Thread {
 
                 //Vai ver se houve alguma alteracao
                 for(int i = 0; i < 10; i++){
-                    if(!searchList.get(i).getWords().equals(top10search[i]))
-                        checkSearchList = true;
-                    if(!urlList.get(i).getUrl().equals(top10url[i]))
-                        checkUrlList = true;
+                    try{
+                        if(!searchList.get(i).getWords().equals(top10search[i]))
+                            checkSearchList = true;
+                    } catch(Exception e){}
+                    try{
+                        if(!urlList.get(i).getUrl().equals(top10url[i]))
+                            checkUrlList = true;
+                    }catch(Exception e){}
                 }
 
                 //Se tiver havido alguma alteracao no top 10 pesquisas ou no top 10 urls
                 if(checkSearchList || checkUrlList){
+
                     String message = "type|||rtsUpdate;;clientNo|||0";
-                    for(int i = 0; i < 10; i++){
-                        top10url[i] = urlList.get(i).getUrl();
-                        message += ";;url_" + i + "|||" + top10url[i];
+
+                    for (int i = 0; i < 10; i++) {
+                        try{
+                            message += ";;url_" + i + "|||" + urlList.get(i).getUrl();
+                            top10url[i] = urlList.get(i).getUrl();
+                        } catch(ArrayIndexOutOfBoundsException e){
+                            message += ";;url_" + i + "|||N/A";
+                        }
                     }
-                    for(int i = 0; i < 10; i++){
-                        top10search[i] = searchList.get(i).getWords();
-                        message += ";;search_" + i + "|||" + top10search[i];
+    
+                    for (int i = 0; i < 10; i++) {
+                        try{
+                            message += ";;search_" + i + "|||" + searchList.get(i).getWords();
+                            top10search[i] = searchList.get(i).getWords();
+                        } catch(ArrayIndexOutOfBoundsException e){
+                            message += ";;search_" + i + "|||N/A";
+                        }
                     }
+
+                    for(MulticastServerInfo msi: msiList)
+                        message += ";;address|||" + msi.getTCP_ADDRESS() + ";;port|||" + msi.getTCP_PORT();
             
                     byte[] buffer = message.getBytes();
                     DatagramPacket packetSent = new DatagramPacket(buffer, buffer.length, group, PORT);
