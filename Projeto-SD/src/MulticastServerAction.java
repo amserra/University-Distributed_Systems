@@ -130,6 +130,10 @@ public class MulticastServerAction extends Thread {
                 String serverNo = receivedSplit[2].split("\\|")[1];
                 String url = receivedSplit[3].split("\\|")[1];
 
+                for(MulticastServerInfo msi: server.getMulticastServerList())
+                    if(msi.getServerNo() == Integer.parseInt(serverNo))
+                        msi.setCarga(msi.getCarga() + 1);
+
                 if (Integer.parseInt(serverNo) == server.getMulticastServerNo()) {
 
                     WebCrawler getUrls = new WebCrawler(server, url);
@@ -393,6 +397,16 @@ public class MulticastServerAction extends Thread {
                     System.out.println("SERVER: " + msi.getServerNo() + "\nEndereço: " + msi.getTCP_ADDRESS()
                             + "\nPorto: " + msi.getTCP_PORT());
 
+            } else if(messageType.equals("rmiServerStarter")){
+
+                message = "type|rmiServerStarterResult;clientNo|0;serverCount|" + server.getMulticastServerList().size();
+
+                int count = 0;
+
+                for(MulticastServerInfo msi: server.getMulticastServerList()){
+                    message += ";serverNo_" + count + "|" + msi.getServerNo() + ";address_" + count + "|" + msi.getTCP_ADDRESS() + ";port_" + count + "|" + msi.getTCP_PORT() + ";carga_" + count + "|" + msi.getCarga();
+                    count++;
+                }
             }
 
             if (!message.equals("")) {
