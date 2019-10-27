@@ -168,7 +168,7 @@ public class RMIClient extends UnicastRemoteObject implements ClientInterface {
                     else
                         max = 100;
 
-                    System.out.println("Found " + numOfURLs + "results. Showing only the first " + max);
+                    System.out.println("Found " + numOfURLs + "results. Showing the first " + max);
                     for (int i = 0; i < max; i++) {
                         count++;
                         System.out.println("\n" + count + "\n");
