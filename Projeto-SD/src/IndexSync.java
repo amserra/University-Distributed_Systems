@@ -12,11 +12,12 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 public class IndexSync extends Thread {
-    private String index_file = "files/index_";
-    private String url_file = "files/urls_";
-    private String user_file = "files/users_";
 
-    private int TIME_PERIOD = 1000;
+    private String index_file = "files/index_"; //Name of file with index
+    private String url_file = "files/urls_"; //Name of file with URLs
+    private String user_file = "files/users_"; //Name of file with users
+
+    private int TIME_PERIOD = 1000; // Period time between synchronizations
 
     private int serverNo;
     private CopyOnWriteArrayList<MulticastServerInfo> serversList;
@@ -31,6 +32,13 @@ public class IndexSync extends Thread {
     private int TCP_PORT;
     private String TCP_ADDRESS;
 
+    
+    /** 
+     * @param server
+     * @return 
+     * 
+     * Saves information in files and sends it to another Multicast Servers
+     */
     public IndexSync(MulticastServer server) {
         this.serverNo = server.getMulticastServerNo();
         this.serversList = server.getMulticastServerList();
@@ -102,7 +110,6 @@ public class IndexSync extends Thread {
                         out.writeObject(index);
                         out.writeObject(urlList);
                         out.writeObject(usersList);
-                        System.out.println("Mandou objetos");
 
                         out.close();
                         s.close();
@@ -110,8 +117,6 @@ public class IndexSync extends Thread {
                 }
 
                 Thread.sleep(TIME_PERIOD);
-
-                System.out.println("Vai mandar objetos");
 
             } catch (InterruptedException e) {
                 System.out.println("Thread interrupted");
@@ -127,6 +132,9 @@ public class IndexSync extends Thread {
     }
 }
 
+/**
+ * Thread that wait for TCP connections from other multicast servers
+ */
 class IndexReceiveSync extends Thread {
 
     private CopyOnWriteArrayList<URL> urlList;
@@ -142,13 +150,14 @@ class IndexReceiveSync extends Thread {
         this.start();
     }
     
+    /**
+     * Listen socket that wait for TCP connections
+     */
     public void run(){
         try{
-            System.out.println("PORTO A RECEBER: " + TCP_PORT);
             ServerSocket listenSocket = new ServerSocket(TCP_PORT);
             while(true) {
                 Socket clientSocket = listenSocket.accept(); // BLOQUEANTE
-                System.out.println("CLIENT_SOCKET (created at accept())="+clientSocket);
                 new Connection(clientSocket,index, urlList, usersList);
             }
         }catch(IOException e){
@@ -157,6 +166,9 @@ class IndexReceiveSync extends Thread {
     }
 }
 
+/**
+ * Thread that takes care of the data received
+ */
 class Connection extends Thread{
     Socket clientSocket;
     private ConcurrentHashMap<String, CopyOnWriteArraySet<String>> index;
@@ -170,6 +182,10 @@ class Connection extends Thread{
         this.usersList = usersList;
         this.start();
     }
+
+    /**
+     * Compare the data received and the data from the multicast server and concatenates the information
+     */
 
     public void run(){
         try{

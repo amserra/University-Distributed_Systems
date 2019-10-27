@@ -23,12 +23,18 @@ public class WebCrawler extends Thread {
 
     private MulticastServer server;
     private String url;
-    private int MaxWordsText = 20;
+    private int MaxWordsText = 20; // Max words that is stored in text
 
-    private Queue<String> urlQueue = new LinkedList<>();
+    private Queue<String> urlQueue = new LinkedList<>(); // Queue with URLs to be indexed
 
-    private HashMap<String,Queue<String>> linkPointing = new HashMap<>();
+    private HashMap<String,Queue<String>> linkPointing = new HashMap<>(); // Store links pointing to an URL
 
+    
+    /** 
+     * @param server
+     * @param url
+     * @return 
+     */
     public WebCrawler(MulticastServer server, String url) {
         super();
         this.server = server;
@@ -41,6 +47,19 @@ public class WebCrawler extends Thread {
         recursiveIndex(index, urlList, url);
     }
 
+    
+    /** 
+     * @param index
+     * @param urlList
+     * @param url
+     * 
+     * First it gets the URL that's pointing to this URL
+     * Removes URL from Queue
+     * Checks links pointing
+     * Iterates over words of page and add to HashMap index
+     * Add links in page to Queue
+     * Call recursiveIndex again
+     */
     private void recursiveIndex(ConcurrentHashMap<String, CopyOnWriteArraySet<String>> index, CopyOnWriteArrayList<URL> urlList, String url) {
 
         String previousUrl = null;

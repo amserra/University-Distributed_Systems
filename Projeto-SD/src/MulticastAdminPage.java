@@ -2,24 +2,31 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class MulticastAdminPage extends Thread {
 
-    private int PERIOD_TIME = 5000;
+    private int PERIOD_TIME = 2000; // Period time between updates about real time statistics
 
     private CopyOnWriteArrayList<Search> searchList;
     private CopyOnWriteArrayList<URL> urlList;
 
-    private String[] top10search = new String[10];
-    private String[] top10url = new String[10];
+    private String[] top10search = new String[10]; //Top 10 searches
+    private String[] top10url = new String[10]; //Top 10 URLs with most links pointing
 
     private InetAddress group;
     private int PORT;
     private MulticastSocket socket;
      
+    
+    /** 
+     * @param server
+     * @param group
+     * @param PORT
+     * @param socket
+     * @return 
+     */
     public MulticastAdminPage(MulticastServer server, InetAddress group, int PORT, MulticastSocket socket) {
         searchList = server.getSearchList();
         urlList = server.getUrlList();
@@ -31,6 +38,11 @@ public class MulticastAdminPage extends Thread {
 
         this.start();
     }
+
+    /**
+     * Sort search List and URL list between x time.
+     * If something changed in top 10 send message to RMI server
+     */
 
     public void run() {
 

@@ -15,7 +15,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
 
 public class MulticastServerAction extends Thread {
 
-    String received;
+    String received; // Message received from RMI server
     MulticastSocket socket;
     InetAddress group;
 
@@ -27,6 +27,14 @@ public class MulticastServerAction extends Thread {
 
     ConcurrentHashMap<String, CopyOnWriteArraySet<String>> index;
 
+    
+    /** 
+     * @param received
+     * @param socket
+     * @param group
+     * @param server
+     * @return 
+     */
     public MulticastServerAction(String received, MulticastSocket socket, InetAddress group, MulticastServer server) {
         this.received = received;
         this.socket = socket;
@@ -39,6 +47,9 @@ public class MulticastServerAction extends Thread {
         this.index = server.getIndex();
     }
 
+    /**
+     * Receives messages from the RMI server or other Multicast server and makes the request
+     */
     public void run() {
         try {
             System.out.println("RECEIVED: " + received);
@@ -49,7 +60,7 @@ public class MulticastServerAction extends Thread {
 
             String message = "";
 
-            if (messageType.equals("register")) {
+            if (messageType.equals("register")) { // Verifies username and creates new user
                 User newUser;
                 boolean checkUser = false;
 
@@ -80,7 +91,7 @@ public class MulticastServerAction extends Thread {
                     message = "type|registerResult;clientNo|" + clientNo + ";status|invalid";
                 }
 
-            } else if (messageType.equals("login")) {
+            } else if (messageType.equals("login")) { // Verifies username and password and validates login
 
                 boolean checkUser = false;
 
@@ -113,7 +124,8 @@ public class MulticastServerAction extends Thread {
 
             }
 
-            else if (messageType.equals("index")) {
+            else if (messageType.equals("index")) { // Index a new URL
+
                 String clientNo = receivedSplit[1].split("\\|")[1];
                 String serverNo = receivedSplit[2].split("\\|")[1];
                 String url = receivedSplit[3].split("\\|")[1];
@@ -127,9 +139,7 @@ public class MulticastServerAction extends Thread {
                 }
             }
 
-            else if (messageType.equals("search")) {
-
-                // System.out.println(index);
+            else if (messageType.equals("search")) { // Search word or word set in the HashMap index
 
                 String clientNo = receivedSplit[1].split("\\|")[1];
                 String words = receivedSplit[2].split("\\|")[1].toLowerCase();
@@ -220,7 +230,7 @@ public class MulticastServerAction extends Thread {
                 } else
                     message += 0;
 
-            } else if (messageType.equals("searchHistory")) {
+            } else if (messageType.equals("searchHistory")) { // Gets user search history
 
                 String clientNo = receivedSplit[1].split("\\|")[1];
                 String username = receivedSplit[2].split("\\|")[1];
@@ -245,7 +255,7 @@ public class MulticastServerAction extends Thread {
                     searchCount++;
                 }
 
-            } else if (messageType.equals("linksPointing")) {
+            } else if (messageType.equals("linksPointing")) { //Get URL's pointing to URL asked by the user
                 String clientNo = receivedSplit[1].split("\\|")[1];
                 String url = receivedSplit[2].split("\\|")[1];
 
@@ -274,7 +284,7 @@ public class MulticastServerAction extends Thread {
                 if (message.equals(saveMessage))
                     message += "0";
 
-            } else if (messageType.equals("promote")) {
+            } else if (messageType.equals("promote")) { //Promotes user to admin, making the necessary verifications
                 String clientNo = receivedSplit[1].split("\\|")[1];
                 String username = receivedSplit[2].split("\\|")[1];
 
@@ -301,7 +311,7 @@ public class MulticastServerAction extends Thread {
                     message = "type|promoteResult;clientNo|" + clientNo
                             + ";status|invalid;message|That user doesn't exist";
                 }
-            } else if (messageType.equals("rts")) {
+            } else if (messageType.equals("rts")) { // Sorts Search List and URL list, gets Multicast Servers Info and sends to RMI server
                 String clientNo = receivedSplit[1].split("\\|")[1];
 
                 CopyOnWriteArrayList<Search> searchList = server.getSearchList();
@@ -335,7 +345,7 @@ public class MulticastServerAction extends Thread {
                     msiCount++;
                 }
 
-            } else if (messageType.equals("logout")) {
+            } else if (messageType.equals("logout")) { // Receive information that an user has logged out
                 String clientNo = receivedSplit[1].split("\\|")[1];
                 String username = receivedSplit[2].split("\\|")[1];
 
@@ -350,23 +360,20 @@ public class MulticastServerAction extends Thread {
 
                 saveUsers();
 
-            } else if (messageType.equals("checkStatusConfirm")) {
+            } else if (messageType.equals("checkStatusConfirm")) { // Gets notified that other multicast server is alive
 
                 if (server.isCheckingMulticastServers()) {
 
                     int serverNo = Integer.parseInt(receivedSplit[1].split("\\|")[1]);
 
-                    System.out.println("SERVER CHECKED: " + serverNo);
-
                     server.getMulticastServerCheckedList().add(serverNo);
                 }
 
-            } else if (messageType.equals("checkStatus")) {
+            } else if (messageType.equals("checkStatus")) { // Sends message to other multicast so that they answer if they're alive
 
                 message = "type|checkStatusConfirm;serverNo|" + server.getMulticastServerNo();
 
-            } else if (messageType.equals("multicastServerStarterResult")) {
-                // Atualizar o array dos multicast servers que estão up
+            } else if (messageType.equals("multicastServerStarterResult")) { // Receive message from RMI server when a Multicast server starts and updates list of Multicast Servers Info
 
                 int multicastServerCount = Integer.parseInt(receivedSplit[2].split("\\|")[1]);
 
