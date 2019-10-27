@@ -229,11 +229,14 @@ public class MulticastServerAction extends Thread {
                         if (urlResults.contains(url.getUrl()) && !check.contains(url.getUrl())) {
                             check.add(url.getUrl());
                             message += ";title_" + urlCount + "|" + url.getTitle() + ";url_" + urlCount + "|" + url.getUrl() + ";text_" + urlCount + "|" + url.getText();
+                            System.out.println(message);
                             urlCount++;
                         }
                     }
                 } else
                     message += 0;
+
+                    System.out.println(message);
 
             } else if (messageType.equals("searchHistory")) { // Gets user search history
 
