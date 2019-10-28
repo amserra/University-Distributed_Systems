@@ -29,13 +29,12 @@ public class MulticastServerAction extends Thread {
 
     ConcurrentHashMap<String, CopyOnWriteArraySet<String>> index;
 
-    
-    /** 
+    /**
      * @param received
      * @param socket
      * @param group
      * @param server
-     * @return 
+     * @return
      */
     public MulticastServerAction(String received, MulticastSocket socket, InetAddress group, MulticastServer server) {
         this.received = received;
@@ -50,7 +49,8 @@ public class MulticastServerAction extends Thread {
     }
 
     /**
-     * Receives messages from the RMI server or other Multicast server and makes the request
+     * Receives messages from the RMI server or other Multicast server and makes the
+     * request
      */
     public synchronized void run() {
         try {
@@ -96,7 +96,6 @@ public class MulticastServerAction extends Thread {
 
                 System.out.println("Message sent: " + message);
 
-
             } else if (messageType.equals("login")) { // Verifies username and password and validates login
 
                 System.out.println("Message received: " + received);
@@ -120,8 +119,9 @@ public class MulticastServerAction extends Thread {
                 if (checkUser) {
                     user.setLoggedIn(true);
                     user.setClientNo(Integer.parseInt(clientNo));
-                    message = "type|||loginResult;;clientNo|||" + clientNo + ";;status|||valid;;username|||" + user.getUsername()
-                            + ";;isAdmin|||" + user.isAdmin() + ";;notification|||" + user.isNotification();
+                    message = "type|||loginResult;;clientNo|||" + clientNo + ";;status|||valid;;username|||"
+                            + user.getUsername() + ";;isAdmin|||" + user.isAdmin() + ";;notification|||"
+                            + user.isNotification();
                     user.setNotification(false);
 
                     saveUsers();
@@ -142,9 +142,9 @@ public class MulticastServerAction extends Thread {
                 String serverNo = receivedSplit[2].split("\\|\\|\\|")[1];
                 String url = receivedSplit[3].split("\\|\\|\\|")[1];
 
-                for(MulticastServerInfo msi: server.getMulticastServerList())
-                    if(msi.getServerNo() == Integer.parseInt(serverNo))
-                        msi.setCarga(msi.getCarga() + 1);
+                for (MulticastServerInfo msi : server.getMulticastServerList())
+                    if (msi.getServerNo() == Integer.parseInt(serverNo))
+                        msi.setLoad(msi.getLoad() + 1);
 
                 if (Integer.parseInt(serverNo) == server.getMulticastServerNo()) {
 
@@ -250,9 +250,10 @@ public class MulticastServerAction extends Thread {
                     for (URL url : urlList) {
                         if (urlResults.contains(url.getUrl()) && !check.contains(url.getUrl())) {
                             check.add(url.getUrl());
-                            message += ";;title_" + urlCount + "|||" + url.getTitle() + ";;url_" + urlCount + "|||" + url.getUrl() + ";;text_" + urlCount + "|||" + url.getText();
+                            message += ";;title_" + urlCount + "|||" + url.getTitle() + ";;url_" + urlCount + "|||"
+                                    + url.getUrl() + ";;text_" + urlCount + "|||" + url.getText();
                             urlCount++;
-                            if(urlCount == maxUrlsSent)
+                            if (urlCount == maxUrlsSent)
                                 break;
                         }
                     }
@@ -289,7 +290,7 @@ public class MulticastServerAction extends Thread {
 
                 System.out.println("Message sent: " + message);
 
-            } else if (messageType.equals("linksPointing")) { //Get URL's pointing to URL asked by the user
+            } else if (messageType.equals("linksPointing")) { // Get URL's pointing to URL asked by the user
 
                 System.out.println("Message received: " + received);
 
@@ -325,7 +326,7 @@ public class MulticastServerAction extends Thread {
                 if (message.equals(saveMessage))
                     message += "0";
 
-            } else if (messageType.equals("promote")) { //Promotes user to admin, making the necessary verifications
+            } else if (messageType.equals("promote")) { // Promotes user to admin, making the necessary verifications
 
                 System.out.println("Message received: " + received);
 
@@ -359,7 +360,8 @@ public class MulticastServerAction extends Thread {
 
                 System.out.println("Message sent: " + message);
 
-            } else if (messageType.equals("rts")) { // Sorts Search List and URL list, gets Multicast Servers Info and sends to RMI server
+            } else if (messageType.equals("rts")) { // Sorts Search List and URL list, gets Multicast Servers Info and
+                                                    // sends to RMI server
 
                 System.out.println("Message received: " + received);
 
@@ -371,37 +373,35 @@ public class MulticastServerAction extends Thread {
 
                 Collections.sort(urlList);
 
-                for(URL url: urlList)
+                for (URL url : urlList)
                     System.out.println(url);
 
                 message = "type|||rtsResult;;clientNo|||" + clientNo;
 
                 //Top 10 URLs
                 for (int i = 0; i < 10; i++) {
-                    try{
+                    try {
                         message += ";;url_" + i + "|||" + urlList.get(i).getUrl();
-                    } catch(ArrayIndexOutOfBoundsException e){
+                    } catch (ArrayIndexOutOfBoundsException e) {
                         message += ";;url_" + i + "|||N/A";
                     }
                 }
 
                 //top 10 searches
                 for (int i = 0; i < 10; i++) {
-                    try{
+                    try {
                         message += ";;search_" + i + "|||" + searchList.get(i).getWords();
-                    } catch(ArrayIndexOutOfBoundsException e){
+                    } catch (ArrayIndexOutOfBoundsException e) {
                         message += ";;search_" + i + "|||N/A";
                     }
                 }
 
                 //Multicast servers address and port
-                for(MulticastServerInfo msi: server.getMulticastServerList()){
-                    System.out.println("ENDERECO: " + msi.getTCP_ADDRESS() + "    PORTO: " + msi.getTCP_PORT());
+                for (MulticastServerInfo msi : server.getMulticastServerList()) {
                     message += ";;address|||" + msi.getTCP_ADDRESS() + ";;port|||" + msi.getTCP_PORT();
                 }
 
                 System.out.println("Message sent: " + message);
-                
 
             } else if (messageType.equals("logout")) { // Receive information that an user has logged out
 
@@ -436,7 +436,8 @@ public class MulticastServerAction extends Thread {
                     server.getMulticastServerCheckedList().add(serverNo);
                 }
 
-            } else if (messageType.equals("checkStatus")) { // Sends message to other multicast so that they answer if they're alive
+            } else if (messageType.equals("checkStatus")) { // Sends message to other multicast so that they answer if
+                                                            // they're alive
 
                 System.out.println("Message received: " + received);
 
@@ -444,7 +445,9 @@ public class MulticastServerAction extends Thread {
 
                 System.out.println("Message sent: " + message);
 
-            } else if (messageType.equals("multicastServerStarterResult")) { // Receive message from RMI server when a Multicast server starts and updates list of Multicast Servers Info
+            } else if (messageType.equals("multicastServerStarterResult")) { // Receive message from RMI server when a
+                                                                             // Multicast server starts and updates list
+                                                                             // of Multicast Servers Info
 
                 System.out.println("Message received: " + received);
 
@@ -464,17 +467,20 @@ public class MulticastServerAction extends Thread {
 
                 server.setMulticastServerList(newMulticastServerList);
 
-
             } else if(messageType.equals("rmiServerStarter")){ //When RMI Server starts, send information about Multicast servers
+        
 
                 System.out.println("Message received: " + received);
 
-                message = "type|||rmiServerStarterResult;;clientNo|||0;;serverCount|||" + server.getMulticastServerList().size();
+                message = "type|||rmiServerStarterResult;;clientNo|||0;;serverCount|||"
+                        + server.getMulticastServerList().size();
 
                 int count = 0;
 
-                for(MulticastServerInfo msi: server.getMulticastServerList()){
-                    message += ";;serverNo_" + count + "|||" + msi.getServerNo() + ";;address_" + count + "|||" + msi.getTCP_ADDRESS() + ";;port_" + count + "|||" + msi.getTCP_PORT() + ";;carga_" + count + "|||" + msi.getCarga();
+                for (MulticastServerInfo msi : server.getMulticastServerList()) {
+                    message += ";;serverNo_" + count + "|||" + msi.getServerNo() + ";;address_" + count + "|||"
+                            + msi.getTCP_ADDRESS() + ";;port_" + count + "|||" + msi.getTCP_PORT() + ";;load_" + count
+                            + "|||" + msi.getLoad();
                     count++;
                 }
 
@@ -501,7 +507,6 @@ public class MulticastServerAction extends Thread {
             FileOutputStream f = new FileOutputStream(new File(file));
             ObjectOutputStream o = new ObjectOutputStream(f);
 
-            
             o.writeObject(server.getListUsers());
 
             o.close();
@@ -511,7 +516,7 @@ public class MulticastServerAction extends Thread {
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("Error initializing stream");
-        } catch(Exception e){
+        } catch (Exception e) {
             System.out.print(e.getMessage());
         }
     }
@@ -524,7 +529,6 @@ public class MulticastServerAction extends Thread {
             FileOutputStream f = new FileOutputStream(new File(file));
             ObjectOutputStream o = new ObjectOutputStream(f);
 
-            
             o.writeObject(server.getSearchList());
 
             o.close();
@@ -534,7 +538,7 @@ public class MulticastServerAction extends Thread {
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("Error initializing stream");
-        } catch(Exception e){
+        } catch (Exception e) {
             System.out.print(e.getMessage());
         }
     }
