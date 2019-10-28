@@ -58,10 +58,8 @@ public class MulticastServerControl extends Thread {
 
                 if(server.getMulticastServerCheckedList().size() != server.getMulticastServerList().size()){
                     for(MulticastServerInfo msi: server.getMulticastServerList()){
-                        System.out.println("A verificar servidor numero " + msi.getServerNo());
                         boolean check_server = false;
                         for(Integer i : server.getMulticastServerCheckedList()){
-                            System.out.println("Servidor numero " + msi.getServerNo() + " foi verificado");
                             if(i == msi.getServerNo()){
                                 check_server = true;
                                 break;
@@ -73,7 +71,6 @@ public class MulticastServerControl extends Thread {
                             byte[] bufferServerDown = messageServerDown.getBytes();
                             DatagramPacket packetSentServerDown = new DatagramPacket(bufferServerDown, bufferServerDown.length, group, PORT);
                             socket.send(packetSentServerDown);
-                            System.out.println("Foi abaixo " + msi.getServerNo()); //MANDAR MENSAGEM AO SERVIDOR RMI QUE O MULTICAST SERVER FOI DOWN E REMOVER DA LISTA DE SERVERS (do multicast server)
                             server.getMulticastServerList().remove(msi);
                         }
                     }

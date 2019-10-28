@@ -419,7 +419,7 @@ public class MulticastServerAction extends Thread {
 
                     System.out.println("Message received: " + received);
 
-                    int serverNo = Integer.parseInt(receivedSplit[1].split("\\|\\|\\|")[1]);
+                    Integer serverNo = Integer.parseInt(receivedSplit[1].split("\\|\\|\\|")[1]);
 
                     server.getMulticastServerCheckedList().add(serverNo);
                 }
