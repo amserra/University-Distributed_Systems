@@ -26,12 +26,14 @@ public class RMIClient extends UnicastRemoteObject implements ClientInterface {
      * @throws NotBoundException
      */
     public static void main(String[] args) throws MalformedURLException, RemoteException, NotBoundException {
-        if (args.length != 2) {
-            System.out.println("Introduce the IP and Port as argument.");
-            System.exit(0);
+        if (args.length == 0) {
+            System.out.println(
+                    "To start with custom IP and PORT enter as arguments.\nStarting with default IP and PORT.");
+            new RMIClient("RMIConnection");
+        } else if (args.length == 2) {
+            String rmiName = "rmi://" + args[0] + ":" + args[1] + "/RMIConnection";
+            new RMIClient(rmiName);
         }
-        String rmiName = "rmi://" + args[0] + ":" + args[1] + "RMIConnection";
-        new RMIClient(rmiName);
     }
 
     /**
