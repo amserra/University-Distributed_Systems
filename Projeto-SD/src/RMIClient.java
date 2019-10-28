@@ -282,7 +282,6 @@ public class RMIClient extends UnicastRemoteObject implements ClientInterface {
     public void realTimeStatistics() {
         try {
             String msg = serverInterface.realTimeStatistics(this.clientNo);
-            this.inRealTimeStatistics = true;
             System.out.println("Recebi a mensagem: " + msg);
             String[] parameters = msg.split(";;");
             int receivedClientNo = Integer.parseInt(parameters[1].split("\\|\\|\\|")[1]);
@@ -324,6 +323,10 @@ public class RMIClient extends UnicastRemoteObject implements ClientInterface {
             }
         }
     }
+
+    // public boolean getIsInRealTimeStatistics() throws RemoteException {
+    // return this.inRealTimeStatistics;
+    // }
 
     public void rtsUpdate(String msg) {
         if (this.inRealTimeStatistics) {
