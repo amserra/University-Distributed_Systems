@@ -2,6 +2,7 @@ import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.MulticastSocket;
+import java.net.SocketTimeoutException;
 import java.rmi.AccessException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
@@ -12,11 +13,15 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+/**
+ * Class that represents a RMIServer (both Primary and Backup)
+ */
 public class RMIServer extends UnicastRemoteObject implements ServerInterface {
     static final long serialVersionUID = 1L;
-    int clientNo = 1; // Id for RMIServer to indentify RMIClients // ATOMIC INT
-    ServerInterface serverInterface; // So that backup server has the reference
-    HashMap<Integer, ClientInterface> clientInterfacesMap = new HashMap<>();
+    int clientNo = 1; // Id for RMIServer to indentify RMIClients
+    ServerInterface serverInterface; // For backup server to have the reference
+    HashMap<Integer, ClientInterface> clientInterfacesMap = new HashMap<>(); // Map between clientNo and rmi reference
+    // All the multicast servers
     CopyOnWriteArrayList<MulticastServerInfo> multicastServers = new CopyOnWriteArrayList<>();
     boolean isBackup; // Is backup server?
     MulticastSocket socket = null;
@@ -27,30 +32,178 @@ public class RMIServer extends UnicastRemoteObject implements ServerInterface {
     final int RMIPORT = 1099;
     final String RMINAME = "RMIConnection";
 
+    /**
+     * Main method that creates a RMIServer object
+     * 
+     * @param args
+     * @throws RemoteException
+     * @throws NotBoundException
+     * @throws MalformedURLException
+     */
     public static void main(String[] args) throws RemoteException, NotBoundException, MalformedURLException {
-        System.setProperty("java.net.preferIPv4Stack","true");
+        System.setProperty("java.net.preferIPv4Stack", "true");
         new RMIServer();
     }
 
+    /**
+     * Constructor of the RMIServer class. Starts by trying to establish/create a
+     * connection.
+     * 
+     * @throws RemoteException
+     * @throws NotBoundException
+     * @throws MalformedURLException
+     */
     RMIServer() throws RemoteException, NotBoundException, MalformedURLException {
         super();
         connectToRMIServer();
     }
 
-    public void notification(int clientNo) throws RemoteException, MalformedURLException, NotBoundException {
-        try {
-            ClientInterface client = clientInterfacesMap.get(clientNo);
-            client.notification();
-        } catch (RemoteException e) {
-            System.out.println("ERROR #7: Something went wrong. Would you mind to try again? :)");
+    // ServerInterface methods (documentation on ServerInterface class)
+
+    public String sayHelloFromBackup() throws RemoteException {
+        System.out.println("[Backup server] Has just connected.");
+        return "Connected to RMI Primary Server successfully!";
+    }
+
+    public String sayHelloFromClient(ClientInterface client) throws RemoteException {
+        System.out.println("[Client no " + clientNo + "] " + "Has just connected.");
+        this.clientInterfacesMap.put(clientNo, client);
+        String msg = "Connected to RMI Primary Server successfully!\nServer gave me the id no " + clientNo;
+        clientNo++;
+        return msg;
+    }
+
+    public String testPrimary() throws RemoteException {
+        // Called by backup to test
+        // Message from primary to backup to confirm that all is ok
+        return "All good";
+    }
+
+    public HashMap<Integer, ClientInterface> getHashMapFromPrimary() throws RemoteException {
+        return this.clientInterfacesMap;
+    }
+
+    public int getClientNoFromPrimary() throws RemoteException {
+        return this.clientNo;
+    }
+
+    public String authentication(int clientNo, boolean isLogin, String username, String password)
+            throws RemoteException {
+        String msg;
+        if (isLogin)
+            msg = "type|||login;;clientNo|||" + clientNo + ";;username|||" + username + ";;password|||" + password;
+        else
+            msg = "type|||register;;clientNo|||" + clientNo + ";;username|||" + username + ";;password|||" + password;
+
+        System.out.println("Mensgem a ser enviada: " + msg);
+        String msgReceive = connectToMulticast(clientNo, msg);
+        System.out.println("Mensagem recebida: " + msgReceive);
+        return msgReceive;
+    }
+
+    public String logout(int clientNo, String username, boolean exit) throws RemoteException {
+        if (username != null) {
+            String msg = "type|||logout;;clientNo|||" + clientNo + ";;username|||" + username;
+            System.out.println("Mensagem a ser enviada: " + msg);
+            String msgReceive = connectToMulticast(clientNo, msg);
+            System.out.println("Mensagem recebida: " + msgReceive);
+            if (exit && msgReceive != null) {
+                String[] parameters = msgReceive.split(";;");
+                int receivedClientNo = Integer.parseInt(parameters[1].split("\\|\\|\\|")[1]);
+                this.clientInterfacesMap.remove(receivedClientNo);
+            }
+            return msgReceive;
+        } else {
+            if (exit)
+                this.clientInterfacesMap.remove(clientNo);
+            return null;
         }
     }
 
+    public String search(int clientNo, String username, String searchTerms) throws RemoteException {
+        String msg;
+
+        if (username != null)
+            msg = "type|||search;;clientNo|||" + clientNo + ";;word|||" + searchTerms + ";;username|||" + username;
+        else
+            msg = "type|||search;;clientNo|||" + clientNo + ";;word|||" + searchTerms;
+
+        System.out.println("Mensagem a ser enviada: " + msg);
+        String msgReceive = connectToMulticast(clientNo, msg);
+        System.out.println("Mensagem recebida: " + msgReceive);
+        return msgReceive;
+    }
+
+    public String searchHistory(int clientNo, String username) throws RemoteException {
+        String msg = "type|||searchHistory;;clientNo|||" + clientNo + ";;username|||" + username;
+        System.out.println("Mensagem a ser enviada: " + msg);
+        String msgReceive = connectToMulticast(clientNo, msg);
+        System.out.println("Mensagem recebida: " + msgReceive);
+        return msgReceive;
+    }
+
+    public String linksPointing(int clientNo, String url) throws RemoteException {
+        String msg = "type|||linksPointing;;clientNo|||" + clientNo + ";;url|||" + url;
+        System.out.println("Mensagem a ser enviada: " + msg);
+        String msgReceive = connectToMulticast(clientNo, msg);
+        System.out.println("Mensagem recebida: " + msgReceive);
+        return msgReceive;
+    }
+
+    public String indexNewURL(int clientNo, String url) throws RemoteException {
+        int serverNo = getLowestLoadedServer();
+        String msg = "type|||index;;clientNo|||" + clientNo + ";;serverNo|||" + serverNo + ";;url|||" + url;
+        System.out.println("Mensagem a ser enviada: " + msg);
+        String msgReceive = connectToMulticast(clientNo, msg);
+        System.out.println("Mensagem recebida: " + msgReceive);
+        return msgReceive;
+    }
+
+    public String realTimeStatistics(int clientNo) throws RemoteException {
+        String msg = "type|||rts;;clientNo|||" + clientNo;
+        System.out.println("Mensagem a ser enviada: " + msg);
+        String msgReceive = connectToMulticast(clientNo, msg);
+        System.out.println("Mensagem recebida: " + msgReceive);
+        return msgReceive;
+    }
+
+    public String grantPrivileges(int clientNo, String username)
+            throws RemoteException, MalformedURLException, NotBoundException {
+        String msg = "type|||promote;;clientNo|||" + clientNo + ";;username|||" + username;
+        System.out.println("Mensagem a ser enviada: " + msg);
+        String msgReceive = connectToMulticast(clientNo, msg);
+        System.out.println("Mensagem recebida: " + msgReceive);
+
+        if (msgReceive != null) {
+            String[] parameters = msgReceive.split(";;");
+            String status = parameters[2].split("\\|\\|\\|")[1];
+
+            if ((parameters.length > 3) && (parameters[3] != null) && (status.equals("valid"))) {
+                int newAdminNo = Integer.parseInt(parameters[3].split("\\|\\|\\|")[1]);
+                ClientInterface client = clientInterfacesMap.get(newAdminNo);
+                client.notification();
+            }
+        }
+
+        return msgReceive;
+    }
+
+    // End of ServerInterface methods
+
+    /**
+     * Tries to connect the BackupRMIServer. In case it fails, creates a new
+     * connection(becomes the PrimaryRMIServer)
+     * 
+     * @throws AccessException
+     * @throws RemoteException
+     * @throws MalformedURLException
+     * @throws NotBoundException
+     */
     public void connectToRMIServer() throws AccessException, RemoteException, MalformedURLException, NotBoundException {
-        // So para mensagem na consola
+        // Only used to log on the console
         boolean wasBackup = false;
         try {
-            // Tentar primeiro conectar ao primary RMIServer(no caso de ser backup)
+            // Tries to be BackupRMIServer
             serverInterface = (ServerInterface) Naming.lookup(RMINAME);
             String msg = serverInterface.sayHelloFromBackup();
             System.out.println(msg);
@@ -58,10 +211,9 @@ public class RMIServer extends UnicastRemoteObject implements ServerInterface {
             this.isBackup = true;
             checkPrimaryServerStatus();
         } catch (Exception e) { // Usually java.rmi.ConnectException
-            // Qual a excecao?
             System.out.println("No primary RMIServer yet. Connecting...");
         } finally {
-            // Se nao for o backup server, cria ligacao
+            // If it can't be Backup, try to become Primary
             if (!isBackup) {
                 try {
                     LocateRegistry.createRegistry(RMIPORT).rebind(RMINAME, this);
@@ -72,6 +224,7 @@ public class RMIServer extends UnicastRemoteObject implements ServerInterface {
                         if (this.clientInterfacesMap.isEmpty()) {
                             System.out.println("No clients connected.");
                         } else {
+                            // So that clients know the new PrimaryRMIServer
                             reconnectClients();
                             System.out.println("Done! Reconnected to " + this.clientInterfacesMap.size() + " clients.");
                         }
@@ -89,6 +242,14 @@ public class RMIServer extends UnicastRemoteObject implements ServerInterface {
         }
     }
 
+    /**
+     * Reconnects all the RMIClients to the new PrimaryRMIServer. This happens when
+     * a Primary fails and the Backup has to take its place
+     * 
+     * @throws MalformedURLException
+     * @throws RemoteException
+     * @throws NotBoundException
+     */
     public void reconnectClients() throws MalformedURLException, RemoteException, NotBoundException {
         if (!clientInterfacesMap.isEmpty()) {
             for (HashMap.Entry<Integer, ClientInterface> entry : clientInterfacesMap.entrySet()) {
@@ -98,15 +259,15 @@ public class RMIServer extends UnicastRemoteObject implements ServerInterface {
         }
     }
 
-    public HashMap<Integer, ClientInterface> getHashMapFromPrimary() throws RemoteException {
-        return this.clientInterfacesMap;
-    }
-
-    public int getClientNoFromPrimary() throws RemoteException {
-        return this.clientNo;
-    }
-
-    // For the secondary server to check if primary failed
+    /**
+     * Method where RMIBackupServer lays. Tests the RMIPrimaryServer, as well as
+     * gets the necessary data so that when the Primary fails, it has everything
+     * needed. Exception is thrown when primary server stops responding.
+     * 
+     * @throws InterruptedException
+     * @throws AccessException
+     * @throws RemoteException
+     */
     public void checkPrimaryServerStatus() throws InterruptedException, AccessException, RemoteException {
         new RMIMulticastManager(this);
 
@@ -131,10 +292,21 @@ public class RMIServer extends UnicastRemoteObject implements ServerInterface {
         }
     }
 
+    /**
+     * Method used by almost all functionalities to send a multicast message to all
+     * the MulticastServers. In case there's no response within 30s, returns a null
+     * message.
+     * 
+     * @param clientNo
+     * @param msg
+     * @return
+     * @throws RemoteException
+     */
     public String connectToMulticast(int clientNo, String msg) throws RemoteException {
         try {
             // Send
             socket = new MulticastSocket(PORT); // create socket and bind it
+            socket.setSoTimeout(30000);
             InetAddress group = InetAddress.getByName(MULTICAST_ADDRESS);
             socket.joinGroup(group);
 
@@ -152,8 +324,6 @@ public class RMIServer extends UnicastRemoteObject implements ServerInterface {
                 socket.receive(packetReceive);
                 msgReceive = new String(packetReceive.getData(), 0, packetReceive.getLength());
 
-                // System.out.println("Mensagem recebida: " + msgReceive);
-
                 String[] parameters = msgReceive.split(";;");
                 type = parameters[0].split("\\|\\|\\|")[1];
                 receivedClientNo = Integer.parseInt(parameters[1].split("\\|\\|\\|")[1]);
@@ -162,81 +332,59 @@ public class RMIServer extends UnicastRemoteObject implements ServerInterface {
 
             } while ((!type.contains("Result")) || (receivedClientNo != clientNo));
 
-            // System.out.println("Mensagem final: " + msgReceive);
             socket.close();
             return msgReceive;
-            // dar return de msgReceive
 
+        } catch (SocketTimeoutException er) {
+            System.out.println("Timeout! Did not recieve answer. Are there any multicast servers?");
         } catch (Exception e) {
             socket.close();
             System.out.println(
                     "ERROR: Something went wrong. Did you forget the flag? Are there any multicast servers? Aborting program...");
             System.exit(-1);
         }
-        // Necessary but unimportant
         return null;
     }
 
-    public String sayHelloFromBackup() throws RemoteException {
-        System.out.println("[Backup server] Has just connected.");
-        return "Connected to RMI Primary Server successfully!";
-    }
-
-    public String sayHelloFromClient(ClientInterface client) throws RemoteException {
-        System.out.println("[Client no " + clientNo + "] " + "Has just connected.");
-        this.clientInterfacesMap.put(clientNo, client);
-        String msg = "Connected to RMI Primary Server successfully!\nServer gave me the id no " + clientNo;
-        clientNo++;
-        return msg;
-    }
-
-    public String testPrimary() throws RemoteException {
-        // Called by backup to test
-        // Message from primary to backup to confirm that all is ok
-        return "All good";
-    }
-
-    public String authentication(int clientNo, boolean isLogin, String username, String password)
-            throws RemoteException {
-        String msg;
-        if (isLogin)
-            msg = "type|||login;;clientNo|||" + clientNo + ";;username|||" + username + ";;password|||" + password;
-        else
-            msg = "type|||register;;clientNo|||" + clientNo + ";;username|||" + username + ";;password|||" + password;
-
-        System.out.println("Mensgem a ser enviada: " + msg);
-        String msgReceive = connectToMulticast(clientNo, msg);
-        System.out.println("Mensagem recebida: " + msgReceive);
-        return msgReceive;
-    }
-
-    public String logout(int clientNo, String username, boolean exit) throws RemoteException {
-        String msg = "type|||logout;;clientNo|||" + clientNo + ";;username|||" + username;
-        System.out.println("Mensagem a ser enviada: " + msg);
-        String msgReceive = connectToMulticast(clientNo, msg);
-        System.out.println("Mensagem recebida: " + msgReceive);
-        if (exit) {
-            String[] parameters = msgReceive.split(";;");
-            int receivedClientNo = Integer.parseInt(parameters[1].split("\\|\\|\\|")[1]);
-            this.clientInterfacesMap.remove(receivedClientNo);
+    /**
+     * Method used to send a rts message to all the clients. Only the ones that are
+     * in the rts page will see it.
+     * 
+     * @param msg
+     * @throws MalformedURLException
+     * @throws RemoteException
+     * @throws NotBoundException
+     */
+    public void sendRtsToAll(String msg) throws MalformedURLException, RemoteException, NotBoundException {
+        for (HashMap.Entry<Integer, ClientInterface> entry : clientInterfacesMap.entrySet()) {
+            ClientInterface client = entry.getValue();
+            client.rtsUpdate(msg);
         }
-        return msgReceive;
     }
 
-    public String search(int clientNo, String username, String searchTerms) throws RemoteException {
-        String msg;
-
-        if (username != null)
-            msg = "type|||search;;clientNo|||" + clientNo + ";;word|||" + searchTerms + ";;username|||" + username;
-        else
-            msg = "type|||search;;clientNo|||" + clientNo + ";;word|||" + searchTerms;
-
-        System.out.println("Mensagem a ser enviada: " + msg);
-        String msgReceive = connectToMulticast(clientNo, msg);
-        System.out.println("Mensagem recebida: " + msgReceive);
-        return msgReceive;
+    /**
+     * Method that sends a live notification to an user.
+     * 
+     * @param clientNo
+     * @throws RemoteException
+     * @throws MalformedURLException
+     * @throws NotBoundException
+     */
+    public void notification(int clientNo) throws RemoteException, MalformedURLException, NotBoundException {
+        try {
+            ClientInterface client = clientInterfacesMap.get(clientNo);
+            client.notification();
+        } catch (RemoteException e) {
+            System.out.println("ERROR #7: Something went wrong.");
+        }
     }
 
+    /**
+     * Auxiliar method that gets the lowest loaded server available, in order to
+     * distribute the ammount of work.
+     * 
+     * @return
+     */
     public int getLowestLoadedServer() {
         // To initialize the vars, in case nothing found the first server is taken
         int serverNo = 1;
@@ -246,74 +394,13 @@ public class RMIServer extends UnicastRemoteObject implements ServerInterface {
 
         for (int i = 0; i < multicastServers.size(); i++) {
             MulticastServerInfo s = multicastServers.get(i);
-            if (s.getCarga() < min) {
+            if (s.getLoad() < min) {
                 serverNo = s.getServerNo();
-                min = s.getCarga();
+                min = s.getLoad();
                 ref = s;
             }
         }
-        ref.incrementCarga();
+        ref.incrementLoad();
         return serverNo;
     }
-
-    public String indexNewURL(int clientNo, String url) throws RemoteException {
-        int serverNo = getLowestLoadedServer();
-        String msg = "type|||index;;clientNo|||" + clientNo + ";;serverNo|||" + serverNo + ";;url|||" + url;
-        System.out.println("Mensagem a ser enviada: " + msg);
-        String msgReceive = connectToMulticast(clientNo, msg);
-        System.out.println("Mensagem recebida: " + msgReceive);
-        return msgReceive;
-    }
-
-    public String searchHistory(int clientNo, String username) throws RemoteException {
-        String msg = "type|||searchHistory;;clientNo|||" + clientNo + ";;username|||" + username;
-        System.out.println("Mensagem a ser enviada: " + msg);
-        String msgReceive = connectToMulticast(clientNo, msg);
-        System.out.println("Mensagem recebida: " + msgReceive);
-        return msgReceive;
-    }
-
-    public String linksPointing(int clientNo, String url) throws RemoteException {
-        String msg = "type|||linksPointing;;clientNo|||" + clientNo + ";;url|||" + url;
-        System.out.println("Mensagem a ser enviada: " + msg);
-        String msgReceive = connectToMulticast(clientNo, msg);
-        System.out.println("Mensagem recebida: " + msgReceive);
-        return msgReceive;
-    }
-
-    public String grantPrivileges(int clientNo, String username)
-            throws RemoteException, MalformedURLException, NotBoundException {
-        String msg = "type|||promote;;clientNo|||" + clientNo + ";;username|||" + username;
-        System.out.println("Mensagem a ser enviada: " + msg);
-        String msgReceive = connectToMulticast(clientNo, msg);
-        System.out.println("Mensagem recebida: " + msgReceive);
-        String[] parameters = msgReceive.split(";;");
-        String status = parameters[2].split("\\|\\|\\|")[1];
-        // Erro esta aqui
-        if ((parameters.length > 3) && (parameters[3] != null) && (status.equals("valid"))) {
-            int newAdminNo = Integer.parseInt(parameters[3].split("\\|\\|\\|")[1]);
-            ClientInterface client = clientInterfacesMap.get(newAdminNo);
-            client.notification();
-        }
-
-        return msgReceive;
-    }
-
-    public void sendRtsToAll(String msg) throws MalformedURLException, RemoteException, NotBoundException {
-        for (HashMap.Entry<Integer, ClientInterface> entry : clientInterfacesMap.entrySet()) {
-            ClientInterface client = entry.getValue();
-            // boolean inRts = client.getIsInRealTimeStatistics();
-            // if (inRts)
-            client.rtsUpdate(msg);
-        }
-    }
-
-    public String realTimeStatistics(int clientNo) throws RemoteException {
-        String msg = "type|||rts;;clientNo|||" + clientNo;
-        System.out.println("Mensagem a ser enviada: " + msg);
-        String msgReceive = connectToMulticast(clientNo, msg);
-        System.out.println("Mensagem recebida: " + msgReceive);
-        return msgReceive;
-    }
-
 }

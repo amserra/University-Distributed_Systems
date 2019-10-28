@@ -1,28 +1,42 @@
+/**
+ * Class that represents a MulticastServer, with all its properties
+ */
 public class MulticastServerInfo {
 
     private int serverNo;
     private String TCP_ADDRESS;
     private int TCP_PORT;
-    private int carga = 0;
+    private int load = 0;
 
     /**
-     * @param serverNo
-     * @param TCP_ADDRESS
-     * @param TCP_PORT
-     * @return
+     * Used by the RMIServer when a new MulticastServer connects and by the
+     * MulticastServer when it recieves an anwser from the RMIServer
+     * 
+     * @param serverNo    Assigned by the RMIServer
+     * @param TCP_ADDRESS Args[0]
+     * @param TCP_PORT    Args[1]
      */
     public MulticastServerInfo(int serverNo, String TCP_ADDRESS, int TCP_PORT) {
         this.serverNo = serverNo;
         this.TCP_ADDRESS = TCP_ADDRESS;
         this.TCP_PORT = TCP_PORT;
-        this.carga = 0;
+        this.load = 0;
     }
 
-    public MulticastServerInfo(int serverNo, String TCP_ADDRESS, int TCP_PORT, int carga) {
+    /**
+     * Used when the RMIBackupServer needs to add a new MulticastServer
+     * 
+     * @param serverNo    Assigned by the RMIServer
+     * @param TCP_ADDRESS Args[0]
+     * @param TCP_PORT    Args[1]
+     * @param load        Ammount of work(indexing links) assigned to this
+     *                    MulticastServer
+     */
+    public MulticastServerInfo(int serverNo, String TCP_ADDRESS, int TCP_PORT, int load) {
         this.serverNo = serverNo;
         this.TCP_ADDRESS = TCP_ADDRESS;
         this.TCP_PORT = TCP_PORT;
-        this.carga = carga;
+        this.load = load;
     }
 
     /**
@@ -70,24 +84,27 @@ public class MulticastServerInfo {
     /**
      * @return int
      */
-    public int getCarga() {
-        return carga;
+    public int getLoad() {
+        return load;
     }
 
     /**
-     * @param carga
+     * @param load
      */
-    public void setCarga(int carga) {
-        this.carga = carga;
-    }
-
-    public void incrementCarga() {
-        this.carga++;
+    public void setLoad(int load) {
+        this.load = load;
     }
 
     /**
-     * @param otherServerNo
-     * @return int
+     * Increments by 1 unit the load parameter
+     */
+    public void incrementLoad() {
+        this.load++;
+    }
+
+    /**
+     * @param otherServerNo Given serverNo
+     * @return int Compares the given serverNo with this
      */
     public int compareTo(int otherServerNo) {
         return this.serverNo - otherServerNo;
@@ -95,7 +112,7 @@ public class MulticastServerInfo {
 
     @Override
     public String toString() {
-        return "serverNo: " + serverNo + " Ip: " + TCP_ADDRESS + " Port: " + TCP_PORT + "Load: " + carga;
+        return "serverNo: " + serverNo + " Ip: " + TCP_ADDRESS + " Port: " + TCP_PORT + "Load: " + load;
     }
 
 }

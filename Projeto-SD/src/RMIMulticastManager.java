@@ -82,8 +82,8 @@ public class RMIMulticastManager extends Thread {
                         int serverNo = Integer.parseInt(parameters[init++].split("\\|\\|\\|")[1]);
                         String ip = parameters[init++].split("\\|\\|\\|")[1];
                         int port = Integer.parseInt(parameters[init++].split("\\|\\|\\|")[1]);
-                        int carga = Integer.parseInt(parameters[init++].split("\\|\\|\\|")[1]);
-                        this.server.multicastServers.add(new MulticastServerInfo(serverNo, ip, port, carga));
+                        int load = Integer.parseInt(parameters[init++].split("\\|\\|\\|")[1]);
+                        this.server.multicastServers.add(new MulticastServerInfo(serverNo, ip, port, load));
                         // System.out.println(this.server.multicastServers.get(i).toString());
                     }
                 }
