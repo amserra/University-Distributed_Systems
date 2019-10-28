@@ -319,7 +319,7 @@ public class RMIClient extends UnicastRemoteObject implements ClientInterface {
                 System.out.println(cont + ". " + parameters[i].split("\\|\\|\\|")[1]);
             } else {
                 System.out.println(cont + ". Ip: " + parameters[i++].split("\\|\\|\\|")[1] + " Port: "
-                        + parameters[i++].split("\\|\\|\\|")[1]);
+                        + parameters[i].split("\\|\\|\\|")[1]);
             }
         }
     }
