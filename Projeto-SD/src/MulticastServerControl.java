@@ -7,7 +7,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class MulticastServerControl extends Thread {
 
     int CHECK_PERIOD = 1000; //Time period between multicast server check
-    int WAIT_TIME = 2000; // Time to wait for an answer from multicast serveres
+    int WAIT_TIME = 5000; // Time to wait for an answer from multicast serveres
 
     int PORT;
     InetAddress group;
@@ -47,6 +47,8 @@ public class MulticastServerControl extends Thread {
                 byte[] buffer = message.getBytes();
                 DatagramPacket packetSent = new DatagramPacket(buffer, buffer.length, group, PORT);
                 socket.send(packetSent);
+
+                System.out.println("Message sent: " + message);
 
                 server.setCheckingMulticastServers(true);
 

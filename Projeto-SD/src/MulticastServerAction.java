@@ -415,6 +415,8 @@ public class MulticastServerAction extends Thread {
 
                 if (server.isCheckingMulticastServers()) {
 
+                    System.out.println("Message received: " + received);
+
                     int serverNo = Integer.parseInt(receivedSplit[1].split("\\|\\|\\|")[1]);
 
                     server.getMulticastServerCheckedList().add(serverNo);
@@ -422,7 +424,11 @@ public class MulticastServerAction extends Thread {
 
             } else if (messageType.equals("checkStatus")) { // Sends message to other multicast so that they answer if they're alive
 
+                System.out.println("Message received: " + received);
+
                 message = "type|||checkStatusConfirm;;serverNo|||" + server.getMulticastServerNo();
+                
+                System.out.println("Message sent: " + message);
 
             } else if (messageType.equals("multicastServerStarterResult")) { // Receive message from RMI server when a Multicast server starts and updates list of Multicast Servers Info
 
