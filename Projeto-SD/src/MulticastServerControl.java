@@ -64,6 +64,7 @@ public class MulticastServerControl extends Thread {
                             System.out.println("Servidor numero " + msi.getServerNo() + " foi verificado");
                             if(i == msi.getServerNo()){
                                 check_server = true;
+                                break;
                             }
                         }
 
