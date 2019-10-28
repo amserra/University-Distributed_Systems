@@ -301,6 +301,8 @@ public class RMIServer extends UnicastRemoteObject implements ServerInterface {
     public void sendRtsToAll(String msg) throws MalformedURLException, RemoteException, NotBoundException {
         for (HashMap.Entry<Integer, ClientInterface> entry : clientInterfacesMap.entrySet()) {
             ClientInterface client = entry.getValue();
+            // boolean inRts = client.getIsInRealTimeStatistics();
+            // if (inRts)
             client.rtsUpdate(msg);
         }
     }
