@@ -29,8 +29,8 @@ public class RMIServer extends UnicastRemoteObject implements ServerInterface {
     boolean isWriting = false;
 
     final int PORT = 4369;
-    final int RMIPORT = 1099;
-    final String RMINAME = "RMIConnection";
+    int RMIPORT;
+    String RMINAME;
 
     /**
      * Main method that creates a RMIServer object
@@ -41,8 +41,14 @@ public class RMIServer extends UnicastRemoteObject implements ServerInterface {
      * @throws MalformedURLException
      */
     public static void main(String[] args) throws RemoteException, NotBoundException, MalformedURLException {
+        if (args.length != 2) {
+            System.out.println("Introduce the IP and Port as argument.");
+            System.exit(0);
+        }
+        System.setProperty("java.rmi.server.hostname", args[0]);
+        String rmiName = "rmi://" + args[0] + ":" + args[1] + "RMIConnection";
         System.setProperty("java.net.preferIPv4Stack", "true");
-        new RMIServer();
+        new RMIServer(rmiName, Integer.parseInt(args[1]));
     }
 
     /**
@@ -53,8 +59,10 @@ public class RMIServer extends UnicastRemoteObject implements ServerInterface {
      * @throws NotBoundException
      * @throws MalformedURLException
      */
-    RMIServer() throws RemoteException, NotBoundException, MalformedURLException {
+    RMIServer(String rmiName, int port) throws RemoteException, NotBoundException, MalformedURLException {
         super();
+        RMIPORT = port;
+        RMINAME = rmiName;
         connectToRMIServer();
     }
 

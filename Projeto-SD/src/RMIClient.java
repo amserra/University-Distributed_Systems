@@ -15,7 +15,7 @@ public class RMIClient extends UnicastRemoteObject implements ClientInterface {
     boolean inRealTimeStatistics = false;
     UI userUI;
     ServerInterface serverInterface; // To use the remote methods
-    final String RMINAME = "RMIConnection";
+    String RMINAME;
 
     /**
      * Main method that creates a RMIClient object
@@ -26,7 +26,12 @@ public class RMIClient extends UnicastRemoteObject implements ClientInterface {
      * @throws NotBoundException
      */
     public static void main(String[] args) throws MalformedURLException, RemoteException, NotBoundException {
-        new RMIClient();
+        if (args.length != 2) {
+            System.out.println("Introduce the IP and Port as argument.");
+            System.exit(0);
+        }
+        String rmiName = "rmi://" + args[0] + ":" + args[1] + "RMIConnection";
+        new RMIClient(rmiName);
     }
 
     /**
@@ -38,8 +43,9 @@ public class RMIClient extends UnicastRemoteObject implements ClientInterface {
      * @throws RemoteException
      * @throws NotBoundException
      */
-    RMIClient() throws MalformedURLException, RemoteException, NotBoundException {
+    RMIClient(String rmiName) throws MalformedURLException, RemoteException, NotBoundException {
         super();
+        RMINAME = rmiName;
         connectToRMIServer();
         userUI = new UI(this);
         controlCTRLC();
