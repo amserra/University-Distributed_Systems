@@ -19,7 +19,7 @@ public class MulticastServerAction extends Thread {
     MulticastSocket socket;
     InetAddress group;
 
-    final int maxUrlsSent = 100;
+    final int maxUrlsSent = 100; //Maz URLs to be sent when a search request is made
 
     MulticastServer server;
     String MULTICAST_ADDRESS;
@@ -52,7 +52,7 @@ public class MulticastServerAction extends Thread {
      * Receives messages from the RMI server or other Multicast server and makes the
      * request
      */
-    public void run() {
+    public synchronized void run() {
         try {
 
             String[] receivedSplit = received.split(";;");
@@ -77,10 +77,10 @@ public class MulticastServerAction extends Thread {
                 }
 
                 if (!checkUser) {
-                    // Primeiro Utilizador, logo é admin
+                    // First user is admin
                     if (listUsers.isEmpty())
                         newUser = new User(username, password, true, true, Integer.parseInt(clientNo), false);
-                    // Outro utilizador logo é um utilizador
+                    // Other is user
                     else
                         newUser = new User(username, password, false, true, Integer.parseInt(clientNo), false);
 
@@ -168,6 +168,7 @@ public class MulticastServerAction extends Thread {
 
                 Search searchTemp = new Search(words);
 
+                //Add search to search list
                 if (searchList.contains(searchTemp)) {
 
                     int indexWords = searchList.indexOf(searchTemp);
@@ -180,6 +181,7 @@ public class MulticastServerAction extends Thread {
 
                 saveSearches();
 
+                //Check is search was made by a user logged in or anonymous
                 try {
                     String username = receivedSplit[3].split("\\|\\|\\|")[1];
 
@@ -202,6 +204,8 @@ public class MulticastServerAction extends Thread {
 
                 CopyOnWriteArraySet<String> urlResults;
 
+                /*Check if search is just one word or multiple words.
+                If it is multiple words, gets URLs that have all those words in them*/
                 try {
                     String[] wordList = words.split(" ");
 
@@ -234,6 +238,7 @@ public class MulticastServerAction extends Thread {
 
                     int urlCount = 0;
 
+                    //Sort URL list, to send URLs sorted by links pointing
                     try {
                         Collections.sort(urlList);
                     } catch (Exception e) {
@@ -241,7 +246,7 @@ public class MulticastServerAction extends Thread {
                     }
 
                     HashSet<String> check = new HashSet<>();
-
+                    //After sort, see which URLs were filtered before
                     for (URL url : urlList) {
                         if (urlResults.contains(url.getUrl()) && !check.contains(url.getUrl())) {
                             check.add(url.getUrl());
@@ -264,6 +269,7 @@ public class MulticastServerAction extends Thread {
 
                 User user = null;
 
+                //Get User
                 for (User u : listUsers)
                     if (u.getUsername().equals(username)) {
                         user = u;
@@ -338,9 +344,10 @@ public class MulticastServerAction extends Thread {
                     else {
                         message = "type|||promoteResult;;clientNo|||" + clientNo + ";;status|||valid";
                         user.setAdmin(true);
+                        //If user is logged in, send notification
                         if (user.isLoggedIn())
                             message += ";;newAdminNo|||" + user.getClientNo();
-                        else
+                        else //If not, put notification attribute true
                             user.setNotification(true);
 
                         saveUsers();
@@ -371,6 +378,7 @@ public class MulticastServerAction extends Thread {
 
                 message = "type|||rtsResult;;clientNo|||" + clientNo;
 
+                //Top 10 URLs
                 for (int i = 0; i < 10; i++) {
                     try {
                         message += ";;url_" + i + "|||" + urlList.get(i).getUrl();
@@ -379,6 +387,7 @@ public class MulticastServerAction extends Thread {
                     }
                 }
 
+                //top 10 searches
                 for (int i = 0; i < 10; i++) {
                     try {
                         message += ";;search_" + i + "|||" + searchList.get(i).getWords();
@@ -387,8 +396,8 @@ public class MulticastServerAction extends Thread {
                     }
                 }
 
+                //Multicast servers address and port
                 for (MulticastServerInfo msi : server.getMulticastServerList()) {
-                    System.out.println("ENDERECO: " + msi.getTCP_ADDRESS() + "    PORTO: " + msi.getTCP_PORT());
                     message += ";;address|||" + msi.getTCP_ADDRESS() + ";;port|||" + msi.getTCP_PORT();
                 }
 
@@ -406,6 +415,7 @@ public class MulticastServerAction extends Thread {
                 int indexOfUser = listUsers.indexOf(tempUser);
                 User user = listUsers.get(indexOfUser);
 
+                //Set logged in to false
                 user.setLoggedIn(false);
 
                 message = "type|||logoutResult;;clientNo|||" + clientNo + ";;status|||valid";
@@ -422,6 +432,7 @@ public class MulticastServerAction extends Thread {
 
                     Integer serverNo = Integer.parseInt(receivedSplit[1].split("\\|\\|\\|")[1]);
 
+                    //Add server number to check list of server that confirmed that they're alive
                     server.getMulticastServerCheckedList().add(serverNo);
                 }
 
@@ -444,17 +455,20 @@ public class MulticastServerAction extends Thread {
 
                 CopyOnWriteArrayList<MulticastServerInfo> newMulticastServerList = new CopyOnWriteArrayList<>();
 
+                //Update Multicast Servers List
                 for (int i = 3; i < (multicastServerCount * 3 + 3); i = i + 3) {
                     int serverNo = Integer.parseInt(receivedSplit[i].split("\\|\\|\\|")[1]);
                     String address = receivedSplit[i + 1].split("\\|\\|\\|")[1];
                     int port = Integer.parseInt(receivedSplit[i + 2].split("\\|\\|\\|")[1]);
                     MulticastServerInfo msi = new MulticastServerInfo(serverNo, address, port);
+                    server.getMulticastServerCheckedList().add(serverNo);
                     newMulticastServerList.add(msi);
                 }
 
                 server.setMulticastServerList(newMulticastServerList);
 
-            } else if (messageType.equals("rmiServerStarter")) {
+            } else if(messageType.equals("rmiServerStarter")){ //When RMI Server starts, send information about Multicast servers
+        
 
                 System.out.println("Message received: " + received);
 

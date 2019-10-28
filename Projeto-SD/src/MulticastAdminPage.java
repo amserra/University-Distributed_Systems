@@ -60,7 +60,7 @@ public class MulticastAdminPage extends Thread {
                 boolean checkSearchList = false;
                 boolean checkUrlList = false;
 
-                //Vai ver se houve alguma alteracao
+                //Checks if top 10 has changed
                 for(int i = 0; i < 10; i++){
                     try{
                         if(!searchList.get(i).getWords().equals(top10search[i]))
@@ -72,11 +72,12 @@ public class MulticastAdminPage extends Thread {
                     }catch(Exception e){}
                 }
 
-                //Se tiver havido alguma alteracao no top 10 pesquisas ou no top 10 urls
+                //If something changed, update top 10 arrays and send update to RMI server
                 if(checkSearchList || checkUrlList){
 
                     String message = "type|||rtsUpdate;;clientNo|||0";
 
+                    //Update top 10 URL
                     for (int i = 0; i < 10; i++) {
                         try{
                             message += ";;url_" + i + "|||" + urlList.get(i).getUrl();
@@ -86,6 +87,7 @@ public class MulticastAdminPage extends Thread {
                         }
                     }
     
+                    //Update top 10 searches
                     for (int i = 0; i < 10; i++) {
                         try{
                             message += ";;search_" + i + "|||" + searchList.get(i).getWords();
@@ -96,7 +98,6 @@ public class MulticastAdminPage extends Thread {
                     }
 
                     for(MulticastServerInfo msi: msiList){
-                        System.out.println("ENDERECO: " + msi.getTCP_ADDRESS() + "    PORTO: " + msi.getTCP_PORT());
                         message += ";;address|||" + msi.getTCP_ADDRESS() + ";;port|||" + msi.getTCP_PORT();
                     }
             

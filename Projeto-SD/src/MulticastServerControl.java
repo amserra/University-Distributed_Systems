@@ -46,16 +46,17 @@ public class MulticastServerControl extends Thread {
                 String message = "type|||checkStatus";
                 byte[] buffer = message.getBytes();
                 DatagramPacket packetSent = new DatagramPacket(buffer, buffer.length, group, PORT);
-                socket.send(packetSent);
+                socket.send(packetSent); //Send message so that other Multicast servers check their status
 
                 System.out.println("Message sent: " + message);
 
                 server.setCheckingMulticastServers(true);
 
-                Thread.sleep(WAIT_TIME);
+                Thread.sleep(WAIT_TIME); //Wait for answer
 
                 server.setCheckingMulticastServers(false);
 
+                //Check which ones have answered
                 if(server.getMulticastServerCheckedList().size() != server.getMulticastServerList().size()){
                     for(MulticastServerInfo msi: server.getMulticastServerList()){
                         boolean check_server = false;
@@ -66,6 +67,7 @@ public class MulticastServerControl extends Thread {
                             }
                         }
 
+                        //If it didn't answer, warn RMI server
                         if(!check_server){
                             String messageServerDown = "type|||multicastServerDown;;serverNo|||" + msi.getServerNo();
                             byte[] bufferServerDown = messageServerDown.getBytes();

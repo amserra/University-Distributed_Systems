@@ -49,41 +49,42 @@ public class WebCrawler extends Thread {
 
     
     /** 
-     * @param index
-     * @param urlList
-     * @param url
-     * 
      * First it gets the URL that's pointing to this URL
      * Removes URL from Queue
      * Checks links pointing
      * Iterates over words of page and add to HashMap index
      * Add links in page to Queue
      * Call recursiveIndex again
+     * @param index
+     * @param urlList
+     * @param url
      */
-    private void recursiveIndex(ConcurrentHashMap<String, CopyOnWriteArraySet<String>> index, CopyOnWriteArrayList<URL> urlList, String url) {
+    private synchronized void recursiveIndex(ConcurrentHashMap<String, CopyOnWriteArraySet<String>> index, CopyOnWriteArrayList<URL> urlList, String url) {
 
         String previousUrl = null;
 
+        //Get URL pointing to this URL
         if(linkPointing.containsKey(url)){
             previousUrl = linkPointing.get(url).peek();
             linkPointing.get(url).remove();
         }
         String saveURL = url;
 
+        //Remove URL from queue
         if (!urlQueue.isEmpty())
             urlQueue.remove();
 
-        // ------------------------------ Adiciona o Url à lista de URLs ou vai busca lo
-        // a lista (se ja la estiver) ---------------------------------
 
         URL urlObject = new URL(url);
+
+        // Add URL to URL list or changes if it is already there
         if (!urlList.contains(urlObject)) {
 
             if(previousUrl != null){
-                //Cria um novo objeto url. Coloca o url e o link count a 1
+                //Creates new URL object and puts links pointing to 1
                 urlObject = new URL(url,1);
 
-                // Cria uma nova Lista com os URLs a apontarem para este URL
+                // Create new list with URLs pointing and adds new URL
                 CopyOnWriteArraySet<String> urlPointingList = urlObject.getUrlPointingToMeList();
                 urlPointingList.add(previousUrl);
                 urlObject.setUrlPointingToMeList(urlPointingList);
@@ -92,7 +93,7 @@ public class WebCrawler extends Thread {
                 urlObject = new URL(url, 0);
             }
 
-            // Adiciona o URL à lista de URLs
+            // Add URL to URL list
             urlList.add(urlObject);
         } else {
 
@@ -100,10 +101,10 @@ public class WebCrawler extends Thread {
             urlObject = urlList.get(indexOfUrl);
 
             if(previousUrl != null){
-                //Incrementar os links a apontar para este url
+                //Increment links pointing
                 urlObject.setLinksCount(urlObject.getLinksCount() + 1);
 
-                // Adiciona o URL para o qual aponta
+                // Adds new URL pointing
                 CopyOnWriteArraySet<String> urlPointingList = urlObject.getUrlPointingToMeList();
                 if (urlPointingList == null)
                     urlPointingList = new CopyOnWriteArraySet<>();
@@ -114,19 +115,15 @@ public class WebCrawler extends Thread {
         }
     
 
-        /*for(URL u: urlList)
-            System.out.println(u.getUrl());*/
-
         CopyOnWriteArraySet<String> indexURLs = new CopyOnWriteArraySet<>();
 
-        // --------------------- Indexar as palavras na pagina do url, fazendo as
-        // verificacoes necessarias -------------------------------
+        // Index words in this URL
         try {
                 Document doc = Jsoup.connect(url).get();
-                urlObject.setTitle(doc.title()); // Guardar o titulo da pagina
+                urlObject.setTitle(doc.title()); // Save title
                 StringTokenizer tokens = new StringTokenizer(doc.text());
                 String currentToken;
-                String text = ""; // Vai guardar um excerto de texto da pagina
+                String text = ""; // Save text
                 int wordsCount = 0;
                 while (tokens.hasMoreElements()) {
                     currentToken = tokens.nextToken();
@@ -140,28 +137,23 @@ public class WebCrawler extends Thread {
 
                     indexURLs.add(url);
 
-                    if (wordsCount <= MaxWordsText) {
+                    if (wordsCount <= MaxWordsText) { //Only saves MaxWordsText
                         text += currentToken + " ";
                         wordsCount++;
                     }
                 }
 
                 urlObject.setText(text);
-
-               // System.out.println(urlObject);
-
-                // ------------------------------ Verificar os links na pagina
-                // ----------------------------------
                 
                 Elements links = doc.select("a[href]");
+                // Add URLs to Queue
                 for (Element link : links) {
 
                     url = (link.attr("abs:href"));
 
-                    //System.out.println("APONTA PARA O LINK: " + url);
-
                     urlQueue.add(url);
 
+                    //Update hashMap with links pointing
                     if(linkPointing.containsKey(url)){
                         linkPointing.get(url).add(saveURL);
                     } else{
@@ -202,8 +194,7 @@ public class WebCrawler extends Thread {
                 e.printStackTrace();
             }
 
-            //System.out.println("Vai ser vista a pagina: " + urlQueue.peek());
-
+            //Check if queue is empty and continue recursive index
             if (!urlQueue.isEmpty())
                 recursiveIndex(index, urlList, urlQueue.peek());
 

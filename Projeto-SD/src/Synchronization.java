@@ -36,10 +36,9 @@ public class Synchronization extends Thread {
 
     
     /** 
+     * Saves information in files and sends it to another Multicast Servers
      * @param server
      * @return 
-     * 
-     * Saves information in files and sends it to another Multicast Servers
      */
     public Synchronization(MulticastServer server) {
         this.serverNo = server.getMulticastServerNo();
@@ -63,12 +62,15 @@ public class Synchronization extends Thread {
         this.start();
     }
 
+    /**
+     * Save information to files and sends it other multicast servers via TCP sockets
+     */
     public void run() {
         while (true) {
             try {
                 System.out.println("Writing to files. Do not CTRL+C");
 
-                //Guardar no ficheiro de objetos o hashmap
+                //Saves hashmap in file
                 FileOutputStream f = new FileOutputStream(new File(index_file));
                 ObjectOutputStream o = new ObjectOutputStream(f);
 
@@ -77,7 +79,7 @@ public class Synchronization extends Thread {
                 o.close();
                 f.close();
 
-                //Guardar no ficheiro de objetos a lista de urls
+                //Save URL list in files
                 f = new FileOutputStream(new File(url_file));
                 o = new ObjectOutputStream(f);
 
@@ -86,7 +88,7 @@ public class Synchronization extends Thread {
                 o.close();
                 f.close();
 
-                //Guardar no ficheiro de objetos a lista de utilizadores
+                //Save users list in files
                 f = new FileOutputStream(new File(user_file));
                 o = new ObjectOutputStream(f);
 
@@ -95,7 +97,7 @@ public class Synchronization extends Thread {
                 o.close();
                 f.close();
 
-                //Guardar no ficheiro de objetos a lista de searches
+                //Save search list in files
                 f = new FileOutputStream(new File(search_file));
                 o = new ObjectOutputStream(f);
 
@@ -104,25 +106,19 @@ public class Synchronization extends Thread {
                 o.close();
                 f.close();
 
-                //Enviar para os restantes Multicast Servers
                 Socket s = null;
                 ObjectOutputStream out = null;
 
                 serversList = server.getMulticastServerList();
 
+                //Send to others Multicast servers
                 for (MulticastServerInfo msi : serversList) {
-                    //System.out.println("Server: " + msi.getTCP_ADDRESS() + ": " + msi.getTCP_PORT());
                     if(!(msi.getTCP_ADDRESS().equals(TCP_ADDRESS) && msi.getTCP_PORT() == TCP_PORT)){
-                        // Abre o socket
-                        //System.out.println("A mandar para: " + msi.getTCP_ADDRESS() + ": " + msi.getTCP_PORT());
 
                         s = new Socket(msi.getTCP_ADDRESS(), msi.getTCP_PORT());
 
-                        // Stream para mandar
                         out = new ObjectOutputStream(s.getOutputStream());
 
-
-                        // Manda o objeto
                         out.writeObject(index);
                         out.writeObject(urlList);
                         out.writeObject(usersList);
@@ -211,14 +207,15 @@ class Connection extends Thread{
      * Compare the data received and the data from the multicast server and concatenates the information
      */
 
-    public void run(){
+    public synchronized void run(){
         try{
             ObjectInputStream in = new ObjectInputStream(clientSocket.getInputStream());
-            for(int i = 0; i < 4; i++){ //Vai receber o HashMap com os indices e a lista de URLs
+            for(int i = 0; i < 4; i++){ //Receives 1 HashMap and 3 ArrayLists
                 Object data = in.readObject();
                 if(data instanceof ConcurrentHashMap<?,?>){
                     ConcurrentHashMap<String, CopyOnWriteArraySet<String>> receivedIndex = (ConcurrentHashMap<String, CopyOnWriteArraySet<String>>) data;
 
+                    //Synchronize data from hash maps
                     for(String s: receivedIndex.keySet()){
                         if(index.containsKey(s)){
                             CopyOnWriteArraySet<String> indexValue = index.get(s);
@@ -233,13 +230,13 @@ class Connection extends Thread{
                     try{
                         CopyOnWriteArrayList<URL> receivedList = (CopyOnWriteArrayList<URL>) data;
 
+                        //Synchronize data from array lists
                         for(URL url: receivedList){
-                            //System.out.println(url);
+
                             if(urlList.contains(url)){
                                 int urlIndex = urlList.indexOf(url);
                                 URL editedURL = urlList.get(urlIndex);
     
-                                //System.out.println(editedURL);
                                 editedURL.getUrlPointingToMeList().addAll(url.getUrlPointingToMeList());
 
                                 editedURL.setLinksCount(editedURL.getUrlPointingToMeList().size());
@@ -252,6 +249,7 @@ class Connection extends Thread{
                         try{
                             CopyOnWriteArrayList<User> receivedList = (CopyOnWriteArrayList<User>) data;
 
+                            //Check is server has user in list
                             for(User user: receivedList){
 
                                 if(!usersList.contains(user))
@@ -261,6 +259,7 @@ class Connection extends Thread{
                         } catch(ClassCastException e2){
                             CopyOnWriteArrayList<Search> receivedList = (CopyOnWriteArrayList<Search>) data;
 
+                            //Check is server has search in list
                             for(Search s: receivedList){
 
                                 if(!searchList.contains(s))
