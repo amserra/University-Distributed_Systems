@@ -1,5 +1,8 @@
-public class Search implements Comparable<Search>{
+import java.io.Serializable;
+
+public class Search implements Comparable<Search>, Serializable {
     
+    private static final long serialVersionUID = 1L;
     private String words; // Search made by the user
     private int nSearches; // Number of time the search has been made
 
@@ -15,7 +18,12 @@ public class Search implements Comparable<Search>{
     }
     
     
-    /** 
+    public Search(String words) {
+        this.words = words;
+	}
+
+
+	/** 
      * @param search
      * @return int
      */

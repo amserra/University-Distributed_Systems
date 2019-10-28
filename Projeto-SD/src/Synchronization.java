@@ -16,12 +16,14 @@ public class Synchronization extends Thread {
     private String index_file = "files/index_"; //Name of file with index
     private String url_file = "files/urls_"; //Name of file with URLs
     private String user_file = "files/users_"; //Name of file with users
+    private String search_file = "files/search_"; // Namoe of files with searches
 
-    private int TIME_PERIOD = 1000; // Period time between synchronizations
+    private int TIME_PERIOD = 10000; // Period time between synchronizations
 
     private int serverNo;
     private CopyOnWriteArrayList<MulticastServerInfo> serversList;
     private CopyOnWriteArrayList<URL> urlList;
+    private CopyOnWriteArrayList<Search> searchList;
 
     private ConcurrentHashMap<String, CopyOnWriteArraySet<String>> index;
 
@@ -45,6 +47,7 @@ public class Synchronization extends Thread {
         this.index = server.getIndex();
         this.urlList = server.getUrlList();
         this.usersList = server.getListUsers();
+        this.searchList = server.getSearchList();
         this.server = server;
 
         this.TCP_PORT = server.getTCP_PORT();
@@ -53,8 +56,9 @@ public class Synchronization extends Thread {
         index_file += serverNo + ".txt";
         url_file += serverNo + ".txt";
         user_file += serverNo + ".txt";
+        search_file += serverNo + ".txt";
 
-        new IndexReceiveSync(index, urlList, TCP_PORT, usersList);
+        new IndexReceiveSync(index, urlList, TCP_PORT, usersList, searchList);
 
         this.start();
     }
@@ -62,6 +66,8 @@ public class Synchronization extends Thread {
     public void run() {
         while (true) {
             try {
+                System.out.println("Writing to files. Do not CTRL+C");
+
                 //Guardar no ficheiro de objetos o hashmap
                 FileOutputStream f = new FileOutputStream(new File(index_file));
                 ObjectOutputStream o = new ObjectOutputStream(f);
@@ -89,6 +95,15 @@ public class Synchronization extends Thread {
                 o.close();
                 f.close();
 
+                //Guardar no ficheiro de objetos a lista de searches
+                f = new FileOutputStream(new File(search_file));
+                o = new ObjectOutputStream(f);
+
+                o.writeObject(searchList);
+
+                o.close();
+                f.close();
+
                 //Enviar para os restantes Multicast Servers
                 Socket s = null;
                 ObjectOutputStream out = null;
@@ -106,15 +121,20 @@ public class Synchronization extends Thread {
                         // Stream para mandar
                         out = new ObjectOutputStream(s.getOutputStream());
 
+
                         // Manda o objeto
                         out.writeObject(index);
                         out.writeObject(urlList);
                         out.writeObject(usersList);
+                        out.writeObject(searchList);
 
                         out.close();
                         s.close();
                     }
                 }
+
+                System.out.println("You can now CTRL+C");
+
 
                 Thread.sleep(TIME_PERIOD);
 
@@ -140,12 +160,14 @@ class IndexReceiveSync extends Thread {
     private CopyOnWriteArrayList<URL> urlList;
     private ConcurrentHashMap<String, CopyOnWriteArraySet<String>> index;
     private CopyOnWriteArrayList<User> usersList;
+    private CopyOnWriteArrayList<Search> searchList;
     private int TCP_PORT;
 
-    public IndexReceiveSync(ConcurrentHashMap<String, CopyOnWriteArraySet<String>> index, CopyOnWriteArrayList<URL> urlList, int TCP_PORT, CopyOnWriteArrayList<User> usersList){
+    public IndexReceiveSync(ConcurrentHashMap<String, CopyOnWriteArraySet<String>> index, CopyOnWriteArrayList<URL> urlList, int TCP_PORT, CopyOnWriteArrayList<User> usersList, CopyOnWriteArrayList<Search> searchList){
         this.index = index;
         this.urlList = urlList;
         this.usersList = usersList;
+        this.searchList = searchList;
         this.TCP_PORT = TCP_PORT;
         this.start();
     }
@@ -158,7 +180,7 @@ class IndexReceiveSync extends Thread {
             ServerSocket listenSocket = new ServerSocket(TCP_PORT);
             while(true) {
                 Socket clientSocket = listenSocket.accept(); // BLOQUEANTE
-                new Connection(clientSocket,index, urlList, usersList);
+                new Connection(clientSocket,index, urlList, usersList, searchList);
             }
         }catch(IOException e){
             System.out.println("Listen:" + e.getMessage());
@@ -174,12 +196,14 @@ class Connection extends Thread{
     private ConcurrentHashMap<String, CopyOnWriteArraySet<String>> index;
     private CopyOnWriteArrayList<URL> urlList;
     private CopyOnWriteArrayList<User> usersList;
+    private CopyOnWriteArrayList<Search> searchList;
 
-    public Connection(Socket clientSocket, ConcurrentHashMap<String, CopyOnWriteArraySet<String>> index, CopyOnWriteArrayList<URL> urlList, CopyOnWriteArrayList<User> usersList){
+    public Connection(Socket clientSocket, ConcurrentHashMap<String, CopyOnWriteArraySet<String>> index, CopyOnWriteArrayList<URL> urlList, CopyOnWriteArrayList<User> usersList, CopyOnWriteArrayList<Search> searchList){
         this.clientSocket = clientSocket;
         this.index = index;
         this.urlList = urlList;
         this.usersList = usersList;
+        this.searchList = searchList;
         this.start();
     }
 
@@ -190,12 +214,10 @@ class Connection extends Thread{
     public void run(){
         try{
             ObjectInputStream in = new ObjectInputStream(clientSocket.getInputStream());
-            for(int i = 0; i < 3; i++){ //Vai receber o HashMap com os indices e a lista de URLs
+            for(int i = 0; i < 4; i++){ //Vai receber o HashMap com os indices e a lista de URLs
                 Object data = in.readObject();
                 if(data instanceof ConcurrentHashMap<?,?>){
                     ConcurrentHashMap<String, CopyOnWriteArraySet<String>> receivedIndex = (ConcurrentHashMap<String, CopyOnWriteArraySet<String>>) data;
-
-                   // System.out.println(receivedIndex);
 
                     for(String s: receivedIndex.keySet()){
                         if(index.containsKey(s)){
@@ -227,19 +249,27 @@ class Connection extends Thread{
                             }
                         } 
                     } catch(ClassCastException e){
-                        CopyOnWriteArrayList<User> receivedList = (CopyOnWriteArrayList<User>) data;
+                        try{
+                            CopyOnWriteArrayList<User> receivedList = (CopyOnWriteArrayList<User>) data;
 
-                        for(User user: receivedList){
+                            for(User user: receivedList){
 
-                            if(!usersList.contains(user))
-                                usersList.add(user);
+                                if(!usersList.contains(user))
+                                    usersList.add(user);
 
-                        } 
+                            } 
+                        } catch(ClassCastException e2){
+                            CopyOnWriteArrayList<Search> receivedList = (CopyOnWriteArrayList<Search>) data;
+
+                            for(Search s: receivedList){
+
+                                if(!searchList.contains(s))
+                                    searchList.add(s);
+
+                            } 
+                        }
+
                     }
-
-                    //System.out.println(receivedUrlList);
-
-                   
                 }
 
             }
