@@ -385,8 +385,10 @@ public class MulticastServerAction extends Thread {
                     }
                 }
 
-                for(MulticastServerInfo msi: server.getMulticastServerList())
+                for(MulticastServerInfo msi: server.getMulticastServerList()){
+                    System.out.println("ENDERECO: " + msi.getTCP_ADDRESS() + "    PORTO: " + msi.getTCP_PORT());
                     message += ";;address|||" + msi.getTCP_ADDRESS() + ";;port|||" + msi.getTCP_PORT();
+                }
 
                 System.out.println("Message sent: " + message);
                 
@@ -427,7 +429,7 @@ public class MulticastServerAction extends Thread {
                 System.out.println("Message received: " + received);
 
                 message = "type|||checkStatusConfirm;;serverNo|||" + server.getMulticastServerNo();
-                
+
                 System.out.println("Message sent: " + message);
 
             } else if (messageType.equals("multicastServerStarterResult")) { // Receive message from RMI server when a Multicast server starts and updates list of Multicast Servers Info

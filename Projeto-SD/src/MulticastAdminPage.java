@@ -95,8 +95,10 @@ public class MulticastAdminPage extends Thread {
                         }
                     }
 
-                    for(MulticastServerInfo msi: msiList)
+                    for(MulticastServerInfo msi: msiList){
+                        System.out.println("ENDERECO: " + msi.getTCP_ADDRESS() + "    PORTO: " + msi.getTCP_PORT());
                         message += ";;address|||" + msi.getTCP_ADDRESS() + ";;port|||" + msi.getTCP_PORT();
+                    }
             
                     byte[] buffer = message.getBytes();
                     DatagramPacket packetSent = new DatagramPacket(buffer, buffer.length, group, PORT);
