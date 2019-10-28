@@ -28,6 +28,7 @@ public class RMIServer extends UnicastRemoteObject implements ServerInterface {
     final String RMINAME = "RMIConnection";
 
     public static void main(String[] args) throws RemoteException, NotBoundException, MalformedURLException {
+        System.setProperty("java.net.preferIPv4Stack","true");
         new RMIServer();
     }
 
