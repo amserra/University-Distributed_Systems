@@ -316,10 +316,10 @@ public class RMIClient extends UnicastRemoteObject implements ClientInterface {
             }
 
             if (i < 22) {
-                System.out.println(cont + ". " + parameters[i].split("\\|\\|\\|")[1]);
+                System.out.println(cont + ". " + parameters[i].split("\\|\\|\\|")[1] + "\n");
             } else {
                 System.out.println(cont + ". Ip: " + parameters[i++].split("\\|\\|\\|")[1] + " Port: "
-                        + parameters[i++].split("\\|\\|\\|")[1]);
+                        + parameters[i].split("\\|\\|\\|")[1]);
             }
         }
     }
