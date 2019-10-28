@@ -35,14 +35,16 @@ public class MulticastServer extends Thread {
     private CopyOnWriteArrayList<URL> urlList = new CopyOnWriteArrayList<>(); // List with information about URLs
     private CopyOnWriteArrayList<Search> searchList = new CopyOnWriteArrayList<>(); // Searches List
 
-    private ConcurrentHashMap<String, CopyOnWriteArraySet<String>> index = new ConcurrentHashMap<>(); // HashMap com os
-                                                                                                      // URLs para cada
-                                                                                                      // palavra
+    private ConcurrentHashMap<String, CopyOnWriteArraySet<String>> index = new ConcurrentHashMap<>(); // HashMap with URL for each word
 
     /**
      * @param args Saves the Address and port given
      */
     public static void main(String[] args) {
+        if(args.length != 2){
+            System.out.println("MulticastServer TCP_ADDRESS TCP_PORT");
+            System.exit(0);
+        }
         System.setProperty("java.net.preferIPv4Stack","true");
         MulticastServer server = new MulticastServer();
         server.setTCP_ADDRESS(args[0]);
@@ -73,7 +75,7 @@ public class MulticastServer extends Thread {
 
             getMulticastServerNo(socket, group); // Get server number and information about other multicast servers
 
-            getMulticastServerFiles(); // Get information in files
+            getMulticastServerFiles(); // Get information from files
 
             new MulticastServerControl(this, group, socket); // Thread that checks status of other multicast servers
 
@@ -89,7 +91,7 @@ public class MulticastServer extends Thread {
                 String received = new String(packetReceived.getData(), 0, packetReceived.getLength());
 
                 MulticastServerAction newAction = new MulticastServerAction(received, socket, group, this);
-                newAction.start();
+                newAction.start(); // Thread to take care of the request
             }
 
         } catch (Exception e) {
@@ -100,10 +102,11 @@ public class MulticastServer extends Thread {
     }
 
     /**
+     *  Send message to RMI server warning that a new Multicast Server 
+     * has started. Then it receives a message with a given server number 
+     * and the information about the other Multicast Servers
      * @param socket
-     * @param group  Send message to RMI server warning that a new Multicast Server
-     *               has started. Then it receives a message with a given server
-     *               number and the information about the other Multicast Servers
+     * @param group
      */
     private void getMulticastServerNo(MulticastSocket socket, InetAddress group) {
         try {
@@ -156,7 +159,7 @@ public class MulticastServer extends Thread {
         String users_file = "files/users_" + getMulticastServerNo() + ".txt";
         String search_file = "files/search_" + getMulticastServerNo() + ".txt";
 
-        // Ler ficheiro do servidor com o hashmap
+        // Read file with hashmap
         try {
             FileInputStream f = new FileInputStream(new File(index_file));
             ObjectInputStream o = new ObjectInputStream(f);
@@ -173,7 +176,7 @@ public class MulticastServer extends Thread {
             System.out.println("Error transfering HashMap");
         }
 
-        // Ler ficheiro do servidor com a lista de URLs
+        // Read file with URLs list
         try {
             FileInputStream f = new FileInputStream(new File(url_file));
             ObjectInputStream o = new ObjectInputStream(f);
@@ -191,7 +194,7 @@ public class MulticastServer extends Thread {
             System.out.println("Error transfering URL List");
         }
 
-        // Ler ficheiro do servidor com a lista de utilizadores
+        // Read file with users list
         try {
             FileInputStream f = new FileInputStream(new File(users_file));
             ObjectInputStream o = new ObjectInputStream(f);
@@ -208,7 +211,7 @@ public class MulticastServer extends Thread {
             System.out.println("Error transfering URL List");
         }
 
-        // Ler ficheiro do servidor com a lista de procuras
+        // Read file with search list
         try {
             FileInputStream f = new FileInputStream(new File(search_file));
             ObjectInputStream o = new ObjectInputStream(f);
