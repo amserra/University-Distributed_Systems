@@ -43,6 +43,7 @@ public class MulticastServer extends Thread {
      * @param args Saves the Address and port given
      */
     public static void main(String[] args) {
+        System.setProperty("java.net.preferIPv4Stack","true");
         MulticastServer server = new MulticastServer();
         server.setTCP_ADDRESS(args[0]);
         server.setTCP_PORT(Integer.parseInt(args[1]));
