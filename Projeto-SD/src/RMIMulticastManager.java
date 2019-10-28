@@ -3,27 +3,35 @@ import java.net.InetAddress;
 import java.net.MulticastSocket;
 import java.util.Collections;
 
+/**
+ * Thread that manages the MulticastServers and the real time statistics
+ */
 public class RMIMulticastManager extends Thread {
     RMIServer server;
     MulticastSocket socket = null;
     final String MULTICAST_ADDRESS = "224.0.224.0";
     final int PORT = 4369;
 
+    /**
+     * Constructor that gets the RMIServer reference and initializes the thread.
+     * 
+     * @param server
+     */
     RMIMulticastManager(RMIServer server) {
         this.server = server;
         this.start();
     }
 
+    /**
+     * Thread. It's always waiting for a message, and manages 4 types of it:
+     * multicastServerStarter;multicastServerDown;rtsUpdate;rmiServerStarterResult
+     */
     public void run() {
         try {
             // Send
             socket = new MulticastSocket(PORT); // create socket and bind it
             InetAddress group = InetAddress.getByName(MULTICAST_ADDRESS);
             socket.joinGroup(group);
-
-            // 2 tipos de mensagens:
-            // multicastserverstarter (nao o result)
-            // multicastserverdown
 
             String type;
             String msgReceive;
@@ -97,12 +105,22 @@ public class RMIMulticastManager extends Thread {
         }
     }
 
+    /**
+     * Deletes a MulticastServer from the RMIServer object
+     * 
+     * @param serverNo
+     */
     public void deleteMulticastServer(int serverNo) {
         if (this.server.multicastServers.stream().filter(o -> o.getServerNo() == serverNo).findFirst().isPresent()) {
             this.server.multicastServers.removeIf(t -> t.getServerNo() == serverNo);
         }
     }
 
+    /**
+     * Sends a desired message to the MulticastServers
+     * 
+     * @param msg
+     */
     public void sendMsg(String msg) {
         try {
             socket = new MulticastSocket(PORT); // create socket and bind it
@@ -121,8 +139,12 @@ public class RMIMulticastManager extends Thread {
         }
     }
 
+    /**
+     * Gets the best serverNo to assign to a new MulticastServer
+     * 
+     * @return
+     */
     public int getBestServerNo() {
-        // Ns se ta a dar
         int finalValue = 1;
         boolean foundValue = false;
         int j = 1;
@@ -137,6 +159,9 @@ public class RMIMulticastManager extends Thread {
         return finalValue;
     }
 
+    /**
+     * Sorts the MulticastServer arraylist by serverNo
+     */
     public void sortArrayList() {
         Collections.sort(this.server.multicastServers, (o1, o2) -> o1.compareTo(o2.getServerNo()));
     }
