@@ -154,10 +154,10 @@ public class MulticastServer extends Thread {
      * and users
      */
     private void getMulticastServerFiles() {
-        String index_file = "files/index_" + getMulticastServerNo() + ".txt";
-        String url_file = "files/urls_" + getMulticastServerNo() + ".txt";
-        String users_file = "files/users_" + getMulticastServerNo() + ".txt";
-        String search_file = "files/search_" + getMulticastServerNo() + ".txt";
+        String index_file = "Meta1\\files\\index_" + getMulticastServerNo() + ".txt";
+        String url_file = "Meta1\\files\\urls_" + getMulticastServerNo() + ".txt";
+        String users_file = "Meta1\\files\\users_" + getMulticastServerNo() + ".txt";
+        String search_file = "Meta1\\files\\search_" + getMulticastServerNo() + ".txt";
 
         // Read file with hashmap
         try {

@@ -2,17 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1cebd835-8165-47e0-9b03-c550efdbb3fc" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/org_apache_clerezza_ext_org_json_simple_0_4.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Meta2/src/Yandex.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/$PRODUCT_WORKSPACE_FILE$" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/$PRODUCT_WORKSPACE_FILE$" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/artifacts/Meta2.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/lib1.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/lib1.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Meta1/src/MulticastServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/Meta1/src/MulticastServer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Meta1/src/Synchronization.java" beforeDir="false" afterPath="$PROJECT_DIR$/Meta1/src/Synchronization.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Meta2/Meta2.iml" beforeDir="false" afterPath="$PROJECT_DIR$/Meta2/Meta2.iml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -50,7 +42,7 @@
     <property name="findjar.last.used.dir" value="$PROJECT_DIR$/Meta2/src" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/Meta2/src" />
     <property name="nodejs_package_manager_path" value="npm" />
-    <property name="project.structure.last.edited" value="Libraries" />
+    <property name="project.structure.last.edited" value="Problems" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
   </component>
@@ -83,6 +75,13 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="RMIClient" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="RMIClient" />
+      <module name="Meta1" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="RMIServer" type="Application" factoryName="Application" singleton="false" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="RMIServer" />
       <module name="Meta1" />
@@ -98,6 +97,7 @@
       </method>
     </configuration>
     <list>
+      <item itemvalue="Application.RMIClient" />
       <item itemvalue="Application.MulticastServer_2" />
       <item itemvalue="Application.RMIServer" />
       <item itemvalue="Application.Yandex" />
@@ -122,7 +122,7 @@
       <option name="presentableId" value="Default" />
       <updated>1575730472199</updated>
       <workItem from="1575730482820" duration="3659000" />
-      <workItem from="1575734352245" duration="2818000" />
+      <workItem from="1575734352245" duration="4169000" />
     </task>
     <servers />
   </component>
