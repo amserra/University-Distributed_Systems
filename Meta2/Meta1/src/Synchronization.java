@@ -131,17 +131,18 @@ public class Synchronization extends Thread {
 
                 System.out.println("You can now CTRL+C");
 
-
-                Thread.sleep(TIME_PERIOD);
-
-            } catch (InterruptedException e) {
-                System.out.println("Thread interrupted");
             } catch (FileNotFoundException e) {
                 System.out.println("File not found");
             } catch (IOException e) {
                 System.out.println("Error initializing stream");
             } catch(Exception e){
                 System.out.print(e.getMessage());
+            }
+
+            try {
+                Thread.sleep(TIME_PERIOD);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         }
 
