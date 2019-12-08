@@ -15,6 +15,7 @@
       <root url="jar://$PROJECT_DIR$/Meta2/WebContent/WEB-INF/lib/asm-3.3.jar!/" />
       <root url="jar://$PROJECT_DIR$/Meta2/WebContent/WEB-INF/lib/javassist-3.11.0.GA.jar!/" />
       <root url="jar://$PROJECT_DIR$/Meta2/WebContent/WEB-INF/lib/javax.servlet.jsp.jstl-1.2.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Meta2/WebContent/WEB-INF/lib/json-simple-1.1.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

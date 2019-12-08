@@ -1,0 +1,16 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="Meta2">
+    <output-path>$PROJECT_DIR$/out/artifacts/Meta2</output-path>
+    <root id="archive" name="Meta2.war">
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="Meta2" />
+        </element>
+        <element id="directory" name="lib">
+          <element id="library" level="project" name="lib1" />
+        </element>
+      </element>
+      <element id="javaee-facet-resources" facet="Meta2/web/Web" />
+    </root>
+  </artifact>
+</component>
