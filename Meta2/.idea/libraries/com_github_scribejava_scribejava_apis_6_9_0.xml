@@ -1,0 +1,14 @@
+<component name="libraryTable">
+  <library name="com.github.scribejava:scribejava-apis:6.9.0" type="repository">
+    <properties maven-id="com.github.scribejava:scribejava-apis:6.9.0" />
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/github/scribejava/scribejava-apis/6.9.0/scribejava-apis-6.9.0.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/com/github/scribejava/scribejava-core/6.9.0/scribejava-core-6.9.0.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/com/fasterxml/jackson/core/jackson-databind/2.10.0/jackson-databind-2.10.0.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/com/fasterxml/jackson/core/jackson-annotations/2.10.0/jackson-annotations-2.10.0.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/com/fasterxml/jackson/core/jackson-core/2.10.0/jackson-core-2.10.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

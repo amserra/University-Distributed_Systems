@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1cebd835-8165-47e0-9b03-c550efdbb3fc" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/Meta2/src/FacebookConnect.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Meta1/src/MulticastServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/Meta1/src/MulticastServer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Meta1/src/Synchronization.java" beforeDir="false" afterPath="$PROJECT_DIR$/Meta1/src/Synchronization.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Meta2/Meta2.iml" beforeDir="false" afterPath="$PROJECT_DIR$/Meta2/Meta2.iml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -42,7 +42,7 @@
     <property name="findjar.last.used.dir" value="$PROJECT_DIR$/Meta2/src" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/Meta2/src" />
     <property name="nodejs_package_manager_path" value="npm" />
-    <property name="project.structure.last.edited" value="Problems" />
+    <property name="project.structure.last.edited" value="Libraries" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
   </component>
@@ -58,7 +58,14 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.MulticastServer_1">
+  <component name="RunManager" selected="Application.FacebookConnect">
+    <configuration name="FacebookConnect" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="FacebookConnect" />
+      <module name="Meta2" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="MulticastServer_1" type="Application" factoryName="Application" singleton="false" temporary="true">
       <option name="MAIN_CLASS_NAME" value="MulticastServer" />
       <module name="Meta1" />
@@ -102,9 +109,11 @@
       <item itemvalue="Application.RMIServer" />
       <item itemvalue="Application.Yandex" />
       <item itemvalue="Application.MulticastServer_1" />
+      <item itemvalue="Application.FacebookConnect" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.FacebookConnect" />
         <item itemvalue="Application.MulticastServer_1" />
         <item itemvalue="Application.RMIServer" />
         <item itemvalue="Application.Yandex" />
@@ -122,7 +131,9 @@
       <option name="presentableId" value="Default" />
       <updated>1575730472199</updated>
       <workItem from="1575730482820" duration="3659000" />
-      <workItem from="1575734352245" duration="4169000" />
+      <workItem from="1575734352245" duration="4882000" />
+      <workItem from="1575759411229" duration="48000" />
+      <workItem from="1575807060394" duration="1693000" />
     </task>
     <servers />
   </component>
