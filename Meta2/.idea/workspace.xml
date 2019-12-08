@@ -1,52 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="810318e5-aa12-4263-a532-4dd24770de89" name="Default Changelist" comment="" />
+    <list default="true" id="d2e22b4e-583e-4770-9eed-a8ace478049c" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="FavoritesManager">
-    <favorites_list name="Meta2" />
+  <component name="ProjectId" id="1UioKswyU7rJepMlmACISlSdlAq" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
   </component>
-  <component name="LogFilters">
-    <option name="FILTER_ERRORS" value="false" />
-    <option name="FILTER_WARNINGS" value="false" />
-    <option name="FILTER_INFO" value="true" />
-    <option name="FILTER_DEBUG" value="true" />
-    <option name="CUSTOM_FILTER" />
-  </component>
-  <component name="ProjectCodeStyleSettingsMigration">
-    <option name="version" value="1" />
-  </component>
-  <component name="ProjectId" id="1UewfUInwM7wg0Du4erUSYPN4Ey" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="PropertiesComponent">
-    <property name="Downloaded.Files.Path.Enabled" value="false" />
-    <property name="Repository.Attach.Annotations" value="false" />
-    <property name="Repository.Attach.JavaDocs" value="false" />
-    <property name="Repository.Attach.Sources" value="false" />
-    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="aspect.path.notification.shown" value="true" />
-    <property name="findjar.last.used.dir" value="$PROJECT_DIR$/Meta2/WebContent/WEB-INF/lib" />
-    <property name="jdk.selected.JAVA_MODULE" value="1.8" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/Meta2/WebContent" />
-    <property name="list.type.of.created.stylesheet" value="CSS" />
-    <property name="nodejs_package_manager_path" value="npm" />
-    <property name="project.structure.last.edited" value="Facets" />
-    <property name="project.structure.proportion" value="0.15" />
+    <property name="project.structure.last.edited" value="Project" />
+    <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.2" />
-    <property name="settings.editor.selected.configurable" value="preferences.keymap" />
   </component>
-  <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/Meta2/WebContent/WEB-INF/lib" />
-    </key>
-  </component>
-  <component name="RunManager" selected="Application.RMIServer">
-    <configuration name="RMIServer" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="Application.MulticastServer">
+    <configuration name="MulticastServer" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="MulticastServer" />
+      <module name="Meta1" />
+      <option name="PROGRAM_PARAMETERS" value="127.0.0.1 2000" />
+      <option name="VM_PARAMETERS" value="-Djava.net.preferIPv4Stack=true" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="RMIClient" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="RMIClient" />
+      <module name="Meta1" />
+      <option name="VM_PARAMETERS" value="-Djava.net.preferIPv4Stack=true" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="RMIServer" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="RMIServer" />
       <module name="Meta1" />
       <option name="VM_PARAMETERS" value="-Djava.net.preferIPv4Stack=true" />
@@ -65,7 +57,7 @@
         </artifact>
       </deployment>
       <server-settings>
-        <option name="BASE_DIRECTORY_NAME" value="Unnamed_Meta2_2" />
+        <option name="BASE_DIRECTORY_NAME" value="Unnamed_Meta2_4" />
       </server-settings>
       <predefined_log_file enabled="true" id="Tomcat" />
       <predefined_log_file enabled="true" id="Tomcat Catalina" />
@@ -73,7 +65,7 @@
       <predefined_log_file id="Tomcat Host Manager" />
       <predefined_log_file id="Tomcat Localhost Access" />
       <RunnerSettings RunnerId="Debug">
-        <option name="DEBUG_PORT" value="49196" />
+        <option name="DEBUG_PORT" value="60618" />
       </RunnerSettings>
       <ConfigurationWrapper VM_VAR="JAVA_OPTS" RunnerId="Debug">
         <option name="USE_ENV_VARIABLES" value="true" />
@@ -107,150 +99,73 @@
       </ConfigurationWrapper>
       <method v="2">
         <option name="Make" enabled="true" />
+        <option name="BuildArtifacts" enabled="true">
+          <artifact name="Meta2" />
+        </option>
       </method>
     </configuration>
     <list>
       <item itemvalue="Application.RMIServer" />
+      <item itemvalue="Application.RMIClient" />
+      <item itemvalue="Application.MulticastServer" />
       <item itemvalue="Tomcat Server.Tomcat Meta2" />
     </list>
-    <recent_temporary>
-      <list>
-        <item itemvalue="Application.RMIServer" />
-      </list>
-    </recent_temporary>
   </component>
   <component name="ServiceViewManager">
     <option name="viewStates">
       <list>
-        <item itemvalue="Application.FacebookConnect" />
-        <item itemvalue="Application.MulticastServer_1" />
-        <item itemvalue="Application.RMIServer" />
-        <item itemvalue="Application.Yandex" />
+        <serviceView>
+          <treeState>
+            <expand />
+            <select />
+          </treeState>
+        </serviceView>
       </list>
-    </recent_temporary>
-  </component>
-  <component name="SvnConfiguration">
-    <configuration />
+    </option>
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="810318e5-aa12-4263-a532-4dd24770de89" name="Default Changelist" comment="" />
-      <created>1575839204887</created>
+      <changelist id="d2e22b4e-583e-4770-9eed-a8ace478049c" name="Default Changelist" comment="" />
+      <created>1575848715689</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1575839204887</updated>
-      <workItem from="1575839206260" duration="429000" />
-      <workItem from="1575839665633" duration="120000" />
-      <workItem from="1575839816076" duration="50000" />
+      <updated>1575848715689</updated>
+      <workItem from="1575848716787" duration="162000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
   </component>
-  <component name="Vcs.Log.Tabs.Properties">
-    <option name="TAB_STATES">
-      <map>
-        <entry key="MAIN">
-          <value>
-            <State>
-              <option name="COLUMN_ORDER" />
-            </State>
-          </value>
-        </entry>
-      </map>
-    </option>
   <component name="WindowStateProjectService">
-    <state x="440" y="190" key="#Project_Structure" timestamp="1575838463352">
+    <state x="304" y="187" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1575848878401">
       <screen x="0" y="0" width="1680" height="1050" />
     </state>
-    <state x="440" y="190" key="#Project_Structure/1680.0.1920.1080/0.0.1680.1050@0.0.1680.1050" timestamp="1575838463352" />
-    <state x="516" y="202" key="#RMIServer" timestamp="1575839865341">
+    <state x="304" y="187" key="#com.intellij.execution.impl.EditConfigurationsDialog/1680.0.1920.1080/0.0.1680.1050@0.0.1680.1050" timestamp="1575848878401" />
+    <state x="577" y="316" key="#com.intellij.ide.util.TreeClassChooserDialog" timestamp="1575848876676">
       <screen x="0" y="0" width="1680" height="1050" />
     </state>
-    <state x="516" y="202" key="#RMIServer/1680.0.1920.1080/0.0.1680.1050@0.0.1680.1050" timestamp="1575839865341" />
-    <state x="304" y="187" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1575839694714">
+    <state x="577" y="316" key="#com.intellij.ide.util.TreeClassChooserDialog/1680.0.1920.1080/0.0.1680.1050@0.0.1680.1050" timestamp="1575848876676" />
+    <state x="577" y="316" key="#com.intellij.ide.util.TreeClassChooserDialog/1680.23.1920.1057/0.0.1680.1050@0.0.1680.1050" timestamp="1575848771445" />
+    <state width="1638" height="295" key="GridCell.Tab.0.bottom" timestamp="1575848919300">
       <screen x="0" y="0" width="1680" height="1050" />
     </state>
-    <state x="304" y="187" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1680.1050@0.0.1680.1050" timestamp="1575833317486" />
-    <state x="304" y="187" key="#com.intellij.execution.impl.EditConfigurationsDialog/1680.0.1920.1080/0.0.1680.1050@0.0.1680.1050" timestamp="1575839694714" />
-    <state x="478" y="260" key="#com.intellij.ide.util.ExportDialog" timestamp="1575838830444">
+    <state width="1638" height="295" key="GridCell.Tab.0.bottom/1680.0.1920.1080/0.0.1680.1050@0.0.1680.1050" timestamp="1575848919300" />
+    <state width="1638" height="295" key="GridCell.Tab.0.center" timestamp="1575848919298">
       <screen x="0" y="0" width="1680" height="1050" />
     </state>
-    <state x="478" y="260" key="#com.intellij.ide.util.ExportDialog/1680.0.1920.1080/0.0.1680.1050@0.0.1680.1050" timestamp="1575838830444" />
-    <state x="577" y="316" key="#com.intellij.ide.util.TreeClassChooserDialog" timestamp="1575839833312">
+    <state width="1638" height="295" key="GridCell.Tab.0.center/1680.0.1920.1080/0.0.1680.1050@0.0.1680.1050" timestamp="1575848919298" />
+    <state width="1638" height="295" key="GridCell.Tab.0.left" timestamp="1575848919298">
       <screen x="0" y="0" width="1680" height="1050" />
     </state>
-    <state x="577" y="316" key="#com.intellij.ide.util.TreeClassChooserDialog/1680.0.1920.1080/0.0.1680.1050@0.0.1680.1050" timestamp="1575839833312" />
-    <state width="1638" height="265" key="GridCell.Tab.0.bottom" timestamp="1575839812884">
+    <state width="1638" height="295" key="GridCell.Tab.0.left/1680.0.1920.1080/0.0.1680.1050@0.0.1680.1050" timestamp="1575848919298" />
+    <state width="1638" height="295" key="GridCell.Tab.0.right" timestamp="1575848919299">
       <screen x="0" y="0" width="1680" height="1050" />
     </state>
-    <state width="1126" height="295" key="GridCell.Tab.0.bottom/0.0.1680.1050@0.0.1680.1050" timestamp="1575833312443" />
-    <state width="1638" height="265" key="GridCell.Tab.0.bottom/1680.0.1920.1080/0.0.1680.1050@0.0.1680.1050" timestamp="1575839812884" />
-    <state width="1638" height="265" key="GridCell.Tab.0.bottom/1680.23.1920.1057/0.0.1680.1050@0.0.1680.1050" timestamp="1575839635427" />
-    <state width="1638" height="265" key="GridCell.Tab.0.center" timestamp="1575839812883">
+    <state width="1638" height="295" key="GridCell.Tab.0.right/1680.0.1920.1080/0.0.1680.1050@0.0.1680.1050" timestamp="1575848919299" />
+    <state x="328" y="106" key="SettingsEditor" timestamp="1575848742342">
       <screen x="0" y="0" width="1680" height="1050" />
     </state>
-    <state width="1126" height="295" key="GridCell.Tab.0.center/0.0.1680.1050@0.0.1680.1050" timestamp="1575833312442" />
-    <state width="1638" height="265" key="GridCell.Tab.0.center/1680.0.1920.1080/0.0.1680.1050@0.0.1680.1050" timestamp="1575839812883" />
-    <state width="1638" height="265" key="GridCell.Tab.0.center/1680.23.1920.1057/0.0.1680.1050@0.0.1680.1050" timestamp="1575839635426" />
-    <state width="1638" height="265" key="GridCell.Tab.0.left" timestamp="1575839812882">
-      <screen x="0" y="0" width="1680" height="1050" />
-    </state>
-    <state width="1126" height="295" key="GridCell.Tab.0.left/0.0.1680.1050@0.0.1680.1050" timestamp="1575833312441" />
-    <state width="1638" height="265" key="GridCell.Tab.0.left/1680.0.1920.1080/0.0.1680.1050@0.0.1680.1050" timestamp="1575839812882" />
-    <state width="1638" height="265" key="GridCell.Tab.0.left/1680.23.1920.1057/0.0.1680.1050@0.0.1680.1050" timestamp="1575839635425" />
-    <state width="1638" height="265" key="GridCell.Tab.0.right" timestamp="1575839812883">
-      <screen x="0" y="0" width="1680" height="1050" />
-    </state>
-    <state width="1126" height="295" key="GridCell.Tab.0.right/0.0.1680.1050@0.0.1680.1050" timestamp="1575833312442" />
-    <state width="1638" height="265" key="GridCell.Tab.0.right/1680.0.1920.1080/0.0.1680.1050@0.0.1680.1050" timestamp="1575839812883" />
-    <state width="1638" height="265" key="GridCell.Tab.0.right/1680.23.1920.1057/0.0.1680.1050@0.0.1680.1050" timestamp="1575839635427" />
-    <state width="1126" height="295" key="GridCell.Tab.1.bottom" timestamp="1575839202922">
-      <screen x="0" y="0" width="1680" height="1050" />
-    </state>
-    <state width="1126" height="295" key="GridCell.Tab.1.bottom/0.0.1680.1050@0.0.1680.1050" timestamp="1575833312445" />
-    <state width="1126" height="295" key="GridCell.Tab.1.bottom/1680.0.1920.1080/0.0.1680.1050@0.0.1680.1050" timestamp="1575839202922" />
-    <state width="1126" height="295" key="GridCell.Tab.1.center" timestamp="1575839202920">
-      <screen x="0" y="0" width="1680" height="1050" />
-    </state>
-    <state width="1126" height="295" key="GridCell.Tab.1.center/0.0.1680.1050@0.0.1680.1050" timestamp="1575833312444" />
-    <state width="1126" height="295" key="GridCell.Tab.1.center/1680.0.1920.1080/0.0.1680.1050@0.0.1680.1050" timestamp="1575839202920" />
-    <state width="1126" height="295" key="GridCell.Tab.1.left" timestamp="1575839202920">
-      <screen x="0" y="0" width="1680" height="1050" />
-    </state>
-    <state width="1126" height="295" key="GridCell.Tab.1.left/0.0.1680.1050@0.0.1680.1050" timestamp="1575833312444" />
-    <state width="1126" height="295" key="GridCell.Tab.1.left/1680.0.1920.1080/0.0.1680.1050@0.0.1680.1050" timestamp="1575839202920" />
-    <state width="1126" height="295" key="GridCell.Tab.1.right" timestamp="1575839202921">
-      <screen x="0" y="0" width="1680" height="1050" />
-    </state>
-    <state width="1126" height="295" key="GridCell.Tab.1.right/0.0.1680.1050@0.0.1680.1050" timestamp="1575833312445" />
-    <state width="1126" height="295" key="GridCell.Tab.1.right/1680.0.1920.1080/0.0.1680.1050@0.0.1680.1050" timestamp="1575839202921" />
-    <state width="1126" height="295" key="GridCell.Tab.2.bottom" timestamp="1575839202924">
-      <screen x="0" y="0" width="1680" height="1050" />
-    </state>
-    <state width="1126" height="295" key="GridCell.Tab.2.bottom/0.0.1680.1050@0.0.1680.1050" timestamp="1575833312447" />
-    <state width="1126" height="295" key="GridCell.Tab.2.bottom/1680.0.1920.1080/0.0.1680.1050@0.0.1680.1050" timestamp="1575839202924" />
-    <state width="1126" height="295" key="GridCell.Tab.2.center" timestamp="1575839202923">
-      <screen x="0" y="0" width="1680" height="1050" />
-    </state>
-    <state width="1126" height="295" key="GridCell.Tab.2.center/0.0.1680.1050@0.0.1680.1050" timestamp="1575833312446" />
-    <state width="1126" height="295" key="GridCell.Tab.2.center/1680.0.1920.1080/0.0.1680.1050@0.0.1680.1050" timestamp="1575839202923" />
-    <state width="1126" height="295" key="GridCell.Tab.2.left" timestamp="1575839202922">
-      <screen x="0" y="0" width="1680" height="1050" />
-    </state>
-    <state width="1126" height="295" key="GridCell.Tab.2.left/0.0.1680.1050@0.0.1680.1050" timestamp="1575833312445" />
-    <state width="1126" height="295" key="GridCell.Tab.2.left/1680.0.1920.1080/0.0.1680.1050@0.0.1680.1050" timestamp="1575839202922" />
-    <state width="1126" height="295" key="GridCell.Tab.2.right" timestamp="1575839202924">
-      <screen x="0" y="0" width="1680" height="1050" />
-    </state>
-    <state width="1126" height="295" key="GridCell.Tab.2.right/0.0.1680.1050@0.0.1680.1050" timestamp="1575833312446" />
-    <state width="1126" height="295" key="GridCell.Tab.2.right/1680.0.1920.1080/0.0.1680.1050@0.0.1680.1050" timestamp="1575839202924" />
-    <state x="328" y="106" width="1253" height="837" key="SettingsEditor" timestamp="1575838654112">
-      <screen x="0" y="0" width="1680" height="1050" />
-    </state>
-    <state x="328" y="106" key="SettingsEditor/0.0.1680.1050@0.0.1680.1050" timestamp="1575833338096" />
-    <state x="328" y="106" width="1253" height="837" key="SettingsEditor/1680.0.1920.1080/0.0.1680.1050@0.0.1680.1050" timestamp="1575838654112" />
-    <state x="328" y="127" key="SettingsEditor/1680.23.1920.1057/0.23.1680.1027@0.23.1680.1027" timestamp="1575838532453" />
+    <state x="328" y="106" key="SettingsEditor/1680.23.1920.1057/0.0.1680.1050@0.0.1680.1050" timestamp="1575848742342" />
   </component>
 </project>
