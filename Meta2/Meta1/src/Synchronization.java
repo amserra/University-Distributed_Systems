@@ -13,10 +13,10 @@ import java.util.concurrent.CopyOnWriteArraySet;
 
 public class Synchronization extends Thread {
 
-    private String index_file = "Meta1\\files\\index_"; //Name of file with index
-    private String url_file = "Meta1\\files\\urls_"; //Name of file with URLs
-    private String user_file = "Meta1\\files\\users_"; //Name of file with users
-    private String search_file = "Meta1\\files\\search_"; // Namoe of files with searches
+    private String index_file = "Meta1/files/index_"; //Name of file with index
+    private String url_file = "Meta1/files/urls_"; //Name of file with URLs
+    private String user_file = "Meta1/files/users_"; //Name of file with users
+    private String search_file = "Meta1/files/search_"; // Namoe of files with searches
 
     private int TIME_PERIOD = 10000; // Period time between synchronizations
 
