@@ -6,6 +6,12 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
+    <list default="true" id="1cebd835-8165-47e0-9b03-c550efdbb3fc" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/Meta2/src/FacebookConnect.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Meta2/Meta2.iml" beforeDir="false" afterPath="$PROJECT_DIR$/Meta2/Meta2.iml" afterDir="false" />
+    </list>
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <list default="true" id="2f5f5e52-10fa-449f-b9ee-8fde29a947c0" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -35,6 +41,11 @@
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="findjar.last.used.dir" value="$PROJECT_DIR$/Meta2/src" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/Meta2/src" />
+    <property name="nodejs_package_manager_path" value="npm" />
+    <property name="project.structure.last.edited" value="Libraries" />
     <property name="findjar.last.used.dir" value="$PROJECT_DIR$/Meta2/WebContent/WEB-INF/lib" />
     <property name="jdk.selected.JAVA_MODULE" value="1.8" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/Meta2/WebContent" />
@@ -57,6 +68,15 @@
       <recent name="$PROJECT_DIR$/Meta2/WebContent/WEB-INF/lib" />
     </key>
   </component>
+  <component name="RunManager" selected="Application.FacebookConnect">
+    <configuration name="FacebookConnect" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="FacebookConnect" />
+      <module name="Meta2" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="MulticastServer_1" type="Application" factoryName="Application" singleton="false" temporary="true">
   <component name="RunManager" selected="Tomcat Server.Tomcat Meta2">
     <configuration name="MulticastServer" type="Application" factoryName="Application" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="MulticastServer" />
@@ -197,12 +217,19 @@
       <item itemvalue="Application.MulticastServer" />
       <item itemvalue="Application.RMIClient" />
       <item itemvalue="Application.RMIServer" />
+      <item itemvalue="Application.Yandex" />
+      <item itemvalue="Application.MulticastServer_1" />
+      <item itemvalue="Application.FacebookConnect" />
       <item itemvalue="Tomcat Server.Tomcat Meta2" />
     </list>
   </component>
   <component name="ServiceViewManager">
     <option name="viewStates">
       <list>
+        <item itemvalue="Application.FacebookConnect" />
+        <item itemvalue="Application.MulticastServer_1" />
+        <item itemvalue="Application.RMIServer" />
+        <item itemvalue="Application.Yandex" />
         <serviceView>
           <treeState>
             <expand>
@@ -228,6 +255,11 @@
       <created>1575719225271</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
+      <updated>1575730472199</updated>
+      <workItem from="1575730482820" duration="3659000" />
+      <workItem from="1575734352245" duration="4882000" />
+      <workItem from="1575759411229" duration="48000" />
+      <workItem from="1575807060394" duration="1693000" />
       <updated>1575719225271</updated>
       <workItem from="1575719226484" duration="3591000" />
       <workItem from="1575759276956" duration="379000" />
