@@ -6,13 +6,8 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1cebd835-8165-47e0-9b03-c550efdbb3fc" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Meta2/WebContent/login.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/Meta2/WebContent/login.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/Meta2/Meta2.war" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/Meta2/Meta2.war" afterDir="false" />
-    </list>
+    <list default="true" id="1cebd835-8165-47e0-9b03-c550efdbb3fc" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
-    <list default="true" id="d2e22b4e-583e-4770-9eed-a8ace478049c" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -45,14 +40,15 @@
   </component>
   <component name="ProjectCodeStyleSettingsMigration">
     <option name="version" value="1" />
-  <component name="ProjectId" id="1UioKswyU7rJepMlmACISlSdlAq" />
-  <component name="ProjectViewState">
-    <option name="hideEmptyMiddlePackages" value="true" />
-    <option name="showExcludedFiles" value="true" />
-    <option name="showLibraryContents" value="true" />
   </component>
+  <component name="ProjectId" id="1UewfUInwM7wg0Du4erUSYPN4Ey" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="PropertiesComponent">
-    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="Downloaded.Files.Path.Enabled" value="false" />
+    <property name="Repository.Attach.Annotations" value="false" />
+    <property name="Repository.Attach.JavaDocs" value="false" />
+    <property name="Repository.Attach.Sources" value="false" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="findjar.last.used.dir" value="$PROJECT_DIR$/Meta2/src" />
@@ -83,16 +79,17 @@
       </method>
     </configuration>
     <configuration name="MulticastServer_1" type="Application" factoryName="Application" singleton="false" temporary="true">
-    <property name="project.structure.last.edited" value="Project" />
-    <property name="project.structure.proportion" value="0.0" />
-    <property name="project.structure.side.proportion" value="0.2" />
-  </component>
-  <component name="RunManager" selected="Application.MulticastServer">
-    <configuration name="MulticastServer" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="MulticastServer" />
       <module name="Meta1" />
-      <option name="PROGRAM_PARAMETERS" value="127.0.0.1 2000" />
-      <option name="VM_PARAMETERS" value="-Djava.net.preferIPv4Stack=true" />
+      <option name="PROGRAM_PARAMETERS" value="127.0.0.1 4000" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="MulticastServer_2" type="Application" factoryName="Application" singleton="false">
+      <option name="MAIN_CLASS_NAME" value="MulticastServer" />
+      <module name="Meta1" />
+      <option name="PROGRAM_PARAMETERS" value="127.0.0.1 4001" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -100,75 +97,22 @@
     <configuration name="RMIClient" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="RMIClient" />
       <module name="Meta1" />
-      <option name="VM_PARAMETERS" value="-Djava.net.preferIPv4Stack=true" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="RMIServer" type="Application" factoryName="Application">
+    <configuration name="RMIServer" type="Application" factoryName="Application" singleton="false" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="RMIServer" />
       <module name="Meta1" />
-      <option name="VM_PARAMETERS" value="-Djava.net.preferIPv4Stack=true" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="Tomcat Meta2" type="#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory" factoryName="Local" APPLICATION_SERVER_NAME="Tomcat 8.5.47" ALTERNATIVE_JRE_ENABLED="false">
-      <option name="OPEN_IN_BROWSER_URL" value="http://localhost:8080/Meta2/" />
-      <option name="UPDATING_POLICY" value="restart-server" />
-      <deployment>
-        <artifact name="Meta2">
-          <settings>
-            <option name="CONTEXT_PATH" value="/Meta2" />
-          </settings>
-        </artifact>
-      </deployment>
-      <server-settings>
-        <option name="BASE_DIRECTORY_NAME" value="Unnamed_Meta2_4" />
-      </server-settings>
-      <predefined_log_file enabled="true" id="Tomcat" />
-      <predefined_log_file enabled="true" id="Tomcat Catalina" />
-      <predefined_log_file id="Tomcat Manager" />
-      <predefined_log_file id="Tomcat Host Manager" />
-      <predefined_log_file id="Tomcat Localhost Access" />
-      <RunnerSettings RunnerId="Debug">
-        <option name="DEBUG_PORT" value="60618" />
-      </RunnerSettings>
-      <ConfigurationWrapper VM_VAR="JAVA_OPTS" RunnerId="Debug">
-        <option name="USE_ENV_VARIABLES" value="true" />
-        <STARTUP>
-          <option name="USE_DEFAULT" value="true" />
-          <option name="SCRIPT" value="" />
-          <option name="VM_PARAMETERS" value="" />
-          <option name="PROGRAM_PARAMETERS" value="" />
-        </STARTUP>
-        <SHUTDOWN>
-          <option name="USE_DEFAULT" value="true" />
-          <option name="SCRIPT" value="" />
-          <option name="VM_PARAMETERS" value="" />
-          <option name="PROGRAM_PARAMETERS" value="" />
-        </SHUTDOWN>
-      </ConfigurationWrapper>
-      <ConfigurationWrapper VM_VAR="JAVA_OPTS" RunnerId="Run">
-        <option name="USE_ENV_VARIABLES" value="true" />
-        <STARTUP>
-          <option name="USE_DEFAULT" value="true" />
-          <option name="SCRIPT" value="" />
-          <option name="VM_PARAMETERS" value="" />
-          <option name="PROGRAM_PARAMETERS" value="" />
-        </STARTUP>
-        <SHUTDOWN>
-          <option name="USE_DEFAULT" value="true" />
-          <option name="SCRIPT" value="" />
-          <option name="VM_PARAMETERS" value="" />
-          <option name="PROGRAM_PARAMETERS" value="" />
-        </SHUTDOWN>
-      </ConfigurationWrapper>
+    <configuration name="Yandex" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="Yandex" />
+      <module name="Meta2" />
       <method v="2">
         <option name="Make" enabled="true" />
-        <option name="BuildArtifacts" enabled="true">
-          <artifact name="Meta2" />
-        </option>
       </method>
     </configuration>
     <configuration name="Tomcat" type="#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory" factoryName="Local" APPLICATION_SERVER_NAME="Tomcat 8.5.47" ALTERNATIVE_JRE_ENABLED="false">
@@ -246,32 +190,30 @@
       </method>
     </configuration>
     <list>
+      <item itemvalue="Application.RMIClient" />
+      <item itemvalue="Application.MulticastServer_2" />
       <item itemvalue="Application.RMIServer" />
       <item itemvalue="Application.Yandex" />
       <item itemvalue="Application.MulticastServer_1" />
       <item itemvalue="Application.FacebookConnect" />
       <item itemvalue="Tomcat Server.Tomcat" />
-      <item itemvalue="Application.RMIClient" />
-      <item itemvalue="Application.MulticastServer" />
-      <item itemvalue="Tomcat Server.Tomcat Meta2" />
     </list>
-  </component>
-  <component name="ServiceViewManager">
-    <option name="viewStates">
+    <recent_temporary>
       <list>
-        <serviceView>
-          <treeState>
-            <expand />
-            <select />
-          </treeState>
-        </serviceView>
+        <item itemvalue="Application.FacebookConnect" />
+        <item itemvalue="Application.MulticastServer_1" />
+        <item itemvalue="Application.RMIServer" />
+        <item itemvalue="Application.Yandex" />
       </list>
-    </option>
+    </recent_temporary>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="d2e22b4e-583e-4770-9eed-a8ace478049c" name="Default Changelist" comment="" />
-      <created>1575848715689</created>
+      <changelist id="1cebd835-8165-47e0-9b03-c550efdbb3fc" name="Default Changelist" comment="" />
+      <created>1575730472199</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1575730472199</updated>
@@ -281,8 +223,7 @@
       <workItem from="1575807060394" duration="3345000" />
       <workItem from="1575811072448" duration="11698000" />
       <workItem from="1575837062053" duration="3079000" />
-      <updated>1575848715689</updated>
-      <workItem from="1575848716787" duration="162000" />
+      <workItem from="1575900070546" duration="301000" />
     </task>
     <servers />
   </component>
@@ -301,35 +242,5 @@
         </entry>
       </map>
     </option>
-  <component name="WindowStateProjectService">
-    <state x="304" y="187" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1575848878401">
-      <screen x="0" y="0" width="1680" height="1050" />
-    </state>
-    <state x="304" y="187" key="#com.intellij.execution.impl.EditConfigurationsDialog/1680.0.1920.1080/0.0.1680.1050@0.0.1680.1050" timestamp="1575848878401" />
-    <state x="577" y="316" key="#com.intellij.ide.util.TreeClassChooserDialog" timestamp="1575848876676">
-      <screen x="0" y="0" width="1680" height="1050" />
-    </state>
-    <state x="577" y="316" key="#com.intellij.ide.util.TreeClassChooserDialog/1680.0.1920.1080/0.0.1680.1050@0.0.1680.1050" timestamp="1575848876676" />
-    <state x="577" y="316" key="#com.intellij.ide.util.TreeClassChooserDialog/1680.23.1920.1057/0.0.1680.1050@0.0.1680.1050" timestamp="1575848771445" />
-    <state width="1638" height="295" key="GridCell.Tab.0.bottom" timestamp="1575848919300">
-      <screen x="0" y="0" width="1680" height="1050" />
-    </state>
-    <state width="1638" height="295" key="GridCell.Tab.0.bottom/1680.0.1920.1080/0.0.1680.1050@0.0.1680.1050" timestamp="1575848919300" />
-    <state width="1638" height="295" key="GridCell.Tab.0.center" timestamp="1575848919298">
-      <screen x="0" y="0" width="1680" height="1050" />
-    </state>
-    <state width="1638" height="295" key="GridCell.Tab.0.center/1680.0.1920.1080/0.0.1680.1050@0.0.1680.1050" timestamp="1575848919298" />
-    <state width="1638" height="295" key="GridCell.Tab.0.left" timestamp="1575848919298">
-      <screen x="0" y="0" width="1680" height="1050" />
-    </state>
-    <state width="1638" height="295" key="GridCell.Tab.0.left/1680.0.1920.1080/0.0.1680.1050@0.0.1680.1050" timestamp="1575848919298" />
-    <state width="1638" height="295" key="GridCell.Tab.0.right" timestamp="1575848919299">
-      <screen x="0" y="0" width="1680" height="1050" />
-    </state>
-    <state width="1638" height="295" key="GridCell.Tab.0.right/1680.0.1920.1080/0.0.1680.1050@0.0.1680.1050" timestamp="1575848919299" />
-    <state x="328" y="106" key="SettingsEditor" timestamp="1575848742342">
-      <screen x="0" y="0" width="1680" height="1050" />
-    </state>
-    <state x="328" y="106" key="SettingsEditor/1680.23.1920.1057/0.0.1680.1050@0.0.1680.1050" timestamp="1575848742342" />
   </component>
 </project>
