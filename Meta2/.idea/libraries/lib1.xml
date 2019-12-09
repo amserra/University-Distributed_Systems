@@ -16,6 +16,11 @@
       <root url="jar://$PROJECT_DIR$/Meta2/WebContent/WEB-INF/lib/javassist-3.11.0.GA.jar!/" />
       <root url="jar://$PROJECT_DIR$/Meta2/WebContent/WEB-INF/lib/javax.servlet.jsp.jstl-1.2.1.jar!/" />
       <root url="jar://$PROJECT_DIR$/Meta2/WebContent/WEB-INF/lib/json-simple-1.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Meta2/WebContent/WEB-INF/lib/jackson-annotations-2.10.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Meta2/WebContent/WEB-INF/lib/jackson-core-2.10.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Meta2/WebContent/WEB-INF/lib/jackson-databind-2.10.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Meta2/WebContent/WEB-INF/lib/scribejava-apis-6.9.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Meta2/WebContent/WEB-INF/lib/scribejava-core-6.9.0.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
