@@ -6,7 +6,13 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1cebd835-8165-47e0-9b03-c550efdbb3fc" name="Default Changelist" comment="" />
+    <list default="true" id="1cebd835-8165-47e0-9b03-c550efdbb3fc" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Meta2/WebContent/login.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/Meta2/WebContent/login.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Meta2/src/FacebookConnect.java" beforeDir="false" afterPath="$PROJECT_DIR$/Meta2/src/FacebookConnect.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Meta2/src/struts.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Meta2/src/struts.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/artifacts/Meta2/Meta2.war" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/Meta2/Meta2.war" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -223,7 +229,9 @@
       <workItem from="1575807060394" duration="3345000" />
       <workItem from="1575811072448" duration="11698000" />
       <workItem from="1575837062053" duration="3079000" />
-      <workItem from="1575900070546" duration="301000" />
+      <workItem from="1575900070546" duration="916000" />
+      <workItem from="1575906126433" duration="1412000" />
+      <workItem from="1575925624581" duration="4030000" />
     </task>
     <servers />
   </component>
