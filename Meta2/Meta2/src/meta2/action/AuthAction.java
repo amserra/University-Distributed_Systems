@@ -63,8 +63,6 @@ public class AuthAction extends ActionSupport implements SessionAware {
                             this.getHeyBean().setUsername(this.username);
                             session.put("username", username);
 
-
-
                         } else if (status.equals("invalid")) {
                             if (isLogin) {
                                 System.out.println("Login failed. Try again.\n");

@@ -25,7 +25,7 @@
 				</ul>
 				<ul class="right">
 					<li><a href="#">Login</a></li>
-					<li><a href="<s:url action="registerView"/>">Registo</a></li>
+					<li><a href="<s:url action="registerView"/>">Register</a></li>
 				</ul>
 			</div>
 		</nav>
@@ -67,7 +67,15 @@
 		<div class="modal">
 			<div class="modal-content">
 				<h4>Login</h4>
-				<p>${uiMsg}</p>
+				<c:choose>
+					<c:when test="${notificationMsg != null}">
+						<h5>${uiMsg}<br>${notificationMsg}</h5>
+					</c:when>
+					<c:otherwise>
+						<h5>${uiMsg}</h5>
+					</c:otherwise>
+				</c:choose>
+
 			</div>
 			<div class="modal-footer">
 				<c:choose>

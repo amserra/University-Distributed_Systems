@@ -30,7 +30,7 @@
 					</c:when>
 					<c:otherwise>
 						<li><a href="<s:url action="loginView"/>">Login</a></li>
-						<li><a href="<s:url action="registerView"/>">Registo</a></li>
+						<li><a href="<s:url action="registerView"/>">Register</a></li>
 					</c:otherwise>
 				</c:choose>
 				</ul>
