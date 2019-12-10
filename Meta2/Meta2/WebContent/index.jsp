@@ -49,7 +49,14 @@
 						<s:form action="search" method="POST">
 							<div class="input-field row s12">
 								<input id="search" type="text" name="searchTerms" class="validate" autofocus>
-								<label for="search">O que busca?</label>
+								<c:choose>
+									<c:when test="${empty session.username}">
+										<label for="search">O que busca?</label>
+									</c:when>
+									<c:otherwise>
+										<label for="search">${session.username}, o que busca?</label>
+									</c:otherwise>
+								</c:choose>
 							</div>
 
 							<div class="row s12 center-align">

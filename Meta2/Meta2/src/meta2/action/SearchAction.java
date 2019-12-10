@@ -16,7 +16,6 @@ public class SearchAction extends ActionSupport implements SessionAware {
 	@Override
 	public String execute() {
 		System.out.println("SearchTerms:"+searchTerms);
-		// any username is accepted without confirmation (should check using RMI)
 		if(this.searchTerms != null && !searchTerms.equals("")) {
 			System.out.println("Putting in session");
 			//session.put("loggedin", true); // this marks the user as logged in
