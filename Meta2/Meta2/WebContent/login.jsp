@@ -77,10 +77,10 @@
 				<h4>Login</h4>
 				<c:choose>
 					<c:when test="${notificationMsg != null}">
-						<h5>${uiMsg}<br>${notificationMsg}</h5>
+						<p>${uiMsg}<br>${notificationMsg}</p>
 					</c:when>
 					<c:otherwise>
-						<h5>${uiMsg}</h5>
+						<p>${uiMsg}</p>
 					</c:otherwise>
 				</c:choose>
 
