@@ -71,6 +71,7 @@ public class MulticastServerAction extends Thread {
                 String username = receivedSplit[2].split("\\|\\|\\|")[1];
                 String password = receivedSplit[3].split("\\|\\|\\|")[1];
 
+
                 for (User u : listUsers) {
                     if (u.getUsername().equals(username))
                         checkUser = true;
@@ -108,26 +109,62 @@ public class MulticastServerAction extends Thread {
                 String username = receivedSplit[2].split("\\|\\|\\|")[1];
                 String password = receivedSplit[3].split("\\|\\|\\|")[1];
 
-                for (User u : listUsers) {
-                    if (u.getUsername().equals(username) && u.getPassword().equals(password)) {
-                        checkUser = true;
-                        user = u;
-                        break;
-                    }
-                }
+                if(username.matches("[0-9]+")){
 
-                if (checkUser) {
-                    user.setLoggedIn(true);
-                    user.setClientNo(Integer.parseInt(clientNo));
-                    message = "type|||loginResult;;clientNo|||" + clientNo + ";;status|||valid;;username|||"
-                            + user.getUsername() + ";;isAdmin|||" + user.isAdmin() + ";;notification|||"
-                            + user.isNotification();
-                    user.setNotification(false);
+                    for (User u : listUsers) {
+                        if (u.getId() != null && u.getId().equals(username))
+                            checkUser = true;
+                    }
+
+                    if (checkUser) {
+                        user.setLoggedIn(true);
+                        user.setClientNo(Integer.parseInt(clientNo));
+                        message = "type|||loginResult;;clientNo|||" + clientNo + ";;status|||valid;;username|||"
+                                + user.getUsername() + ";;isAdmin|||" + user.isAdmin() + ";;notification|||"
+                                + user.isNotification();
+                        user.setNotification(false);
+
+
+
+                    } else{
+                        User newUser;
+                        // First user is admin
+                        if (listUsers.isEmpty())
+                            newUser = new User(username, null, true, true, Integer.parseInt(clientNo), false);
+                            // Other is user
+                        else
+                            newUser = new User(username, null, false, true, Integer.parseInt(clientNo), false);
+
+                        listUsers.add(newUser);
+                        message = "type|||loginResult;;clientNo|||" + clientNo + ";;status|||valid;;username|||"
+                                + newUser.getUsername() + ";;isAdmin|||" + newUser.isAdmin() + ";;notification|||false";
+                    }
 
                     saveUsers();
 
-                } else {
-                    message = "type|||loginResult;;clientNo|||" + clientNo + ";;status|||invalid";
+                } else{
+
+                    for (User u : listUsers) {
+                        if (u.getUsername().equals(username) && u.getPassword().equals(password)) {
+                            checkUser = true;
+                            user = u;
+                            break;
+                        }
+                    }
+
+                    if (checkUser) {
+                        user.setLoggedIn(true);
+                        user.setClientNo(Integer.parseInt(clientNo));
+                        message = "type|||loginResult;;clientNo|||" + clientNo + ";;status|||valid;;username|||"
+                                + user.getUsername() + ";;isAdmin|||" + user.isAdmin() + ";;notification|||"
+                                + user.isNotification();
+                        user.setNotification(false);
+
+                        saveUsers();
+
+                    } else {
+                        message = "type|||loginResult;;clientNo|||" + clientNo + ";;status|||invalid";
+                    }
                 }
 
                 System.out.println("Message sent: " + message);

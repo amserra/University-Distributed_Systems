@@ -54,7 +54,14 @@
 											<label for="search">O que busca?</label>
 										</c:when>
 										<c:otherwise>
-											<label for="search">${session.username}, o que busca?</label>
+											<c:choose>
+												<c:when test="${empty session.name}">
+													<label for="search">${session.username}, o que busca?</label>
+												</c:when>
+												<c:otherwise>
+													<label for="search">${session.name}, o que busca?</label>
+												</c:otherwise>
+											</c:choose>
 										</c:otherwise>
 									</c:choose>
 								</div>
