@@ -52,9 +52,17 @@
 											</div>
 										</div>
 										<div class="row card-action">
-											<button class="btn waves-effect waves-light blue" type="submit">Login</button>
+											<div class="col">
+												<button class="btn waves-effect waves-light blue" type="submit">Login</button>
+											</div>
+											</s:form>
+											<s:form action="loginFacebook" method="POST">
+											<div class="col">
+												<button class="btn waves-effect waves-light blue" type="submit">Login with Facebook</button>
+											</div>
+											</s:form>
 										</div>
-									</s:form>
+
 								</div>
 							</div>
 						</div>

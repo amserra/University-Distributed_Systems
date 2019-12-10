@@ -7,7 +7,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1cebd835-8165-47e0-9b03-c550efdbb3fc" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/Meta2/WebContent/exchangeTokenForCode.jsp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Meta2/WebContent/facebookLogin.jsp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Meta2/src/meta2/action/ExchangeAction.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Meta1/files/users_1.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Meta1/files/users_1.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Meta2/WebContent/login.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/Meta2/WebContent/login.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Meta2/src/FacebookConnect.java" beforeDir="false" afterPath="$PROJECT_DIR$/Meta2/src/FacebookConnect.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Meta2/src/struts.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Meta2/src/struts.xml" afterDir="false" />
@@ -25,6 +29,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="HTTP Request" />
+        <option value="Jsp File" />
         <option value="Class" />
         <option value="CSS File" />
         <option value="JavaScript File" />
@@ -45,13 +50,11 @@
     <option name="FILTER_DEBUG" value="true" />
     <option name="CUSTOM_FILTER" />
   </component>
+  <component name="ProjectCodeStyleSettingsMigration">
+    <option name="version" value="1" />
+  </component>
   <component name="ProjectId" id="1UewfUInwM7wg0Du4erUSYPN4Ey" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
-  <component name="ProjectViewState">
-    <option name="hideEmptyMiddlePackages" value="true" />
-    <option name="showExcludedFiles" value="true" />
-    <option name="showLibraryContents" value="true" />
-  </component>
   <component name="PropertiesComponent">
     <property name="Downloaded.Files.Path.Enabled" value="false" />
     <property name="Repository.Attach.Annotations" value="false" />
@@ -71,7 +74,6 @@
       <option name="MAIN_CLASS_NAME" value="MulticastServer" />
       <module name="Meta1" />
       <option name="PROGRAM_PARAMETERS" value="127.0.0.1 4001" />
-      <option name="VM_PARAMETERS" value="-Djava.net.preferIPv4Stack=true" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -83,10 +85,9 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="RMIServer" type="Application" factoryName="Application" singleton="false" nameIsGenerated="true">
+    <configuration name="RMIServer" type="Application" factoryName="Application" singleton="false" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="RMIServer" />
       <module name="Meta1" />
-      <option name="VM_PARAMETERS" value="-Djava.net.preferIPv4Stack=true" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -162,21 +163,22 @@
       </method>
     </configuration>
     <list>
-      <item itemvalue="Application.MulticastServer" />
       <item itemvalue="Application.RMIClient" />
+      <item itemvalue="Application.MulticastServer_2" />
       <item itemvalue="Application.RMIServer" />
-      <item itemvalue="Tomcat Server.Tomcat Meta2" />
+      <item itemvalue="Application.Yandex" />
+      <item itemvalue="Application.MulticastServer_1" />
+      <item itemvalue="Application.FacebookConnect" />
+      <item itemvalue="Tomcat Server.Tomcat" />
     </list>
-  </component>
-  <component name="ServiceViewManager">
-    <option name="viewStates">
+    <recent_temporary>
       <list>
+        <item itemvalue="Application.FacebookConnect" />
         <item itemvalue="Application.MulticastServer_1" />
         <item itemvalue="Application.RMIServer" />
-        <item itemvalue="Application.FacebookConnect" />
         <item itemvalue="Application.Yandex" />
       </list>
-    </option>
+    </recent_temporary>
   </component>
   <component name="SvnConfiguration">
     <configuration />
