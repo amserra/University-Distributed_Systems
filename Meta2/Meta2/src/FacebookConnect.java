@@ -41,10 +41,6 @@ public class FacebookConnect {
         System.out.println("Fetching the Authorization URL...");
         final String authorizationUrl = service.getAuthorizationUrl(secretState);
         System.out.println("Got the Authorization URL!");
-
-        String fetchedUrl = getFinalURL(authorizationUrl);
-        System.out.println("FetchedURL is:" + fetchedUrl);
-
         System.out.println("Now go and authorize ScribeJava here:");
         System.out.println(authorizationUrl);
         System.out.println("And paste the authorization code here");
