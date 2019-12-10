@@ -14,7 +14,7 @@ import rmiserver.ServerInterface;
 public class AuthAction extends ActionSupport implements SessionAware {
     private static final long serialVersionUID = 4L;
     private Map<String, Object> session;
-    private String username = null, password = null, type = null;
+    private String username = null, password = null, type = null, uiMsg = null, notificationMsg = null;
 
     @Override
     public String execute() {
@@ -49,14 +49,17 @@ public class AuthAction extends ActionSupport implements SessionAware {
 
                             if (isLogin) {
                                 System.out.println("Login successful. Welcome " + usr + "\n");
+                                uiMsg = "Login successful. Welcome " + usr;
                                 boolean notification = Boolean.parseBoolean(parameters[5].split("\\|\\|\\|")[1]);
-                                if (notification)
+                                if (notification) {
                                     System.out.println("Notification: You have been promoted to admin!");
+                                    notificationMsg = "You have been promoted to admin!";
+                                }
                             } else {
                                 System.out.println("Register successful. Welcome " + usr + "\n");
+                                uiMsg = "Register successful. Welcome " + usr;
                             }
 
-                            //userUI.mainMenu();
                             this.getHeyBean().setUsername(this.username);
                             session.put("username", username);
 
@@ -65,16 +68,15 @@ public class AuthAction extends ActionSupport implements SessionAware {
                         } else if (status.equals("invalid")) {
                             if (isLogin) {
                                 System.out.println("Login failed. Try again.\n");
-                                //userUI.login();
+                                uiMsg = "Login failed. Try again.";
                             } else {
-                                System.out.println("Register failed. Try again.\n");
-                                //userUI.register();
+                                System.out.println("\n");
+                                uiMsg = "Register failed. Try again.";
                             }
                         }
                     }
                 } else {
                     System.out.println("TIMEOUT: Could not recieve info in 30s. Returning to main menu\n");
-                    //userUI.mainMenu();
                 }
             } catch (RemoteException e) {
                 return ERROR;
@@ -97,6 +99,10 @@ public class AuthAction extends ActionSupport implements SessionAware {
         this.password = password; // what about this input?
     }
 
+    public void setUiMsg(String uiMsg) {this.uiMsg = uiMsg;}
+
+    public void setNotificationMsg(String notificationMsg) {this.notificationMsg = notificationMsg;}
+
     public void setType(String type) {
         this.type = type;
     }
@@ -110,6 +116,10 @@ public class AuthAction extends ActionSupport implements SessionAware {
     public void setHeyBean(HeyBean heyBean) {
         this.session.put("heyBean", heyBean);
     }
+
+    public String getUiMsg() {return this.uiMsg;}
+
+    public String getNotificationMsg() {return this.notificationMsg;}
 
     @Override
     public void setSession(Map<String, Object> session) {

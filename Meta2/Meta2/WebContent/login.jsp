@@ -4,28 +4,26 @@
 		 pageEncoding="UTF-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-<head>
-	<meta http-equiv="Content-Type" content="text/html, charset=UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Login</title>
-	<link rel="icon" href="assets/img/logo_transparent_no_letter.png">
-	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-	<link type="text/css" rel="stylesheet" href="css/materialize.min.css" media="screen,projection">
-	<link href="css/navbar.css" rel="stylesheet">
-	<link href="css/register.css" rel="stylesheet">
-</head>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html, charset=UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Login</title>
+		<link rel="icon" href="assets/img/logo_transparent_no_letter.png">
+		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+		<link type="text/css" rel="stylesheet" href="css/materialize.min.css" media="screen,projection">
+		<link href="css/navbar.css" rel="stylesheet">
+		<link href="css/register.css" rel="stylesheet">
+	</head>
 
 	<body>
-	<div id="fb-root"></div>
-
 		<nav>
 			<div class="nav-wrapper blue lighten-2">
 				<ul class="left">
-					<li><a href="<s:url action="index"/>"><img id="navImg" class="circle responsive-img" src="assets/img/logo_transparent_no_letter.png" alt="Logo"></a></li>
+					<li><a href="<s:url action="indexView"/>"><img id="navImg" class="circle responsive-img" src="assets/img/logo_transparent_no_letter.png" alt="Logo"></a></li>
 				</ul>
 				<ul class="right">
 					<li><a href="#">Login</a></li>
-					<li><a href="<s:url action="register"/>">Registo</a></li>
+					<li><a href="<s:url action="registerView"/>">Registo</a></li>
 				</ul>
 			</div>
 		</nav>
@@ -38,32 +36,42 @@
 							<div class="card">
 								<div class="card-content">
 									<span class="card-title black-text">Login</span>
-									<s:form action="login" method="POST">
+									<s:form action="loginAction" method="POST">
 										<div class="row">
 											<div class="input-field col s12">
-												<input id="firstname" type="text" class="validate">
-												<label for="firstname" class="active">Username</label>
+												<input id="username" type="text" class="validate" name="username">
+												<label for="username" class="active">Username</label>
 											</div>
 										</div>
 										<div class="row">
 											<div class="input-field col s12">
-												<input id="lastname" type="password" class="validate">
-												<label for="lastname" class="active">Password</label>
+												<input id="password" type="password" class="validate" name="password">
+												<label for="password" class="active">Password</label>
 											</div>
 										</div>
-
 										<div class="row card-action">
-											<div class="col">
-												<a class="btn waves-effect waves-light blue">Login</a>
-											</div>
-											<div class="col">
-												<a class="btn waves-effect waves-light blue lighten-2" href="<s:url action="register"/>">Registo</a>
-											</div>
-											<div class="col">
-												<a class="btn waves-effect waves-light blue" href="<s:url action="loginFacebook"/>">Login with Facebook</a>
-											</div>
+											<button class="btn waves-effect waves-light blue" type="submit">Login</button>
 										</div>
 									</s:form>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 
-</body>
+		<!-- Modal Structure -->
+		<div id="modal1" class="modal">
+			<div class="modal-content">
+				<h4>Modal Header</h4>
+				<p>A bunch of text</p>
+			</div>
+			<div class="modal-footer">
+				<a href="#!" class="modal-close waves-effect waves-green btn-flat">Agree</a>
+			</div>
+		</div>
+
+		<script type="text/javascript" src="js/materialize.min.js"></script>
+	</body>
 </html>
