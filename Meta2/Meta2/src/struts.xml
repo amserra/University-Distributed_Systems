@@ -41,14 +41,14 @@ and should reside on the classpath of the webapp (generally /WEB-INF/classes). -
 
         <action name="registerAction" class="meta2.action.AuthAction" method="execute">
             <param name="type">register</param>
-            <result name="success">/index.jsp</result>
+            <result name="success">/register.jsp</result>
             <result name="none">/register.jsp</result>
             <result name="error">/error.jsp</result>
         </action>
 
         <action name="loginAction" class="meta2.action.AuthAction" method="execute">
             <param name="type">login</param>
-            <result name="success">/index.jsp</result>
+            <result name="success">/login.jsp</result>
             <result name="none">/login.jsp</result>
             <result name="error">/error.jsp</result>
         </action>
