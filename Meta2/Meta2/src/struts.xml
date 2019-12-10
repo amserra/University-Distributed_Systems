@@ -39,6 +39,10 @@ and should reside on the classpath of the webapp (generally /WEB-INF/classes). -
             <result>/login.jsp</result>
         </action>
 
+        <action name="searchResultsView">
+            <result>/searchResults.jsp</result>
+        </action>
+
         <action name="registerAction" class="meta2.action.AuthAction" method="execute">
             <param name="type">register</param>
             <result name="success">/register.jsp</result>
@@ -65,8 +69,6 @@ and should reside on the classpath of the webapp (generally /WEB-INF/classes). -
         <action name="exchangeAction" class="meta2.action.ExchangeAction" method="execute">
             <result name="success">/index.jsp</result>
         </action>
-
-        <!-- 'login' action calls 'execute' in 'LoginAction' -->
 
         <action name="search" class="meta2.action.SearchAction" method="execute">
             <result name="success">/register.jsp</result>
