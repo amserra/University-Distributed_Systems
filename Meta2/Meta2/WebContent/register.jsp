@@ -25,7 +25,7 @@
 				</ul>
 				<ul class="right">
 					<li><a href="<s:url action="loginView"/>">Login</a></li>
-					<li><a href="#">Registo</a></li>
+					<li><a href="#">Register</a></li>
 				</ul>
 			</div>
 		</nav>
@@ -53,7 +53,7 @@
 										</div>
 
 										<div class="row card-action">
-											<button class="btn waves-effect waves-light blue" type="submit">Registar</button>
+											<button class="btn waves-effect waves-light blue" type="submit">Register</button>
 										</div>
 									</s:form>
 								</div>

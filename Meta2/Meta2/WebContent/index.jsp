@@ -1,7 +1,6 @@
 <%@ taglib prefix="s" uri="/struts-tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 	<head>
@@ -13,7 +12,7 @@
 		<link type="text/css" rel="stylesheet" href="css/materialize.min.css" media="screen,projection">
 		<link href="css/navbar.css" rel="stylesheet">
 		<link href="css/index.css" rel="stylesheet">
-
+		<script type="text/javascript" src="js/materialize.min.js"></script>
 	</head>
 
 	<body>
@@ -30,7 +29,7 @@
 					</c:when>
 					<c:otherwise>
 						<li><a href="<s:url action="loginView"/>">Login</a></li>
-						<li><a href="<s:url action="registerView"/>">Registo</a></li>
+						<li><a href="<s:url action="registerView"/>">Register</a></li>
 					</c:otherwise>
 				</c:choose>
 				</ul>
@@ -45,6 +44,7 @@
 							<div class="row center-align">
 								<img id="mainImg" class="circle responsive-img" src="assets/img/logo_transparent.png" alt="ucBusca">
 							</div>
+							<a href="<s:url action="searchResultsView"/>">searchResults</a>
 							<!--- Em action mete-se o nome da action...--->
 							<s:form action="search" method="POST">
 								<div class="input-field row s12">
@@ -80,7 +80,5 @@
 				</div>
 			</div>
 		</div>
-
-		<script type="text/javascript" src="js/materialize.min.js"></script>
 	</body>
 </html>
