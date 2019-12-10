@@ -6,7 +6,8 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d2e22b4e-583e-4770-9eed-a8ace478049c" name="Default Changelist" comment="" />
+    <list default="true" id="1cebd835-8165-47e0-9b03-c550efdbb3fc" name="Default Changelist" comment="" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -34,8 +35,14 @@
     <option name="showExcludedFiles" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
+  <component name="ProjectId" id="1UewfUInwM7wg0Du4erUSYPN4Ey" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="PropertiesComponent">
-    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="Downloaded.Files.Path.Enabled" value="false" />
+    <property name="Repository.Attach.Annotations" value="false" />
+    <property name="Repository.Attach.JavaDocs" value="false" />
+    <property name="Repository.Attach.Sources" value="false" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="list.type.of.created.stylesheet" value="CSS" />
     <property name="project.structure.last.edited" value="Project" />
@@ -53,8 +60,7 @@
     <configuration name="MulticastServer" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="MulticastServer" />
       <module name="Meta1" />
-      <option name="PROGRAM_PARAMETERS" value="127.0.0.1 2000" />
-      <option name="VM_PARAMETERS" value="-Djava.net.preferIPv4Stack=true" />
+      <option name="PROGRAM_PARAMETERS" value="127.0.0.1 4001" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -66,10 +72,9 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="RMIServer" type="Application" factoryName="Application">
+    <configuration name="RMIServer" type="Application" factoryName="Application" singleton="false" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="RMIServer" />
       <module name="Meta1" />
-      <option name="VM_PARAMETERS" value="-Djava.net.preferIPv4Stack=true" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -93,8 +98,23 @@
       <predefined_log_file id="Tomcat Host Manager" />
       <predefined_log_file id="Tomcat Localhost Access" />
       <RunnerSettings RunnerId="Debug">
-        <option name="DEBUG_PORT" value="60618" />
+        <option name="DEBUG_PORT" value="57183" />
       </RunnerSettings>
+      <ConfigurationWrapper VM_VAR="JAVA_OPTS" RunnerId="Cover">
+        <option name="USE_ENV_VARIABLES" value="true" />
+        <STARTUP>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </STARTUP>
+        <SHUTDOWN>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </SHUTDOWN>
+      </ConfigurationWrapper>
       <ConfigurationWrapper VM_VAR="JAVA_OPTS" RunnerId="Debug">
         <option name="USE_ENV_VARIABLES" value="true" />
         <STARTUP>
@@ -133,14 +153,15 @@
       </method>
     </configuration>
     <list>
-      <item itemvalue="Application.RMIServer" />
       <item itemvalue="Application.RMIClient" />
-      <item itemvalue="Application.MulticastServer" />
-      <item itemvalue="Tomcat Server.Tomcat Meta2" />
+      <item itemvalue="Application.MulticastServer_2" />
+      <item itemvalue="Application.RMIServer" />
+      <item itemvalue="Application.Yandex" />
+      <item itemvalue="Application.MulticastServer_1" />
+      <item itemvalue="Application.FacebookConnect" />
+      <item itemvalue="Tomcat Server.Tomcat" />
     </list>
-  </component>
-  <component name="ServiceViewManager">
-    <option name="viewStates">
+    <recent_temporary>
       <list>
         <serviceView>
           <treeState>
@@ -159,12 +180,15 @@
           </treeState>
         </serviceView>
       </list>
-    </option>
+    </recent_temporary>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="d2e22b4e-583e-4770-9eed-a8ace478049c" name="Default Changelist" comment="" />
-      <created>1575848715689</created>
+      <changelist id="1cebd835-8165-47e0-9b03-c550efdbb3fc" name="Default Changelist" comment="" />
+      <created>1575730472199</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1575848715689</updated>
