@@ -64,51 +64,6 @@
 											</div>
 										</div>
 									</s:form>
-<body>
-<nav>
-	<div class="nav-wrapper blue lighten-2">
-		<ul class="left">
-			<li><a href="<s:url action="indexView"/>"><img id="navImg" class="circle responsive-img" src="assets/img/logo_transparent_no_letter.png" alt="Logo"></a></li>
-		</ul>
-		<ul class="right">
-			<li><a href="#">Login</a></li>
-			<li><a href="<s:url action="registerView"/>">Registo</a></li>
-		</ul>
-	</div>
-</nav>
-
-<div class="valign-wrapper" style="width:100%;height:80%;position: absolute;">
-	<div class="valign" style="width:100%;">
-		<div class="container">
-			<div class="row">
-				<div class="col s12 m6 offset-m3">
-					<div class="card">
-						<div class="card-content">
-							<span class="card-title black-text">Login</span>
-							<s:form action="loginAction" method="POST">
-								<div class="row">
-									<div class="input-field col s12">
-										<input id="username" type="text" class="validate" name="username">
-										<label for="username" class="active">Username</label>
-									</div>
-								</div>
-								<div class="row">
-									<div class="input-field col s12">
-										<input id="password" type="password" class="validate" name="password">
-										<label for="password" class="active">Password</label>
-									</div>
-								</div>
-								<div class="row card-action">
-									<button class="btn waves-effect waves-light blue" type="submit">Login</button>
-								</div>
-							</s:form>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
 
 </body>
 </html>
