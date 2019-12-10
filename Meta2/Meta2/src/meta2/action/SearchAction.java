@@ -11,17 +11,15 @@ import meta2.model.HeyBean;
 public class SearchAction extends ActionSupport implements SessionAware {
 	private static final long serialVersionUID = 4L;
 	private Map<String, Object> session;
-	private String searchTerms = null, password = null;
+	private String searchTerms = null;
 
 	@Override
 	public String execute() {
+		System.out.println("SearchTerms:"+searchTerms);
 		// any username is accepted without confirmation (should check using RMI)
 		if(this.searchTerms != null && !searchTerms.equals("")) {
-			this.getHeyBean().setUsername(this.searchTerms);
-			this.getHeyBean().setPassword(this.password);
 			System.out.println("Putting in session");
-			session.put("username", searchTerms);
-			session.put("loggedin", true); // this marks the user as logged in
+			//session.put("loggedin", true); // this marks the user as logged in
 			System.out.println("Returning success");
 			return SUCCESS;
 		}
@@ -33,24 +31,16 @@ public class SearchAction extends ActionSupport implements SessionAware {
 	
 	public void setSearchTerms(String username) {
 		this.searchTerms = username; // will you sanitize this input? maybe use a prepared statement?
-		System.out.println("Setting username...");
 	}
 
-	public void setPassword(String password) {
-		this.password = password; // what about this input?
-		System.out.println("Setting password...");
-	}
-	
 	public HeyBean getHeyBean() {
 		if(!session.containsKey("heyBean"))
 			this.setHeyBean(new HeyBean());
-		System.out.println("didn't create bean");
 		return (HeyBean) session.get("heyBean");
 	}
 
 	public void setHeyBean(HeyBean heyBean) {
 		this.session.put("heyBean", heyBean);
-		System.out.println("Created bean!");
 	}
 
 	@Override

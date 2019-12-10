@@ -1,4 +1,5 @@
 <%@ taglib prefix="s" uri="/struts-tags"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -22,8 +23,16 @@
 				<li><a href="#"><img id="navImg" class="circle responsive-img" src="assets/img/logo_transparent_no_letter.png" alt="Logo"></a></li>
 			</ul>
 			<ul class="right">
-				<li><a href="<s:url action="login"/>">Login</a></li>
-				<li><a href="<s:url action="register"/>">Registo</a></li>
+			<c:choose>
+				<c:when test="${(session.typeOfClient eq 'user') || (session.typeOfClient eq 'admin')}">
+					<li><a style="pointer-events: none;cursor: default">${session.username}</a></li>
+					<li><a href="<s:url action="logoutAction"/>">Logout</a></li>
+				</c:when>
+				<c:otherwise>
+					<li><a href="<s:url action="loginView"/>">Login</a></li>
+					<li><a href="<s:url action="registerView"/>">Registo</a></li>
+				</c:otherwise>
+			</c:choose>
 			</ul>
 		</div>
 	</nav>
@@ -39,7 +48,7 @@
 						<!--- Em action mete-se o nome da action...--->
 						<s:form action="search" method="POST">
 							<div class="input-field row s12">
-								<input id="search" type="text" name="searchTerms" class="validate">
+								<input id="search" type="text" name="searchTerms" class="validate" autofocus>
 								<label for="search">O que busca?</label>
 							</div>
 
