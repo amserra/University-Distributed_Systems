@@ -1,3 +1,6 @@
+import rmiserver.ClientInterface;
+import rmiserver.ServerInterface;
+
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.MalformedURLException;
@@ -68,12 +71,20 @@ public class RMIServer extends UnicastRemoteObject implements ServerInterface {
         connectToRMIServer();
     }
 
-    // ServerInterface methods (documentation on ServerInterface class)
+    // rmiserver.ServerInterface methods (documentation on rmiserver.ServerInterface class)
 
     public String sayHelloFromBackup() throws RemoteException {
         System.out.println("[Backup server] Has just connected.");
         return "Connected to RMI Primary Server successfully!";
     }
+
+    public String sayHelloFromClient() throws RemoteException {
+        System.out.println("[Client no " + clientNo + "] " + "Has just connected.");
+        String msg = "Connected to RMI Primary Server successfully!\nServer gave me the id no " + clientNo;
+        clientNo++;
+        return msg;
+    }
+
 
     public String sayHelloFromClient(ClientInterface client) throws RemoteException {
         System.out.println("[Client no " + clientNo + "] " + "Has just connected.");
@@ -109,6 +120,18 @@ public class RMIServer extends UnicastRemoteObject implements ServerInterface {
         String msgReceive = connectToMulticast(clientNo, msg);
         System.out.println("Mensagem recebida: " + msgReceive);
         return msgReceive;
+    }
+
+    public String logout(int clientNo, String username) throws RemoteException {
+        if (username != null) {
+            String msg = "type|||logout;;clientNo|||" + clientNo + ";;username|||" + username;
+            System.out.println("Mensagem a ser enviada: " + msg);
+            String msgReceive = connectToMulticast(clientNo, msg);
+            System.out.println("Mensagem recebida: " + msgReceive);
+            return msgReceive;
+        }
+        // Else
+        return "ERROR LOGOUT";
     }
 
     public String logout(int clientNo, String username, boolean exit) throws RemoteException {
@@ -198,7 +221,7 @@ public class RMIServer extends UnicastRemoteObject implements ServerInterface {
         return msgReceive;
     }
 
-    // End of ServerInterface methods
+    // End of rmiserver.ServerInterface methods
 
     /**
      * Tries to connect the BackupRMIServer. In case it fails, creates a new

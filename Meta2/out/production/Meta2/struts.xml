@@ -10,12 +10,12 @@ and should reside on the classpath of the webapp (generally /WEB-INF/classes). -
 <struts>
 
     <!-- devMode equals debug information and reload everything for every request -->
-    <constant name="struts.devMode" value="true" />
-    <constant name="struts.ui.theme" value="simple" />
+    <constant name="struts.devMode" value="true"/>
+    <constant name="struts.ui.theme" value="simple"/>
 
     <package name="meta2" extends="struts-default">
 
-        <default-action-ref name="index" />
+        <default-action-ref name="indexView"/>
 
         <global-results>
             <result name="error">/error.jsp</result>
@@ -27,16 +27,35 @@ and should reside on the classpath of the webapp (generally /WEB-INF/classes). -
         </global-exception-mappings>
 
         <!-- 'index' action leads to the view provided by index.jsp -->
-        <action name="index">
+        <action name="indexView">
             <result>/index.jsp</result>
         </action>
 
-        <action name="login">
+        <action name="registerView">
+            <result>/register.jsp</result>
+        </action>
+
+        <action name="loginView">
             <result>/login.jsp</result>
         </action>
 
-        <action name="register">
-            <result>/register.jsp</result>
+        <action name="registerAction" class="meta2.action.AuthAction" method="execute">
+            <param name="type">register</param>
+            <result name="success">/index.jsp</result>
+            <result name="none">/register.jsp</result>
+            <result name="error">/error.jsp</result>
+        </action>
+
+        <action name="loginAction" class="meta2.action.AuthAction" method="execute">
+            <param name="type">login</param>
+            <result name="success">/index.jsp</result>
+            <result name="none">/login.jsp</result>
+            <result name="error">/error.jsp</result>
+        </action>
+
+        <action name="logoutAction" class="meta2.action.LogoutAction">
+            <result name="success">/index.jsp</result>
+            <result name="error">/error.jsp</result>
         </action>
 
         <action name="loginFacebook">
@@ -44,6 +63,7 @@ and should reside on the classpath of the webapp (generally /WEB-INF/classes). -
         </action>
 
         <!-- 'login' action calls 'execute' in 'LoginAction' -->
+
         <action name="search" class="meta2.action.SearchAction" method="execute">
             <result name="success">/register.jsp</result>
             <result name="login">/index.jsp</result>

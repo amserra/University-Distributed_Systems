@@ -1,8 +1,10 @@
+package rmiserver;
+
 import java.rmi.Remote;
 import java.util.HashMap;
 
 /**
- * ServerInterface class that includes all the RMIServer remote methods
+ * rmiserver.ServerInterface class that includes all the RMIServer remote methods
  */
 public interface ServerInterface extends Remote {
         /**
@@ -12,6 +14,14 @@ public interface ServerInterface extends Remote {
          * @throws java.rmi.RemoteException
          */
         public String sayHelloFromBackup() throws java.rmi.RemoteException;
+
+        /**
+         * Remote Hello RMI method from Tomcat to PrimaryRMIServer
+         *
+         * @return Answer message
+         * @throws java.rmi.RemoteException
+         */
+        public String sayHelloFromClient() throws java.rmi.RemoteException;
 
         /**
          * Remote Hello RMI method from Client to PrimaryRMIServer
@@ -32,7 +42,7 @@ public interface ServerInterface extends Remote {
 
         /**
          * Remote method used by BackupRMIServer to get the map between clientNo and
-         * ClientInterface stored in the PrimaryRMIServer
+         * rmiserver.ClientInterface stored in the PrimaryRMIServer
          * 
          * @return Answer message
          * @throws java.rmi.RemoteException
@@ -59,6 +69,16 @@ public interface ServerInterface extends Remote {
          */
         public String authentication(int clientNo, boolean isLogin, String username, String password)
                         throws java.rmi.RemoteException;
+
+        /**
+         * Remote method to logout an user
+         *
+         * @param clientNo
+         * @param username
+         * @return Answer message
+         * @throws java.rmi.RemoteException
+         */
+        public String logout(int clientNo, String username) throws java.rmi.RemoteException;
 
         /**
          * Remote method to logout an user

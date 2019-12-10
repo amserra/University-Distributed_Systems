@@ -1,7 +1,9 @@
+package rmiserver;
+
 import java.rmi.Remote;
 
 /**
- * ClientInterface class that includes all the RMIClient remote methods
+ * rmiserver.ClientInterface class that includes all the RMIClient remote methods
  */
 public interface ClientInterface extends Remote {
 

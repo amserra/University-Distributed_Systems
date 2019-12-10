@@ -1,3 +1,6 @@
+import rmiserver.ClientInterface;
+import rmiserver.ServerInterface;
+
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
@@ -53,7 +56,7 @@ public class RMIClient extends UnicastRemoteObject implements ClientInterface {
         userUI.mainMenu();
     }
 
-    // ClientInterface methods (documentation on ClientInterface class)
+    // rmiserver.ClientInterface methods (documentation on rmiserver.ClientInterface class)
 
     public void notification() throws MalformedURLException, RemoteException, NotBoundException {
         if (this.typeOfClient.equals("user")) {
@@ -75,7 +78,7 @@ public class RMIClient extends UnicastRemoteObject implements ClientInterface {
         }
     }
 
-    // End of ClientInterface methods
+    // End of rmiserver.ClientInterface methods
 
     /**
      * Connects the client to the PrimaryRMIServer and gives it its reference.

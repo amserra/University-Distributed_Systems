@@ -19,10 +19,10 @@
 		<nav>
 			<div class="nav-wrapper blue lighten-2">
 				<ul class="left">
-					<li><a href="<s:url action="index"/>"><img id="navImg" class="circle responsive-img" src="assets/img/logo_transparent_no_letter.png" alt="Logo"></a></li>
+					<li><a href="<s:url action="indexView"/>"><img id="navImg" class="circle responsive-img" src="assets/img/logo_transparent_no_letter.png" alt="Logo"></a></li>
 				</ul>
 				<ul class="right">
-					<li><a href="<s:url action="login"/>">Login</a></li>
+					<li><a href="<s:url action="loginView"/>">Login</a></li>
 					<li><a href="#">Registo</a></li>
 				</ul>
 			</div>
@@ -36,27 +36,22 @@
 							<div class="card">
 								<div class="card-content">
 									<span class="card-title black-text">Registo</span>
-									<s:form action="register" method="POST">
+									<s:form action="registerAction" method="POST">
 										<div class="row">
 											<div class="input-field col s12">
-												<input id="firstname" type="text" class="validate">
-												<label for="firstname" class="active">Username</label>
+												<input id="username" type="text" class="validate" name="username">
+												<label for="username" class="active">Username</label>
 											</div>
 										</div>
 										<div class="row">
 											<div class="input-field col s12">
-												<input id="lastname" type="password" class="validate">
-												<label for="lastname" class="active">Password</label>
+												<input id="password" type="password" class="validate" name="password">
+												<label for="password" class="active">Password</label>
 											</div>
 										</div>
 
 										<div class="row card-action">
-											<div class="col">
-												<a class="btn waves-effect waves-light blue">Registar</a>
-											</div>
-											<div class="col">
-												<a class="btn waves-effect waves-light blue lighten-2" href="<s:url action="login"/>">Login</a>
-											</div>
+											<button class="btn waves-effect waves-light blue" type="submit">Registar</button>
 										</div>
 									</s:form>
 								</div>
