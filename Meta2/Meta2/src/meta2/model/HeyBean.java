@@ -3,6 +3,7 @@
  */
 package meta2.model;
 
+import java.rmi.registry.LocateRegistry;
 import java.util.ArrayList;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
@@ -19,12 +20,13 @@ public class HeyBean {
 
 	public HeyBean() {
 		try {
-			server = (ServerInterface) Naming.lookup("RMIConnection");
+			//server = (ServerInterface) Naming.lookup("RMIConnection");
+			server = (ServerInterface) LocateRegistry.getRegistry(2857).lookup("RMIConnection");
 			String msg = server.sayHelloFromClient();
 			System.out.println(msg);
 			this.clientNo = Integer.parseInt(msg.substring(msg.length() - 1));
 		}
-		catch(NotBoundException|MalformedURLException|RemoteException e) {
+		catch(NotBoundException|/*MalformedURLException|*/RemoteException e) {
 			e.printStackTrace(); // what happens *after* we reach this line?
 		}
 	}

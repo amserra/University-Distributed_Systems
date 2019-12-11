@@ -5,6 +5,7 @@ import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
 import java.rmi.server.UnicastRemoteObject;
 
 /**
@@ -19,6 +20,7 @@ public class RMIClient extends UnicastRemoteObject implements ClientInterface {
     UI userUI;
     ServerInterface serverInterface; // To use the remote methods
     String RMINAME;
+    int REGISTRYPORT;
 
     /**
      * Main method that creates a RMIClient object
@@ -31,10 +33,10 @@ public class RMIClient extends UnicastRemoteObject implements ClientInterface {
     public static void main(String[] args) throws MalformedURLException, RemoteException, NotBoundException {
         if (args.length == 0) {
             System.out.println(
-                    "To start with custom IP and PORT enter as arguments.\nStarting with default IP and PORT.");
-            new RMIClient("RMIConnection");
+                    "To start with custom RMI name and Registry enter as arguments.\nStarting with default RMI name and Registry.");
+            new RMIClient("RMIConnection",2857);
         } else if (args.length == 2) {
-            new RMIClient(args[0]);
+            new RMIClient(args[0],Integer.parseInt(args[1]));
         }
     }
 
@@ -47,9 +49,10 @@ public class RMIClient extends UnicastRemoteObject implements ClientInterface {
      * @throws RemoteException
      * @throws NotBoundException
      */
-    RMIClient(String rmiName) throws MalformedURLException, RemoteException, NotBoundException {
+    RMIClient(String rmiName,int registyPort) throws MalformedURLException, RemoteException, NotBoundException {
         super();
         RMINAME = rmiName;
+        REGISTRYPORT = registyPort;
         connectToRMIServer();
         userUI = new UI(this);
         controlCTRLC();
@@ -89,7 +92,8 @@ public class RMIClient extends UnicastRemoteObject implements ClientInterface {
      */
     public void connectToRMIServer() throws MalformedURLException, RemoteException, NotBoundException {
         try {
-            serverInterface = (ServerInterface) Naming.lookup(RMINAME);
+            //serverInterface = (ServerInterface) Naming.lookup(RMINAME);
+            serverInterface = (ServerInterface) LocateRegistry.getRegistry(REGISTRYPORT).lookup(RMINAME);
         } catch (java.rmi.ConnectException e) {
             System.out.println("\nConnect the server first.");
             System.exit(-1);

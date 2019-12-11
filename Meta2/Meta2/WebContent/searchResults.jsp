@@ -75,7 +75,7 @@
                                                             <span class="badge">${result.lang} - <a href="#">Traduzir</a></span>
                                                             ${result.title}
                                                         </span>
-                                                        <a href="${result.url}" target="_blank" style="font-size: 20px">${result.url}</a>
+                                                        <p><a href="${result.url}" target="_blank">${result.url}</a></p>
                                                         <p>${result.text}</p>
                                                     </div>
                                                 </div>
