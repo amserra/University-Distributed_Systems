@@ -8,7 +8,6 @@
         </element>
         <element id="directory" name="lib">
           <element id="library" level="project" name="lib1" />
-          <element id="library" level="project" name="com.github.scribejava:scribejava-apis:6.9.0" />
         </element>
       </element>
       <element id="javaee-facet-resources" facet="Meta2/web/Web" />
