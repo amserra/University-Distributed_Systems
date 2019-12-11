@@ -54,7 +54,7 @@ public class RMIServer extends UnicastRemoteObject implements ServerInterface {
     final String clientSecret = "6e77bf3115c0707179b8ec299ee6d7e4"; //API secret
     final OAuth20Service service = new ServiceBuilder(clientId)  //Service for Facebook Login
             .apiSecret(clientSecret)
-            .callback("http://localhost:8080/Meta2/exchangeTokenForCode.jsp")
+            .callback("https://localhost:8443/Meta2/exchangeTokenForCode.jsp")
             .build(FacebookApi.instance());
     private static final String PROTECTED_RESOURCE_URL = "https://graph.facebook.com/v3.2/me";
 
@@ -73,7 +73,7 @@ public class RMIServer extends UnicastRemoteObject implements ServerInterface {
         if (args.length == 0) {
             System.out.println(
                     "To start with custom IP and PORT enter as arguments.\nStarting with default IP and PORT.");
-            new RMIServer("RMIConnection", 1099);
+            new RMIServer("RMIConnection", 2857);
         } else if (args.length == 2) {
             System.setProperty("java.rmi.server.hostname", args[0]);
             new RMIServer(args[0], Integer.parseInt(args[1]));
