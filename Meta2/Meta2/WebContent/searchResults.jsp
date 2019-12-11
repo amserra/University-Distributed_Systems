@@ -22,7 +22,8 @@
                 <ul class="left">
                     <li><a href="<s:url action="indexView"/>"><img id="navImg" class="circle responsive-img" src="assets/img/logo_transparent_no_letter.png" alt="Logo"></a></li>
                 </ul>
-                <ul class="right">
+                <a href="#" data-target="mobile-demo" class="sidenav-trigger right"><i class="material-icons">menu</i></a>
+                <ul class="right hide-on-med-and-down">
                     <c:choose>
                         <c:when test="${(session.typeOfClient eq 'user') || (session.typeOfClient eq 'admin')}">
                             <c:choose>
@@ -33,8 +34,13 @@
                                     <li><a style="pointer-events: none;cursor: default">${session.name}</a></li>
                                 </c:otherwise>
                             </c:choose>
+                            <c:choose>
+                                <c:when test="${session.typeOfClient eq 'admin'}">
+                                    <li><a href="<s:url action="indexNewUrlAction"></s:url>">Index url</a></li>
+                                </c:when>
+                            </c:choose>
                             <li><a href="<s:url action="searchHistoryAction"></s:url>">Search history</a></li>
-                            <li><a href="<s:url action="linksPointingView"/>">Links pointing</a></li>
+                            <li><a href="<s:url action="linksPointingAction"/>">Links pointing</a></li>
                             <li><a href="<s:url action="logoutAction"/>">Logout</a></li>
                         </c:when>
                         <c:otherwise>
@@ -45,6 +51,33 @@
                 </ul>
             </div>
         </nav>
+
+        <ul class="sidenav" id="mobile-demo">
+            <c:choose>
+                <c:when test="${(session.typeOfClient eq 'user') || (session.typeOfClient eq 'admin')}">
+                    <c:choose>
+                        <c:when test="${empty session.name}">
+                            <li><a style="pointer-events: none;cursor: default">${session.username}</a></li>
+                        </c:when>
+                        <c:otherwise>
+                            <li><a style="pointer-events: none;cursor: default">${session.name}</a></li>
+                        </c:otherwise>
+                    </c:choose>
+                    <c:choose>
+                        <c:when test="${session.typeOfClient eq 'admin'}">
+                            <li><a href="<s:url action="indexNewUrlAction"></s:url>">Index url</a></li>
+                        </c:when>
+                    </c:choose>
+                    <li><a href="<s:url action="searchHistoryAction"></s:url>">Search history</a></li>
+                    <li><a href="<s:url action="linksPointingAction"/>">Links pointing</a></li>
+                    <li><a href="<s:url action="logoutAction"/>">Logout</a></li>
+                </c:when>
+                <c:otherwise>
+                    <li><a href="<s:url action="loginView"/>">Login</a></li>
+                    <li><a href="<s:url action="registerView"/>">Register</a></li>
+                </c:otherwise>
+            </c:choose>
+        </ul>
 
         <div class="valign-wrapper" style="width:100%;margin-top:5vh;position: absolute;">
             <div class="valign" style="width:100%;">
@@ -105,5 +138,6 @@
                 </div>
             </div>
         </div>
+        <script type="text/javascript" src="js/initializeSideBar.js"></script>
     </body>
 </html>

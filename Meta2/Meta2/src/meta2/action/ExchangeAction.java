@@ -76,8 +76,6 @@ public class ExchangeAction extends ActionSupport implements SessionAware {
                     notificationMsg = "You have been promoted to admin!";
                 }
 
-                session.put("uiMsg", uiMsg);
-
                 this.getHeyBean().setUsername(this.username);
                 session.put("username", username);
 

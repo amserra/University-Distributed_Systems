@@ -23,12 +23,18 @@
 				<ul class="left">
 					<li><a href="<s:url action="indexView"/>"><img id="navImg" class="circle responsive-img" src="assets/img/logo_transparent_no_letter.png" alt="Logo"></a></li>
 				</ul>
-				<ul class="right">
+				<a href="#" data-target="mobile-demo" class="sidenav-trigger right"><i class="material-icons">menu</i></a>
+				<ul class="right hide-on-med-and-down">
 					<li><a href="#">Login</a></li>
 					<li><a href="<s:url action="registerView"/>">Register</a></li>
 				</ul>
 			</div>
 		</nav>
+
+		<ul class="sidenav" id="mobile-demo">
+			<li><a href="#">Login</a></li>
+			<li><a href="<s:url action="registerView"/>">Register</a></li>
+		</ul>
 
 		<div class="valign-wrapper" style="width:100%;height:80%;position: absolute;">
 			<div class="valign" style="width:100%;">
@@ -108,5 +114,6 @@
 				</script>
 			</c:when>
 		</c:choose>
+		<script type="text/javascript" src="js/initializeSideBar.js"></script>
 	</body>
 </html>

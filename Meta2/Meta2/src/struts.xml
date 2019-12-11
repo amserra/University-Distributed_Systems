@@ -43,10 +43,6 @@ and should reside on the classpath of the webapp (generally /WEB-INF/classes). -
             <result>/searchResults.jsp</result>
         </action>
 
-        <action name="linksPointingView">
-            <result>/linksPointing.jsp</result>
-        </action>
-
         <action name="registerAction" class="meta2.action.AuthAction" method="execute">
             <param name="type">register</param>
             <result name="success">/register.jsp</result>
@@ -89,6 +85,11 @@ and should reside on the classpath of the webapp (generally /WEB-INF/classes). -
 
         <action name="linksPointingAction" class="meta2.action.LinksPointingAction" method="execute">
             <result name="success">/linksPointing.jsp</result>
+            <result name="error">/error.jsp</result>
+        </action>
+
+        <action name="indexNewUrlAction" class="meta2.action.IndexNewUrlAction" method="execute">
+            <result name="success">/indexNewUrl.jsp</result>
             <result name="error">/error.jsp</result>
         </action>
 
