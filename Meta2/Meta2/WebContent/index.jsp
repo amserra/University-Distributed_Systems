@@ -44,9 +44,8 @@
 							<div class="row center-align">
 								<img id="mainImg" class="circle responsive-img" src="assets/img/logo_transparent.png" alt="ucBusca">
 							</div>
-							<a href="<s:url action="searchResultsView"/>">searchResults</a>
 							<!--- Em action mete-se o nome da action...--->
-							<s:form action="search" method="POST">
+							<s:form action="searchAction" method="POST">
 								<div class="input-field row s12">
 									<input id="search" type="text" name="searchTerms" class="validate" autofocus>
 									<c:choose>
