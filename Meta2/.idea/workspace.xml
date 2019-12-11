@@ -8,12 +8,11 @@
   <component name="ChangeListManager">
     <list default="true" id="1cebd835-8165-47e0-9b03-c550efdbb3fc" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Meta1/files/index_1.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Meta1/files/index_1.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Meta1/files/search_1.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Meta1/files/search_1.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Meta1/files/urls_1.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Meta1/files/urls_1.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Meta1/files/users_1.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Meta1/files/users_1.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Meta2/WebContent/exchangeTokenForCode.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/Meta2/WebContent/exchangeTokenForCode.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Meta2/WebContent/index.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/Meta2/WebContent/index.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Meta2/src/meta2/action/ExchangeAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/Meta2/src/meta2/action/ExchangeAction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Meta2/src/struts.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Meta2/src/struts.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/artifacts/Meta2/Meta2.war" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/Meta2/Meta2.war" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -22,13 +21,26 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="CodeStyleSettingsInfer">
+    <option name="done" value="true" />
+  </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
+        <option value="HTTP Request" />
+        <option value="JavaScript File" />
         <option value="Jsp File" />
+        <option value="CSS File" />
         <option value="Class" />
       </list>
     </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="JavaeeView">
+    <option name="frameworksView" value="false" />
+    <option name="showModules" value="false" />
   </component>
   <component name="LogFilters">
     <option name="FILTER_ERRORS" value="false" />
@@ -37,7 +49,10 @@
     <option name="FILTER_DEBUG" value="true" />
     <option name="CUSTOM_FILTER" />
   </component>
-  <component name="ProjectId" id="1UqFTbzsKh9iJId0uCuTATqM31A" />
+  <component name="ProjectCodeStyleSettingsMigration">
+    <option name="version" value="1" />
+  </component>
+  <component name="ProjectId" id="1UewfUInwM7wg0Du4erUSYPN4Ey" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -45,13 +60,19 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="Downloaded.Files.Path.Enabled" value="false" />
+    <property name="Repository.Attach.Annotations" value="false" />
+    <property name="Repository.Attach.JavaDocs" value="false" />
+    <property name="Repository.Attach.Sources" value="false" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="list.type.of.created.stylesheet" value="CSS" />
     <property name="project.structure.last.edited" value="Artifacts" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
+    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -75,14 +96,14 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="RMIClient" type="Application" factoryName="Application" nameIsGenerated="true">
+    <configuration name="RMIClient" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="RMIClient" />
       <module name="Meta1" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="RMIServer" type="Application" factoryName="Application" nameIsGenerated="true">
+    <configuration name="RMIServer" type="Application" factoryName="Application" singleton="false" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="RMIServer" />
       <module name="Meta1" />
       <option name="VM_PARAMETERS" value="-Djava.net.preferIPv4Stack=true" />
@@ -173,32 +194,13 @@
       <item itemvalue="Tomcat Server.Tomcat" />
     </list>
   </component>
-  <component name="ServiceViewManager">
-    <option name="viewStates">
-      <list>
-        <serviceView>
-          <treeState>
-            <expand>
-              <path>
-                <item name="services root" type="e789fda9:ObjectUtils$Sentinel" />
-                <item name="Tomcat Server" type="7427dc5b:ServiceModel$ServiceGroupNode" />
-              </path>
-              <path>
-                <item name="services root" type="e789fda9:ObjectUtils$Sentinel" />
-                <item name="Tomcat Server" type="7427dc5b:ServiceModel$ServiceGroupNode" />
-                <item name="Running" type="7427dc5b:ServiceModel$ServiceGroupNode" />
-              </path>
-            </expand>
-            <select />
-          </treeState>
-        </serviceView>
-      </list>
-    </option>
+  <component name="SvnConfiguration">
+    <configuration />
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="d3795b85-be95-480a-a3be-5ba84898fe12" name="Default Changelist" comment="" />
-      <created>1576076227582</created>
+      <changelist id="1cebd835-8165-47e0-9b03-c550efdbb3fc" name="Default Changelist" comment="" />
+      <created>1575730472199</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1575730472199</updated>
@@ -216,12 +218,26 @@
       <workItem from="1576022873777" duration="2189000" />
       <workItem from="1576074532214" duration="243000" />
       <workItem from="1576075575253" duration="155000" />
-      <workItem from="1576076948044" duration="3870000" />
+      <workItem from="1576076948044" duration="5895000" />
     </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="WindowStateProjectService">
     <state x="304" y="187" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1575999692693">
@@ -328,10 +344,10 @@
     <state x="505" y="248" key="run.anything.popup" timestamp="1575997635910">
       <screen x="0" y="0" width="1680" height="1050" />
     </state>
-    <state width="1126" height="295" key="GridCell.Tab.2.right/0.0.1680.1050@0.0.1680.1050" timestamp="1576082468370" />
-    <state x="328" y="106" key="SettingsEditor" timestamp="1576076249923">
+    <state x="505" y="248" key="run.anything.popup/0.0.1680.1050@0.0.1680.1050" timestamp="1575997635910" />
+    <state x="505" y="233" width="670" height="676" key="search.everywhere.popup" timestamp="1575890458866">
       <screen x="0" y="0" width="1680" height="1050" />
     </state>
-    <state x="328" y="106" key="SettingsEditor/0.0.1680.1050@0.0.1680.1050" timestamp="1576076249923" />
+    <state x="505" y="233" width="670" height="676" key="search.everywhere.popup/0.0.1680.1050@0.0.1680.1050" timestamp="1575890458866" />
   </component>
 </project>
