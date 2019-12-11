@@ -1,5 +1,7 @@
 package rmiserver;
 
+import org.json.simple.JSONObject;
+
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -65,6 +67,24 @@ public interface ClientInterface extends Remote {
      */
     public String authentication(int clientNo, boolean isLogin, String username, String password)
             throws java.rmi.RemoteException;
+
+    /**
+     * Remote method to get authorization URL when user tries to login with facebook account
+     *
+     * @param secretState //Client number
+     * @return
+     * @throws java.rmi.RemoteException
+     */
+    public String getAuthorizationUrl(String secretState)
+            throws java.rmi.RemoteException;
+
+    /**
+     * Get Facebook name and ID from client that has logged in
+     *
+     * @param code  //Code to exchange for access token
+     * @return
+     */
+    public JSONObject exchangeCodeForToken(String code, int clientNo);
 
     /**
      * Remote method to logout an user

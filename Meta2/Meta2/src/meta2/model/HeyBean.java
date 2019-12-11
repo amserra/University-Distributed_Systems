@@ -13,6 +13,7 @@ import rmiserver.ServerInterface;
 public class HeyBean {
 	private ServerInterface server;
 	private String username; // username and password supplied by the user
+	private String name;
 	private String typeOfClient = "anonymous";
 	private int clientNo;
 
@@ -43,6 +44,14 @@ public class HeyBean {
 	public int getClientNo() {return this.clientNo;}
 
 	public String getUsername() {return this.username;}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 
 
 	@Override

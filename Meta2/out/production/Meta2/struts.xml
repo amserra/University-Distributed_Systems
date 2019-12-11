@@ -64,10 +64,12 @@ and should reside on the classpath of the webapp (generally /WEB-INF/classes). -
 
         <action name="loginFacebook" class="meta2.action.FacebookLoginAction" method="execute">
             <result name="success">/facebookLogin.jsp</result>
+            <result name="error">/error.jsp</result>
         </action>
 
         <action name="exchangeAction" class="meta2.action.ExchangeAction" method="execute">
             <result name="success">/index.jsp</result>
+            <result name="error">/error.jsp</result>
         </action>
 
         <action name="searchAction" class="meta2.action.SearchAction" method="execute">

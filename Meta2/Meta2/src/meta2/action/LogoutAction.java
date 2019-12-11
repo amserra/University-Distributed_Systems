@@ -22,8 +22,10 @@ public class LogoutAction extends ActionSupport implements SessionAware {
             server.logout(getHeyBean().getClientNo(),getHeyBean().getUsername());
             this.getHeyBean().setTypeOfClient("anonymous");
             this.getHeyBean().setUsername("");
+            this.getHeyBean().setName("");
             session.put("typeOfClient","anonymous");
             session.put("username", "");
+            session.put("name", "");
         } catch (RemoteException e) {
             return ERROR;
         }

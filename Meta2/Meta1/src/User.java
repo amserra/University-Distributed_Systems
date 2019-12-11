@@ -4,7 +4,8 @@ import java.util.ArrayList;
 public class User implements Serializable{
 
     private static final long serialVersionUID = 1L;
-    private String username;
+    private String username;    //Username for users that registered normally
+    private String id;      //id to know User Facebook ID
     private String password;
     private boolean isAdmin; // Check if User is Admin
     private ArrayList<String> searchHistory; // List with searches that the user has made
@@ -75,8 +76,23 @@ public class User implements Serializable{
         this.username = username;
     }
 
-    
-    /** 
+    /**
+     *
+     * @return
+     */
+    public String getId() {
+        return id;
+    }
+
+    /**
+     *
+     * @param id
+     */
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    /**
      * @return String
      */
     public String getPassword() {

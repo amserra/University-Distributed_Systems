@@ -16,4 +16,5 @@
 
 <body>
     <c:redirect url = "${authorizationUrl}" />
+    If you are not automatically redirected please click <a href="${authorizationUrl}">here</a>.
 </html>

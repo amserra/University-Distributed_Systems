@@ -7,16 +7,27 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1cebd835-8165-47e0-9b03-c550efdbb3fc" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/Meta2/WebContent/exchangeTokenForCode.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Meta2/WebContent/facebookLogin.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Meta2/src/meta2/action/ExchangeAction.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/webContexts.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Meta1/Meta1.iml" beforeDir="false" afterPath="$PROJECT_DIR$/Meta1/Meta1.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Meta1/files/users_1.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Meta1/files/users_1.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Meta2/WebContent/login.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/Meta2/WebContent/login.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Meta2/src/FacebookConnect.java" beforeDir="false" afterPath="$PROJECT_DIR$/Meta2/src/FacebookConnect.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Meta1/src/MulticastServerAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/Meta1/src/MulticastServerAction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Meta1/src/RMIServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/Meta1/src/RMIServer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Meta1/src/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/Meta1/src/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Meta1/src/rmiserver/ServerInterface.java" beforeDir="false" afterPath="$PROJECT_DIR$/Meta1/src/rmiserver/ServerInterface.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Meta2/WebContent/exchangeTokenForCode.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/Meta2/WebContent/exchangeTokenForCode.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Meta2/WebContent/facebookLogin.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/Meta2/WebContent/facebookLogin.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Meta2/WebContent/index.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/Meta2/WebContent/index.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Meta2/src/meta2/action/ExchangeAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/Meta2/src/meta2/action/ExchangeAction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Meta2/src/meta2/action/FacebookLoginAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/Meta2/src/meta2/action/FacebookLoginAction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Meta2/src/meta2/model/HeyBean.java" beforeDir="false" afterPath="$PROJECT_DIR$/Meta2/src/meta2/model/HeyBean.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Meta2/src/rmiserver/ClientInterface.java" beforeDir="false" afterPath="$PROJECT_DIR$/Meta2/src/rmiserver/ClientInterface.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Meta2/src/rmiserver/ServerInterface.java" beforeDir="false" afterPath="$PROJECT_DIR$/Meta2/src/rmiserver/ServerInterface.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Meta2/src/struts.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Meta2/src/struts.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/artifacts/Meta2/Meta2.war" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/Meta2/Meta2.war" afterDir="false" />
     </list>
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -196,7 +207,7 @@
       <created>1575730472199</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1575848715689</updated>
+      <updated>1575730472199</updated>
       <workItem from="1575730482820" duration="3659000" />
       <workItem from="1575734352245" duration="4882000" />
       <workItem from="1575759411229" duration="48000" />

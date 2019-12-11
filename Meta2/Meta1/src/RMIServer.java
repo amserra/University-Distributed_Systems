@@ -1,6 +1,17 @@
+import com.github.scribejava.apis.FacebookApi;
+import com.github.scribejava.core.builder.ServiceBuilder;
+import com.github.scribejava.core.model.OAuth2AccessToken;
+import com.github.scribejava.core.model.OAuthRequest;
+import com.github.scribejava.core.model.Response;
+import com.github.scribejava.core.model.Verb;
+import com.github.scribejava.core.oauth.OAuth20Service;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import rmiserver.ClientInterface;
 import rmiserver.ServerInterface;
 
+import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.MalformedURLException;
@@ -15,6 +26,7 @@ import java.rmi.server.UnicastRemoteObject;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Class that represents a RMIServer (both Primary and Backup)
@@ -35,6 +47,17 @@ public class RMIServer extends UnicastRemoteObject implements ServerInterface {
     int RMIPORT;
     String RMINAME;
 
+    //Variables for APIs access
+
+    //Facebook
+    final String clientId = "1517623451722247"; //API key
+    final String clientSecret = "6e77bf3115c0707179b8ec299ee6d7e4"; //API secret
+    final OAuth20Service service = new ServiceBuilder(clientId)  //Service for Facebook Login
+            .apiSecret(clientSecret)
+            .callback("http://localhost:8080/Meta2/exchangeTokenForCode.jsp")
+            .build(FacebookApi.instance());
+    private static final String PROTECTED_RESOURCE_URL = "https://graph.facebook.com/v3.2/me";
+
     /**
      * Main method that creates a RMIServer object
      * 
@@ -45,6 +68,7 @@ public class RMIServer extends UnicastRemoteObject implements ServerInterface {
      */
     public static void main(String[] args) throws RemoteException, NotBoundException, MalformedURLException {
         System.setProperty("java.net.preferIPv4Stack", "true");
+
 
         if (args.length == 0) {
             System.out.println(
@@ -219,6 +243,45 @@ public class RMIServer extends UnicastRemoteObject implements ServerInterface {
         }
 
         return msgReceive;
+    }
+
+    public String getAuthorizationUrl(String secretState) {
+        return service.getAuthorizationUrl(secretState);
+    }
+
+    public JSONObject exchangeCodeForToken(String code, int clientNo) throws InterruptedException, ExecutionException, IOException, ParseException {
+        JSONObject json = null;
+
+        //Obtain Access Token
+        System.out.println("Trading the Authorization Code for an Access Token...");
+        final OAuth2AccessToken accessToken = service.getAccessToken(code);
+        System.out.println("Got the Access Token!");
+
+        //Get ID and Name of the user that logged in via Facebook
+        System.out.println("Now we're going to access a protected resource...");
+        final OAuthRequest request = new OAuthRequest(Verb.GET, PROTECTED_RESOURCE_URL);
+        service.signRequest(accessToken, request);
+        Response response = service.execute(request);
+
+        if(response.getCode() == 200){
+            System.out.println("Retrieved information successfully");
+
+            System.out.println(response.getBody());
+
+            JSONParser parser = new JSONParser();
+            json = (JSONObject) parser.parse(response.getBody());
+
+            String msgReceived = authentication(clientNo,true, (String) json.get("id"), null );
+
+            System.out.println(msgReceived);
+
+            json.put("msg", msgReceived);
+        }
+
+
+
+        return json;
+
     }
 
     // End of rmiserver.ServerInterface methods
