@@ -1,12 +1,5 @@
 package meta2.action;
 
-import com.github.scribejava.apis.FacebookApi;
-import com.github.scribejava.core.builder.ServiceBuilder;
-import com.github.scribejava.core.model.OAuth2AccessToken;
-import com.github.scribejava.core.model.OAuthRequest;
-import com.github.scribejava.core.model.Response;
-import com.github.scribejava.core.model.Verb;
-import com.github.scribejava.core.oauth.OAuth20Service;
 import com.opensymphony.xwork2.ActionSupport;
 import meta2.model.HeyBean;
 import org.apache.struts2.interceptor.SessionAware;
@@ -14,13 +7,10 @@ import org.json.simple.JSONObject;
 import rmiserver.ServerInterface;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
 
 
 public class ExchangeAction extends ActionSupport implements SessionAware {
@@ -63,7 +53,6 @@ public class ExchangeAction extends ActionSupport implements SessionAware {
 
             String[] parameters = msg.split(";;");
             int receivedClientNo = Integer.parseInt(parameters[1].split("\\|\\|\\|")[1]);
-            String status = parameters[2].split("\\|\\|\\|")[1];
 
             if (clientNo == receivedClientNo) {
 
@@ -78,16 +67,16 @@ public class ExchangeAction extends ActionSupport implements SessionAware {
                     session.put("typeOfClient","user");
                 }
 
-                System.out.println("Login successful. Welcome " + usr + "\n");
+                System.out.println("Login successful. Welcome " + name + "\n");
 
-                uiMsg = "Login successful. Welcome " + usr;
+                uiMsg = "Login successful. Welcome " + name;
                 boolean notification = Boolean.parseBoolean(parameters[5].split("\\|\\|\\|")[1]);
                 if (notification) {
                     System.out.println("Notification: You have been promoted to admin!");
                     notificationMsg = "You have been promoted to admin!";
                 }
 
-                System.out.println(uiMsg);
+                session.put("uiMsg", uiMsg);
 
                 this.getHeyBean().setUsername(this.username);
                 session.put("username", username);
@@ -98,6 +87,8 @@ public class ExchangeAction extends ActionSupport implements SessionAware {
             }
         } else {
             System.out.println("TIMEOUT: Could not recieve info in 30s. Returning to main menu\n");
+
+            return ERROR;
         }
 
 
@@ -110,6 +101,22 @@ public class ExchangeAction extends ActionSupport implements SessionAware {
         if(!session.containsKey("heyBean"))
             this.setHeyBean(new HeyBean());
         return (HeyBean) session.get("heyBean");
+    }
+
+    public String getUiMsg() {
+        return uiMsg;
+    }
+
+    public void setUiMsg(String uiMsg) {
+        this.uiMsg = uiMsg;
+    }
+
+    public String getNotificationMsg() {
+        return notificationMsg;
+    }
+
+    public void setNotificationMsg(String notificationMsg) {
+        this.notificationMsg = notificationMsg;
     }
 
     public String getUrl() {

@@ -21,7 +21,6 @@
 
     function callAction() {
         document.getElementById("url").value = window.location.href
-        console.log(document.getElementById("url").value)
         form.submit()
     }
 </script>
