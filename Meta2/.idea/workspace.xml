@@ -7,23 +7,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1cebd835-8165-47e0-9b03-c550efdbb3fc" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/webContexts.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/artifacts/Meta2.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/artifacts/Meta2.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Meta1/Meta1.iml" beforeDir="false" afterPath="$PROJECT_DIR$/Meta1/Meta1.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Meta1/files/users_1.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Meta1/files/users_1.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Meta1/src/MulticastServerAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/Meta1/src/MulticastServerAction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Meta1/src/RMIServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/Meta1/src/RMIServer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Meta1/src/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/Meta1/src/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Meta1/src/rmiserver/ServerInterface.java" beforeDir="false" afterPath="$PROJECT_DIR$/Meta1/src/rmiserver/ServerInterface.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Meta2/WebContent/exchangeTokenForCode.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/Meta2/WebContent/exchangeTokenForCode.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Meta2/WebContent/facebookLogin.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/Meta2/WebContent/facebookLogin.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Meta2/WebContent/index.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/Meta2/WebContent/index.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Meta2/src/meta2/action/ExchangeAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/Meta2/src/meta2/action/ExchangeAction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Meta2/src/meta2/action/FacebookLoginAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/Meta2/src/meta2/action/FacebookLoginAction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Meta2/src/meta2/action/LogoutAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/Meta2/src/meta2/action/LogoutAction.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Meta2/src/meta2/model/HeyBean.java" beforeDir="false" afterPath="$PROJECT_DIR$/Meta2/src/meta2/model/HeyBean.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Meta2/src/rmiserver/ClientInterface.java" beforeDir="false" afterPath="$PROJECT_DIR$/Meta2/src/rmiserver/ClientInterface.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Meta2/src/rmiserver/ServerInterface.java" beforeDir="false" afterPath="$PROJECT_DIR$/Meta2/src/rmiserver/ServerInterface.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Meta2/src/struts.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Meta2/src/struts.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/artifacts/Meta2/Meta2.war" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/Meta2/Meta2.war" afterDir="false" />
     </list>
@@ -78,13 +68,26 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
     <property name="list.type.of.created.stylesheet" value="CSS" />
     <property name="project.structure.last.edited" value="Artifacts" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
   </component>
-  <component name="RunManager" selected="Tomcat Server.Tomcat Meta2">
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager" selected="Tomcat Server.Tomcat">
     <configuration name="MulticastServer" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="MulticastServer" />
       <module name="Meta1" />
@@ -130,7 +133,7 @@
       <predefined_log_file id="Tomcat Host Manager" />
       <predefined_log_file id="Tomcat Localhost Access" />
       <RunnerSettings RunnerId="Debug">
-        <option name="DEBUG_PORT" value="61862" />
+        <option name="DEBUG_PORT" value="62805" />
       </RunnerSettings>
       <ConfigurationWrapper VM_VAR="JAVA_OPTS" RunnerId="Debug">
         <option name="USE_ENV_VARIABLES" value="true" />
@@ -173,28 +176,13 @@
       <item itemvalue="Application.MulticastServer" />
       <item itemvalue="Application.RMIClient" />
       <item itemvalue="Application.RMIServer" />
-      <item itemvalue="Tomcat Server.Tomcat Meta2" />
+      <item itemvalue="Tomcat Server.Tomcat" />
     </list>
   </component>
   <component name="ServiceViewManager">
     <option name="viewStates">
       <list>
-        <serviceView>
-          <treeState>
-            <expand>
-              <path>
-                <item name="services root" type="e789fda9:ObjectUtils$Sentinel" />
-                <item name="Tomcat Server" type="7427dc5b:ServiceModel$ServiceGroupNode" />
-              </path>
-              <path>
-                <item name="services root" type="e789fda9:ObjectUtils$Sentinel" />
-                <item name="Tomcat Server" type="7427dc5b:ServiceModel$ServiceGroupNode" />
-                <item name="Running" type="7427dc5b:ServiceModel$ServiceGroupNode" />
-              </path>
-            </expand>
-            <select />
-          </treeState>
-        </serviceView>
+        <item itemvalue="Application.RMIServer" />
       </list>
     </option>
   </component>
@@ -217,18 +205,28 @@
       <workItem from="1575900070546" duration="916000" />
       <workItem from="1575906126433" duration="1412000" />
       <workItem from="1575925624581" duration="4030000" />
-      <workItem from="1575848716787" duration="17836000" />
-      <workItem from="1575906662815" duration="9179000" />
-      <workItem from="1575995755663" duration="1263000" />
-      <workItem from="1575997728041" duration="347000" />
-      <workItem from="1575998101043" duration="51000" />
-      <workItem from="1575998268625" duration="15421000" />
+      <workItem from="1575986743922" duration="25556000" />
+      <workItem from="1576021226744" duration="1539000" />
+      <workItem from="1576022873777" duration="2189000" />
     </task>
     <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="WindowStateProjectService">
     <state x="304" y="187" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1576074478288">
