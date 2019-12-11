@@ -36,11 +36,11 @@
                             </c:choose>
                             <c:choose>
                                 <c:when test="${session.typeOfClient eq 'admin'}">
-                                    <li><a href="<s:url action="indexNewUrlAction"></s:url>">Index url</a></li>
+                                    <li><a href="#">Index url</a></li>
                                 </c:when>
                             </c:choose>
                             <li><a href="<s:url action="searchHistoryAction"></s:url>">Search history</a></li>
-                            <li><a href="<s:url action="linksPointingAction"/>">Links pointing</a></li>
+                            <li><a href="#">Links pointing</a></li>
                             <li><a href="<s:url action="logoutAction"/>">Logout</a></li>
                         </c:when>
                         <c:otherwise>
@@ -65,11 +65,11 @@
                     </c:choose>
                     <c:choose>
                         <c:when test="${session.typeOfClient eq 'admin'}">
-                            <li><a href="<s:url action="indexNewUrlAction"></s:url>">Index url</a></li>
+                            <li><a href="#">Index url</a></li>
                         </c:when>
                     </c:choose>
                     <li><a href="<s:url action="searchHistoryAction"></s:url>">Search history</a></li>
-                    <li><a href="<s:url action="linksPointingAction"/>">Links pointing</a></li>
+                    <li><a href="#">Links pointing</a></li>
                     <li><a href="<s:url action="logoutAction"/>">Logout</a></li>
                 </c:when>
                 <c:otherwise>
@@ -84,55 +84,26 @@
                 <div class="container">
                     <div class="row">
                         <div class="col s12 m10 offset-m1">
-                            <s:form action="searchAction" method="POST">
+                            <s:form action="indexNewUrlAction" method="POST">
                                 <div class="input-field row s12">
-                                    <input value= "${searchTerms}" id="search" type="text" name="searchTerms" class="validate" autofocus>
+                                    <input value= "${indexUrl}" id="search" type="text" name="indexUrl" class="validate" autofocus>
                                     <c:choose>
-                                        <c:when test="${empty session.username}">
-                                            <label for="search">O que busca?</label>
+                                        <c:when test="${empty session.name}">
+                                            <label for="search">${session.username}, introduza o url a indexar</label>
                                         </c:when>
                                         <c:otherwise>
-                                            <c:choose>
-                                                <c:when test="${empty session.name}">
-                                                    <label for="search">${session.username}, o que busca?</label>
-                                                </c:when>
-                                                <c:otherwise>
-                                                    <label for="search">${session.name}, o que busca?</label>
-                                                </c:otherwise>
-                                            </c:choose>
+                                            <label for="search">${session.name}, introduza o url a indexar</label>
                                         </c:otherwise>
                                     </c:choose>
                                 </div>
 
                                 <div class="row s12 center-align">
                                     <button class="btn waves-effect waves-light blue" type="submit">
-                                        Procurar
-                                        <i class="material-icons right">search</i>
+                                        Index
                                     </button>
                                 </div>
                             </s:form>
                             <p>${uiMsg}</p>
-                            <c:choose>
-                                <c:when test="${fn:contains(uiMsg,'results')}">
-                                    <!--- For each com os valores do arrayList--->
-                                    <c:forEach items="${searchResults}" var="result">
-                                        <div class="row">
-                                            <div class="col s12">
-                                                <div class="card hoverable">
-                                                    <div class="card-content">
-                                                        <span class="card-title">
-                                                            <span class="badge">${result.lang} - <a href="#">Traduzir</a></span>
-                                                            ${result.title}
-                                                        </span>
-                                                        <p><a href="${result.url}" target="_blank">${result.url}</a></p>
-                                                        <p>${result.text}</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </c:forEach>
-                                </c:when>
-                            </c:choose>
                         </div>
                     </div>
                 </div>

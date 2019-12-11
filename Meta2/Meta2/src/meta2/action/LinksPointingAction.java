@@ -26,34 +26,36 @@ public class LinksPointingAction extends ActionSupport implements SessionAware {
         System.out.println("URL:"+url);
         ServerInterface server = getHeyBean().getServer();
         int clientNo = getHeyBean().getClientNo();
-        try {
-            String msg = server.linksPointing(clientNo, url);
+        if(url != null && !url.equals("")) {
+            try {
+                String msg = server.linksPointing(clientNo, url);
 
-            if (msg != null) {
-                String[] parameters = msg.split(";;");
-                int receivedClientNo = Integer.parseInt(parameters[1].split("\\|\\|\\|")[1]);
-                int numOfLinks = Integer.parseInt(parameters[2].split("\\|\\|\\|")[1]);
-                if (clientNo == receivedClientNo && numOfLinks != 0) {
-                    int count = 0;
-                    int startIndex = 3;
-                    // Starts at index 3
-                    linksPointing = new ArrayList<>();
-                    for (int i = startIndex; i < numOfLinks + startIndex; i++) {
-                        count++;
-                        System.out.println("Link " + count + ": " + parameters[i].split("\\|\\|\\|")[1]);
-                        linksPointing.add(parameters[i].split("\\|\\|\\|")[1]);
+                if (msg != null) {
+                    String[] parameters = msg.split(";;");
+                    int receivedClientNo = Integer.parseInt(parameters[1].split("\\|\\|\\|")[1]);
+                    int numOfLinks = Integer.parseInt(parameters[2].split("\\|\\|\\|")[1]);
+                    if (clientNo == receivedClientNo && numOfLinks != 0) {
+                        int count = 0;
+                        int startIndex = 3;
+                        // Starts at index 3
+                        linksPointing = new ArrayList<>();
+                        for (int i = startIndex; i < numOfLinks + startIndex; i++) {
+                            count++;
+                            System.out.println("Link " + count + ": " + parameters[i].split("\\|\\|\\|")[1]);
+                            linksPointing.add(parameters[i].split("\\|\\|\\|")[1]);
+                        }
+                        uiMsg = "There are " + count + " links pointing to this url. Showing them all.";
+                    } else if (clientNo == receivedClientNo && numOfLinks == 0) {
+                        System.out.println("Link doesn't have any pages connected to it yet!");
+                        uiMsg = "Link doesn't have any pages connected to it yet!";
                     }
-                    uiMsg = "There are " + count + " links pointing to this url. Showing them all.";
-                } else if (clientNo == receivedClientNo && numOfLinks == 0) {
-                    System.out.println("Link doesn't have any pages connected to it yet!");
-                    uiMsg = "Link doesn't have any pages connected to it yet!";
+                } else {
+                    System.out.println("TIMEOUT: Could not recieve info in 30s. Returning to main menu\n");
                 }
-            } else {
-                System.out.println("TIMEOUT: Could not recieve info in 30s. Returning to main menu\n");
+            } catch (RemoteException e) {
+                System.out.println("ERROR #7: Something went wrong. Would you mind to try again? :)");
+                return ERROR;
             }
-        } catch (RemoteException e) {
-            System.out.println("ERROR #7: Something went wrong. Would you mind to try again? :)");
-            return ERROR;
         }
         System.out.println("Returning success from search history");
         return SUCCESS;
