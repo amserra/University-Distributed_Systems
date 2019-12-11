@@ -26,59 +26,64 @@ public class AuthAction extends ActionSupport implements SessionAware {
             ServerInterface server = getHeyBean().getServer();
             int clientNo = getHeyBean().getClientNo();
             boolean isLogin = type.equals("login");
-            try {
-                String msg = server.authentication(clientNo,isLogin,username,password);
-                if (msg != null) {
+            if(this.username.matches("[0-9]+")) {
+                uiMsg = this.type.substring(0,1).toUpperCase() + this.type.substring(1).toLowerCase() + " failed. Try again.";
+            } else {
+                try {
+                    String msg = server.authentication(clientNo,isLogin,username,password);
+                    if (msg != null) {
 
-                    String[] parameters = msg.split(";;");
-                    int receivedClientNo = Integer.parseInt(parameters[1].split("\\|\\|\\|")[1]);
-                    String status = parameters[2].split("\\|\\|\\|")[1];
+                        String[] parameters = msg.split(";;");
+                        int receivedClientNo = Integer.parseInt(parameters[1].split("\\|\\|\\|")[1]);
+                        String status = parameters[2].split("\\|\\|\\|")[1];
 
-                    if (clientNo == receivedClientNo) {
-                        if (status.equals("valid")) {
-                            String usr = parameters[3].split("\\|\\|\\|")[1];
-                            boolean isAdmin = Boolean.parseBoolean(parameters[4].split("\\|\\|\\|")[1]);
-                            if (isAdmin) {
-                                this.getHeyBean().setTypeOfClient("admin");
-                                session.put("typeOfClient","admin");
-                            }
-                            else {
-                                this.getHeyBean().setTypeOfClient("user");
-                                session.put("typeOfClient","user");
-                            }
-
-                            if (isLogin) {
-                                System.out.println("Login successful. Welcome " + usr + "\n");
-                                uiMsg = "Login successful. Welcome " + usr;
-                                boolean notification = Boolean.parseBoolean(parameters[5].split("\\|\\|\\|")[1]);
-                                if (notification) {
-                                    System.out.println("Notification: You have been promoted to admin!");
-                                    notificationMsg = "You have been promoted to admin!";
+                        if (clientNo == receivedClientNo) {
+                            if (status.equals("valid")) {
+                                String usr = parameters[3].split("\\|\\|\\|")[1];
+                                boolean isAdmin = Boolean.parseBoolean(parameters[4].split("\\|\\|\\|")[1]);
+                                if (isAdmin) {
+                                    this.getHeyBean().setTypeOfClient("admin");
+                                    session.put("typeOfClient","admin");
                                 }
-                            } else {
-                                System.out.println("Register successful. Welcome " + usr + "\n");
-                                uiMsg = "Register successful. Welcome " + usr;
-                            }
+                                else {
+                                    this.getHeyBean().setTypeOfClient("user");
+                                    session.put("typeOfClient","user");
+                                }
 
-                            this.getHeyBean().setUsername(this.username);
-                            session.put("username", username);
+                                if (isLogin) {
+                                    System.out.println("Login successful. Welcome " + usr + "\n");
+                                    uiMsg = "Login successful. Welcome " + usr;
+                                    boolean notification = Boolean.parseBoolean(parameters[5].split("\\|\\|\\|")[1]);
+                                    if (notification) {
+                                        System.out.println("Notification: You have been promoted to admin!");
+                                        notificationMsg = "You have been promoted to admin!";
+                                    }
+                                } else {
+                                    System.out.println("Register successful. Welcome " + usr + "\n");
+                                    uiMsg = "Register successful. Welcome " + usr;
+                                }
 
-                        } else if (status.equals("invalid")) {
-                            if (isLogin) {
-                                System.out.println("Login failed. Try again.\n");
-                                uiMsg = "Login failed. Try again.";
-                            } else {
-                                System.out.println("\n");
-                                uiMsg = "Register failed. Try again.";
+                                this.getHeyBean().setUsername(this.username);
+                                session.put("username", username);
+
+                            } else if (status.equals("invalid")) {
+                                if (isLogin) {
+                                    System.out.println("Login failed. Try again.\n");
+                                    uiMsg = "Login failed. Try again.";
+                                } else {
+                                    System.out.println("\n");
+                                    uiMsg = "Register failed. Try again.";
+                                }
                             }
                         }
+                    } else {
+                        System.out.println("TIMEOUT: Could not recieve info in 30s. Returning to main menu\n");
                     }
-                } else {
-                    System.out.println("TIMEOUT: Could not recieve info in 30s. Returning to main menu\n");
+                } catch (RemoteException e) {
+                    return ERROR;
                 }
-            } catch (RemoteException e) {
-                return ERROR;
             }
+
 
             System.out.println("Returning success on AuthAction");
             return SUCCESS;
