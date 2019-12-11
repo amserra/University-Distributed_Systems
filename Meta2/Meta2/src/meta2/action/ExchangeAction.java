@@ -79,6 +79,7 @@ public class ExchangeAction extends ActionSupport implements SessionAware {
                 }
 
                 System.out.println("Login successful. Welcome " + usr + "\n");
+
                 uiMsg = "Login successful. Welcome " + usr;
                 boolean notification = Boolean.parseBoolean(parameters[5].split("\\|\\|\\|")[1]);
                 if (notification) {
@@ -86,13 +87,13 @@ public class ExchangeAction extends ActionSupport implements SessionAware {
                     notificationMsg = "You have been promoted to admin!";
                 }
 
+                System.out.println(uiMsg);
+
                 this.getHeyBean().setUsername(this.username);
                 session.put("username", username);
 
                 this.getHeyBean().setName(this.name);
                 session.put("name", this.name);
-
-                System.out.println(this.getHeyBean().getName());
 
             }
         } else {

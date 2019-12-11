@@ -24,7 +24,14 @@
 				<ul class="right">
 				<c:choose>
 					<c:when test="${(session.typeOfClient eq 'user') || (session.typeOfClient eq 'admin')}">
-						<li><a style="pointer-events: none;cursor: default">${session.username}</a></li>
+                        <c:choose>
+                            <c:when test="${empty session.name}">
+                                <li><a style="pointer-events: none;cursor: default">${session.username}</a></li>
+                            </c:when>
+                            <c:otherwise>
+                                <li><a style="pointer-events: none;cursor: default">${session.name}</a></li>
+                            </c:otherwise>
+                        </c:choose>
 						<li><a href="<s:url action="logoutAction"/>">Logout</a></li>
 					</c:when>
 					<c:otherwise>
@@ -80,5 +87,6 @@
 				</div>
 			</div>
 		</div>
+
 	</body>
 </html>

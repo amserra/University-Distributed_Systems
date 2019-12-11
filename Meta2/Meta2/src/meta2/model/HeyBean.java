@@ -14,7 +14,6 @@ public class HeyBean {
 	private ServerInterface server;
 	private String username; // username and password supplied by the user
 	private String name;
-	private String id;
 	private String typeOfClient = "anonymous";
 	private int clientNo;
 
@@ -54,13 +53,6 @@ public class HeyBean {
 		this.name = name;
 	}
 
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
 
 	@Override
 	public String toString() {
