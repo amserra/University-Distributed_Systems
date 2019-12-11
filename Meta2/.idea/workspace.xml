@@ -7,15 +7,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1cebd835-8165-47e0-9b03-c550efdbb3fc" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/artifacts/Meta2.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/artifacts/Meta2.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Meta1/files/users_1.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Meta1/files/users_1.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Meta2/WebContent/index.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/Meta2/WebContent/index.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Meta2/src/meta2/action/ExchangeAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/Meta2/src/meta2/action/ExchangeAction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Meta2/src/meta2/action/LogoutAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/Meta2/src/meta2/action/LogoutAction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Meta2/src/meta2/model/HeyBean.java" beforeDir="false" afterPath="$PROJECT_DIR$/Meta2/src/meta2/model/HeyBean.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Meta2/src/struts.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Meta2/src/struts.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/Meta2/Meta2.war" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/Meta2/Meta2.war" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -180,13 +172,6 @@
       <item itemvalue="Tomcat Server.Tomcat" />
     </list>
   </component>
-  <component name="ServiceViewManager">
-    <option name="viewStates">
-      <list>
-        <item itemvalue="Application.RMIServer" />
-      </list>
-    </option>
-  </component>
   <component name="SvnConfiguration">
     <configuration />
   </component>
@@ -209,6 +194,9 @@
       <workItem from="1575986743922" duration="25556000" />
       <workItem from="1576021226744" duration="1539000" />
       <workItem from="1576022873777" duration="2189000" />
+      <workItem from="1576074532214" duration="243000" />
+      <workItem from="1576075575253" duration="155000" />
+      <workItem from="1576076948044" duration="652000" />
     </task>
     <option name="localTasksCounter" value="2" />
     <servers />
