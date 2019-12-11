@@ -32,6 +32,8 @@
                                 <li><a style="pointer-events: none;cursor: default">${session.name}</a></li>
                             </c:otherwise>
                         </c:choose>
+						<li><a href="<s:url action="searchHistoryAction"></s:url>">Search history</a></li>
+						<li><a href="<s:url action="linksPointingView"/>">Links pointing</a></li>
 						<li><a href="<s:url action="logoutAction"/>">Logout</a></li>
 					</c:when>
 					<c:otherwise>

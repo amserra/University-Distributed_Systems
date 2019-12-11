@@ -25,7 +25,16 @@
                 <ul class="right">
                     <c:choose>
                         <c:when test="${(session.typeOfClient eq 'user') || (session.typeOfClient eq 'admin')}">
-                            <li><a style="pointer-events: none;cursor: default">${session.username}</a></li>
+                            <c:choose>
+                                <c:when test="${empty session.name}">
+                                    <li><a style="pointer-events: none;cursor: default">${session.username}</a></li>
+                                </c:when>
+                                <c:otherwise>
+                                    <li><a style="pointer-events: none;cursor: default">${session.name}</a></li>
+                                </c:otherwise>
+                            </c:choose>
+                            <li><a href="<s:url action="searchHistoryAction"></s:url>">Search history</a></li>
+                            <li><a href="<s:url action="linksPointingView"/>">Links pointing</a></li>
                             <li><a href="<s:url action="logoutAction"/>">Logout</a></li>
                         </c:when>
                         <c:otherwise>
@@ -50,7 +59,14 @@
                                             <label for="search">O que busca?</label>
                                         </c:when>
                                         <c:otherwise>
-                                            <label for="search">${session.username}, o que busca?</label>
+                                            <c:choose>
+                                                <c:when test="${empty session.name}">
+                                                    <label for="search">${session.username}, o que busca?</label>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <label for="search">${session.name}, o que busca?</label>
+                                                </c:otherwise>
+                                            </c:choose>
                                         </c:otherwise>
                                     </c:choose>
                                 </div>
