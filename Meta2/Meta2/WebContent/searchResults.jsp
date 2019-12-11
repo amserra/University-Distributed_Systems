@@ -1,5 +1,6 @@
 <%@ taglib prefix="s" uri="/struts-tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix = "fn" uri = "http://java.sun.com/jsp/jstl/functions"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -19,7 +20,7 @@
         <nav>
             <div class="nav-wrapper blue lighten-2">
                 <ul class="left">
-                    <li><a href="#"><img id="navImg" class="circle responsive-img" src="assets/img/logo_transparent_no_letter.png" alt="Logo"></a></li>
+                    <li><a href="<s:url action="indexView"/>"><img id="navImg" class="circle responsive-img" src="assets/img/logo_transparent_no_letter.png" alt="Logo"></a></li>
                 </ul>
                 <ul class="right">
                     <c:choose>
@@ -36,25 +37,53 @@
             </div>
         </nav>
 
-        <div class="valign-wrapper" style="width:100%;height:80%;position: absolute;">
+        <div class="valign-wrapper" style="width:100%;margin-top:5vh;position: absolute;">
             <div class="valign" style="width:100%;">
                 <div class="container">
                     <div class="row">
                         <div class="col s12 m10 offset-m1">
-
-                            <div class="row">
-                                <div class="col s12">
-                                    <div class="card">
-                                        <div class="card-content">
-                                            <span class="card-title">Card Title</span>
-                                            <a class="card-title">http://asdasd.com</a>
-                                            <p>I am a very simple card. I am good at containing small bits of information.
-                                                I am convenient because I require little markup to use effectively.</p>
-                                        </div>
-                                    </div>
+                            <s:form action="searchAction" method="POST">
+                                <div class="input-field row s12">
+                                    <input value= "${searchTerms}" id="search" type="text" name="searchTerms" class="validate" autofocus>
+                                    <c:choose>
+                                        <c:when test="${empty session.username}">
+                                            <label for="search">O que busca?</label>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <label for="search">${session.username}, o que busca?</label>
+                                        </c:otherwise>
+                                    </c:choose>
                                 </div>
-                            </div>
 
+                                <div class="row s12 center-align">
+                                    <button class="btn waves-effect waves-light blue" type="submit">
+                                        Procurar
+                                        <i class="material-icons right">search</i>
+                                    </button>
+                                </div>
+                            </s:form>
+                            <p>${uiMsg}</p>
+                            <c:choose>
+                                <c:when test="${fn:contains(uiMsg,'results')}">
+                                    <!--- For each com os valores do arrayList--->
+                                    <c:forEach items="${searchResults}" var="result">
+                                        <div class="row">
+                                            <div class="col s12">
+                                                <div class="card hoverable">
+                                                    <div class="card-content">
+                                                        <span class="card-title">
+                                                            <span class="badge">${result.lang} - <a href="#">Traduzir</a></span>
+                                                            ${result.title}
+                                                        </span>
+                                                        <a href="${result.url}" target="_blank" style="font-size: 20px">${result.url}</a>
+                                                        <p>${result.text}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </c:forEach>
+                                </c:when>
+                            </c:choose>
                         </div>
                     </div>
                 </div>

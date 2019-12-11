@@ -72,9 +72,10 @@ and should reside on the classpath of the webapp (generally /WEB-INF/classes). -
             <result name="error">/error.jsp</result>
         </action>
 
-        <action name="search" class="meta2.action.SearchAction" method="execute">
-            <result name="success">/register.jsp</result>
-            <result name="login">/index.jsp</result>
+        <action name="searchAction" class="meta2.action.SearchAction" method="execute">
+            <result name="success">/searchResults.jsp</result>
+            <result name="none">/index.jsp</result>
+            <result name="error">/error.jsp</result>
         </action>
 
     </package>
