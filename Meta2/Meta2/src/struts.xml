@@ -93,6 +93,11 @@ and should reside on the classpath of the webapp (generally /WEB-INF/classes). -
             <result name="error">/error.jsp</result>
         </action>
 
+        <action name="translateAction" class="meta2.action.TranslateAction" method="execute">
+            <result name="success">/searchResults.jsp</result>
+            <result name="error">/error.jsp</result>
+        </action>
+
     </package>
 
 </struts>

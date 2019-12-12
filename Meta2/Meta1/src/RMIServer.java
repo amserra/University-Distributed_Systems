@@ -5,18 +5,19 @@ import com.github.scribejava.core.model.OAuthRequest;
 import com.github.scribejava.core.model.Response;
 import com.github.scribejava.core.model.Verb;
 import com.github.scribejava.core.oauth.OAuth20Service;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import rmiserver.ClientInterface;
 import rmiserver.ServerInterface;
 
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.net.DatagramPacket;
-import java.net.InetAddress;
-import java.net.MalformedURLException;
-import java.net.MulticastSocket;
-import java.net.SocketTimeoutException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.*;
+import java.net.URL;
 import java.rmi.AccessException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
@@ -57,6 +58,12 @@ public class RMIServer extends UnicastRemoteObject implements ServerInterface {
             .callback("https://localhost:8443/Meta2/exchangeTokenForCode.jsp")
             .build(FacebookApi.instance());
     private static final String PROTECTED_RESOURCE_URL = "https://graph.facebook.com/v3.2/me";
+
+    //Yandex
+
+    final String yandexKey = "trnsl.1.1.20191206T165834Z.50ed042d59e192aa.81c30e2830afbe9bdc5fa2e4c7113646e5ee9ed7";
+    final String yandexDetectLanguage = "https://translate.yandex.net/api/v1.5/tr.json/detect";
+    final String yandexTranslateText = "https://translate.yandex.net/api/v1.5/tr.json/translate";
 
     /**
      * Main method that creates a RMIServer object
@@ -277,11 +284,53 @@ public class RMIServer extends UnicastRemoteObject implements ServerInterface {
 
             json.put("msg", msgReceived);
         }
-
-
-
         return json;
+    }
 
+    public String translateText(String text) throws IOException, ParseException {
+        URL url = new URL(yandexTranslateText);
+
+        HttpURLConnection connection = getYandexConnection(url);
+
+        OutputStream os = connection.getOutputStream();
+        os.write(("key=" + yandexKey + "&text=" + text + "&lang=en").getBytes());
+        os.flush();
+
+        String language = getAnswer(false, connection );
+
+        return language;
+    }
+
+    public HttpURLConnection getYandexConnection(URL url) throws IOException {
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+
+        connection.setRequestMethod("GET");
+
+        connection.setDoOutput(true);
+        connection.setInstanceFollowRedirects(false);
+        connection.setRequestProperty("Accept", "application/json");
+
+        return connection;
+    }
+
+    public String getAnswer(boolean isDetect, HttpURLConnection connection) throws IOException, ParseException {
+        BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+
+        String inputLine;
+        StringBuffer response = new StringBuffer();
+        while((inputLine = in.readLine()) != null){
+            response.append(inputLine);
+        }
+        in.close();
+
+        System.out.println(response.toString());
+
+        JSONParser parser = new JSONParser();
+        JSONObject json = (JSONObject) parser.parse(response.toString());
+
+        JSONArray jsonArray = (JSONArray) json.get("text");
+
+        return (String) jsonArray.get(0);
     }
 
     // End of rmiserver.ServerInterface methods

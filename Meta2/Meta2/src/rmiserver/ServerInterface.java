@@ -4,7 +4,9 @@
 package rmiserver;
 
 import org.json.simple.JSONObject;
+import org.json.simple.parser.ParseException;
 
+import java.io.IOException;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -128,6 +130,16 @@ public interface ServerInterface extends Remote {
 	 * @throws java.rmi.RemoteException
 	 */
 	public String search(int clientNo, String username, String searchTerms) throws java.rmi.RemoteException;
+
+	/**
+	 * Remote method to detect language of text
+	 *
+	 * @param text
+	 * @return
+	 * @throws IOException
+	 * @throws ParseException
+	 */
+	public String translateText(String text) throws IOException, ParseException;
 
 	/**
 	 * Remote method to retrieve the searchHistory

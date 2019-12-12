@@ -136,6 +136,16 @@ public interface ServerInterface extends Remote {
         public String searchHistory(int clientNo, String username) throws java.rmi.RemoteException;
 
         /**
+         * Remote method to detect language of text
+         *
+         * @param text
+         * @return
+         * @throws IOException
+         * @throws ParseException
+         */
+        public String translateText(String text) throws IOException, ParseException;
+
+        /**
          * Remote method the links pointing to another link
          * 
          * @param clientNo

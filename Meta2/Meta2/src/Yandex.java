@@ -121,7 +121,6 @@ public class Yandex {
             connection.setDoOutput(true);
             connection.setInstanceFollowRedirects(false);
             connection.setRequestProperty("Accept", "application/json");
-            connection.setRequestProperty("User-agent", "Pablo v1");
 
             // We can use getOkeytputStream() for passing the values for r, g and b in the request's body
             OutputStream os = connection.getOutputStream();

@@ -1,0 +1,15 @@
+.nothing {
+    border: 0;
+    outline: none;
+    color: black;
+    box-shadow: none;
+    border-bottom: none;
+}
+
+.linkBtn{
+    border: none;
+    background-color: Transparent;
+    cursor: pointer;
+    outline:none;
+    color: #87CEEB;
+}

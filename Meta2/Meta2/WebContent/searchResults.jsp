@@ -116,20 +116,22 @@
                                 <c:when test="${fn:contains(uiMsg,'results')}">
                                     <!--- For each com os valores do arrayList--->
                                     <c:forEach items="${searchResults}" var="result">
-                                        <div class="row">
-                                            <div class="col s12">
-                                                <div class="card hoverable">
-                                                    <div class="card-content">
-                                                        <span class="card-title">
-                                                            <span class="badge">${result.lang} - <a href="#">Traduzir</a></span>
-                                                            ${result.title}
-                                                        </span>
-                                                        <p><a href="${result.url}" target="_blank">${result.url}</a></p>
-                                                        <p>${result.text}</p>
+                                        <s:form action="translateAction" method="POST">
+                                            <div class="row">
+                                                <div class="col s12">
+                                                    <div class="card hoverable">
+                                                        <div class="card-content">
+                                                            <span class="card-title">
+                                                                <span class="badge">${result.lang} - <button type="submit" class="linkBtn">Traduzir</button></span>
+                                                                <input class = "nothing" type="text" name = "title" readonly value = "${result.title}">
+                                                            </span>
+                                                            <p><a href="${result.url}" target="_blank">${result.url}</a></p>
+                                                            <input class = "nothing" type="text" name="text" readonly value = "${result.text}">
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </s:form>
                                     </c:forEach>
                                 </c:when>
                             </c:choose>
