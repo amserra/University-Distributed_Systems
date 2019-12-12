@@ -78,6 +78,7 @@
                             <c:choose>
                                 <c:when test="${session.typeOfClient eq 'admin'}">
                                     <li><a href="<s:url action="indexNewUrlAction"></s:url>">Index url</a></li>
+                                    <li><a href="<s:url action="adminPrivilegesAction"></s:url>">Admin privileges</a></li>
                                 </c:when>
                             </c:choose>
                             <li><a href="<s:url action="searchHistoryAction"></s:url>">Search history</a></li>
@@ -107,6 +108,7 @@
                     <c:choose>
                         <c:when test="${session.typeOfClient eq 'admin'}">
                             <li><a href="<s:url action="indexNewUrlAction"></s:url>">Index url</a></li>
+                            <li><a href="<s:url action="adminPrivilegesAction"></s:url>">Admin privileges</a></li>
                         </c:when>
                     </c:choose>
                     <li><a href="<s:url action="searchHistoryAction"></s:url>">Search history</a></li>
