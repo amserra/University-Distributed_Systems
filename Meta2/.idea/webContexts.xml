@@ -4,6 +4,8 @@
     <option name="state">
       <map>
         <entry key="file://$PROJECT_DIR$/Meta2/WebContent" value="file://$PROJECT_DIR$/Meta2/WebContent" />
+        <entry key="file://$PROJECT_DIR$/Meta2/WebContent/css" value="file://$PROJECT_DIR$/Meta2/WebContent" />
+        <entry key="file://$PROJECT_DIR$/Meta2/WebContent/css/login.css" value="file://$PROJECT_DIR$/Meta2/WebContent" />
       </map>
     </option>
   </component>

@@ -14,6 +14,47 @@
         <link href="css/navbar.css" rel="stylesheet">
         <link href="css/searchResults.css" rel="stylesheet">
         <script type="text/javascript" src="js/materialize.min.js"></script>
+        <script type="text/javascript">
+            var websocket = null;
+
+            window.onload = function() { // URI = ws://10.16.0.165:8080/WebSocket/ws
+                console.log(window.location.host)
+                connect('ws://' + window.location.host + '/Meta2/meta2/ws');
+                console.log("Finish loading")
+            }
+
+            function connect(host) { // connect to the host websocket
+                if ('WebSocket' in window)
+                    websocket = new WebSocket(host);
+                else if ('MozWebSocket' in window)
+                    websocket = new MozWebSocket(host);
+                else {
+                    console.log('Get a real browser which supports WebSocket.');
+                    return;
+                }
+
+                websocket.onopen    = onOpen; // set the 4 event listeners below
+                websocket.onclose   = onClose;
+                websocket.onmessage = onMessage;
+                websocket.onerror   = onError;
+
+                function onOpen(event) {
+                    console.log("Web sockets opened")
+                }
+
+                function onClose(event) {
+                    console.log("Web sockets closed")
+                }
+
+                function onMessage(message) { // print the received message
+                    console.log("Received message")
+                }
+
+                function onError(event) {
+                    console.log('WebSocket error.');
+                }
+            }
+        </script>
     </head>
 
     <body>
@@ -105,12 +146,26 @@
                                 </div>
 
                                 <div class="row s12 center-align">
-                                    <button class="btn waves-effect waves-light blue" type="submit">
-                                        Procurar
-                                        <i class="material-icons right">search</i>
-                                    </button>
+                                    <div class="col">
+                                        <button class="btn waves-effect waves-light blue" type="submit">
+                                            Procurar
+                                            <i class="material-icons right">search</i>
+                                        </button>
+                                        </s:form>
+                                    </div>
+                                    <c:choose>
+                                        <c:when test="${not empty session.name}">
+                                            <s:form action="facebookShare">
+                                                <div class="col">
+                                                    <button class="btn waves-effect waves-light blue" type="submit">
+                                                        Share on Facebook
+                                                    </button>
+                                                </div>
+                                            </s:form>
+                                        </c:when>
+                                    </c:choose>
                                 </div>
-                            </s:form>
+
                             <p>${uiMsg}</p>
                             <c:choose>
                                 <c:when test="${fn:contains(uiMsg,'results')}">

@@ -2,6 +2,7 @@ package meta2.action;
 
 import com.opensymphony.xwork2.ActionSupport;
 import meta2.model.HeyBean;
+import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.interceptor.SessionAware;
 import org.json.simple.JSONObject;
 import rmiserver.ServerInterface;
@@ -11,18 +12,23 @@ import java.net.URL;
 import java.net.URLDecoder;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
 
 
 public class ExchangeAction extends ActionSupport implements SessionAware {
     private static final long serialVersionUID = 4L;
     private Map<String, Object> session;
-    private String url = null, uiMsg = null, notificationMsg = null, username = null, name = null;
+    private String uiMsg = null, notificationMsg = null, username = null, name = null;
 
 
     @Override
     public String execute() throws IOException{
 
         System.out.println("Let's trade code for token!");
+
+        HttpServletRequest request = ServletActionContext.getRequest();
+        String url = request.getHeader("referer");
+
         System.out.println(url);
 
         int clientNo = getHeyBean().getClientNo();
@@ -117,13 +123,6 @@ public class ExchangeAction extends ActionSupport implements SessionAware {
         this.notificationMsg = notificationMsg;
     }
 
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
 
     public void setHeyBean(HeyBean heyBean) {
         this.session.put("heyBean", heyBean);

@@ -62,11 +62,14 @@
 												<button class="btn waves-effect waves-light blue" type="submit">Login</button>
 											</div>
 											</s:form>
-											<s:form action="loginFacebook" method="POST">
 											<div class="col">
-												<button class="btn waves-effect waves-light blue" type="submit">Login with Facebook</button>
+												<s:form action="loginFacebook">
+													<button class="btn waves-effect waves-light blue" type="submit">
+														Login With Facebook
+													</button>
+												</s:form>
+
 											</div>
-											</s:form>
 										</div>
 
 								</div>

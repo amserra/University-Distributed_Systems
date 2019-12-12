@@ -7,13 +7,27 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1cebd835-8165-47e0-9b03-c550efdbb3fc" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/Meta2/WebContent/redirectSearch.jsp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Meta2/src/meta2/action/FacebookShareAction.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Meta2/src/meta2/ws/WebSocket.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/webContexts.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/webContexts.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Meta1/files/index_1.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Meta1/files/index_1.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Meta1/files/search_1.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Meta1/files/search_1.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Meta1/files/urls_1.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Meta1/files/urls_1.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Meta1/files/users_1.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Meta1/files/users_1.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Meta1/src/RMIServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/Meta1/src/RMIServer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Meta2/Meta2.iml" beforeDir="false" afterPath="$PROJECT_DIR$/Meta2/Meta2.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Meta2/WebContent/css/searchResults.css" beforeDir="false" afterPath="$PROJECT_DIR$/Meta2/WebContent/css/searchResults.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Meta2/WebContent/exchangeTokenForCode.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/Meta2/WebContent/exchangeTokenForCode.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Meta2/WebContent/login.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/Meta2/WebContent/login.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Meta2/WebContent/register.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/Meta2/WebContent/register.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Meta2/WebContent/searchResults.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/Meta2/WebContent/searchResults.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Meta2/src/meta2/action/ExchangeAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/Meta2/src/meta2/action/ExchangeAction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Meta2/src/meta2/action/SearchAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/Meta2/src/meta2/action/SearchAction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Meta2/src/struts.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Meta2/src/struts.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/artifacts/Meta2/Meta2.war" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/Meta2/Meta2.war" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Meta2/struts.xml" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Meta2/struts.xml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -29,11 +43,11 @@
       <list>
         <option value="HTTP Request" />
         <option value="JavaScript File" />
-        <option value="Jsp File" />
+        <option value="JavaScript File" />
         <option value="CSS File" />
         <option value="Class" />
         <option value="Jsp File" />
-        <option value="JavaScript File" />
+        <option value="Jsp File" />
       </list>
     </option>
   </component>
@@ -62,6 +76,7 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="Downloaded.Files.Path.Enabled" value="false" />
     <property name="Repository.Attach.Annotations" value="false" />
     <property name="Repository.Attach.JavaDocs" value="false" />
@@ -69,10 +84,29 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="project.structure.last.edited" value="Artifacts" />
-    <property name="project.structure.proportion" value="0.0" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="list.type.of.created.stylesheet" value="CSS" />
+    <property name="project.structure.last.edited" value="Libraries" />
+    <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\jgmfe\Documents\GitHub\Projeto-SD\Meta2\Meta2\WebContent" />
+    </key>
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
   </component>
   <component name="RunManager" selected="Tomcat Server.Tomcat Meta2">
     <configuration name="MulticastServer" type="Application" factoryName="Application">
@@ -100,7 +134,8 @@
       </method>
     </configuration>
     <configuration name="Tomcat Meta2" type="#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory" factoryName="Local" APPLICATION_SERVER_NAME="Tomcat 8.5.47" ALTERNATIVE_JRE_ENABLED="false">
-      <option name="OPEN_IN_BROWSER_URL" value="https://localhost:8443/Meta2/" />
+      <option name="OPEN_IN_BROWSER_URL" value="https://local.ucbusca.com:8443/Meta2/" />
+      <option name="BROWSER_ID" value="98ca6316-2f89-46d9-a9e5-fa9e2b0625b3" />
       <option name="UPDATING_POLICY" value="restart-server" />
       <deployment>
         <artifact name="Meta2">
@@ -122,6 +157,21 @@
       <RunnerSettings RunnerId="Debug">
         <option name="DEBUG_PORT" value="53493" />
       </RunnerSettings>
+      <ConfigurationWrapper VM_VAR="JAVA_OPTS" RunnerId="Cover">
+        <option name="USE_ENV_VARIABLES" value="true" />
+        <STARTUP>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </STARTUP>
+        <SHUTDOWN>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </SHUTDOWN>
+      </ConfigurationWrapper>
       <ConfigurationWrapper VM_VAR="JAVA_OPTS" RunnerId="Debug">
         <option name="USE_ENV_VARIABLES" value="true" />
         <STARTUP>
@@ -191,6 +241,7 @@
       <workItem from="1576074532214" duration="243000" />
       <workItem from="1576075575253" duration="155000" />
       <workItem from="1576076948044" duration="5895000" />
+      <workItem from="1576150462604" duration="21085000" />
     </task>
     <option name="localTasksCounter" value="2" />
     <servers />

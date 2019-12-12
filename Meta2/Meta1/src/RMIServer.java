@@ -55,7 +55,7 @@ public class RMIServer extends UnicastRemoteObject implements ServerInterface {
     final String clientSecret = "6e77bf3115c0707179b8ec299ee6d7e4"; //API secret
     final OAuth20Service service = new ServiceBuilder(clientId)  //Service for Facebook Login
             .apiSecret(clientSecret)
-            .callback("https://localhost:8443/Meta2/exchangeTokenForCode.jsp")
+            .callback("https://local.ucbusca.com:8443/Meta2/exchangeTokenForCode.jsp")
             .build(FacebookApi.instance());
     private static final String PROTECTED_RESOURCE_URL = "https://graph.facebook.com/v3.2/me";
 
