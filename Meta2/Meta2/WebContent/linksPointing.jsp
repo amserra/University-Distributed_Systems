@@ -37,10 +37,11 @@
                             <c:choose>
                                 <c:when test="${session.typeOfClient eq 'admin'}">
                                     <li><a href="<s:url action="indexNewUrlAction"></s:url>">Index url</a></li>
+                                    <li><a href="<s:url action="adminPrivilegesAction"></s:url>">Admin privileges</a></li>
                                 </c:when>
                             </c:choose>
                             <li><a href="<s:url action="searchHistoryAction"></s:url>">Search history</a></li>
-                            <li><a href="#">Links pointing</a></li>
+                            <li><a href="<s:url action="linksPointingAction"></s:url>">Links pointing</a></li>
                             <li><a href="<s:url action="logoutAction"/>">Logout</a></li>
                         </c:when>
                         <c:otherwise>
@@ -66,10 +67,11 @@
                     <c:choose>
                         <c:when test="${session.typeOfClient eq 'admin'}">
                             <li><a href="<s:url action="indexNewUrlAction"></s:url>">Index url</a></li>
+                            <li><a href="<s:url action="adminPrivilegesAction"></s:url>">Admin privileges</a></li>
                         </c:when>
                     </c:choose>
                     <li><a href="<s:url action="searchHistoryAction"></s:url>">Search history</a></li>
-                    <li><a href="#">Links pointing</a></li>
+                    <li><a href="<s:url action="linksPointingAction"></s:url>">Links pointing</a></li>
                     <li><a href="<s:url action="logoutAction"/>">Logout</a></li>
                 </c:when>
                 <c:otherwise>

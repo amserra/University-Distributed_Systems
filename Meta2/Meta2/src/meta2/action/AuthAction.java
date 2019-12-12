@@ -56,11 +56,11 @@ public class AuthAction extends ActionSupport implements SessionAware {
                                     boolean notification = Boolean.parseBoolean(parameters[5].split("\\|\\|\\|")[1]);
                                     if (notification) {
                                         System.out.println("Notification: You have been promoted to admin!");
-                                        notificationMsg = "You have been promoted to admin!";
+                                        notificationMsg = "Since your last visit, you have been promoted to admin!";
                                     }
                                 } else {
-                                    System.out.println("Register successful. Welcome " + usr + "\n");
-                                    uiMsg = "Register successful. Welcome " + usr;
+                                    System.out.println("Register successful. Welcome " + usr + ".\n");
+                                    uiMsg = "Register successful. Welcome " + usr +".";
                                 }
 
                                 this.getHeyBean().setUsername(this.username);
