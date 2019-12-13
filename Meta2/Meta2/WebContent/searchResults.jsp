@@ -16,8 +16,50 @@
         <script type="text/javascript" src="js/materialize.min.js"></script>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <script type="text/javascript">
-            function traduzir() {
-                console.log("traduzir")
+            function traduzir(ev) {
+
+                var num = ev.id.split("-")[1];
+
+                var title = $("#title-" + num) .val();
+                var text = $("#text-" + num) .val();
+
+                $.ajax({
+                    type: "POST",
+                    url: "translateAction",
+                    data: {title: title, text: text},
+                    dataType: 'json',
+                    success: function(result)
+                    {
+                        console.log(result)
+
+                        var json = $.parseJSON(result)
+
+                        var titleTranlated = json["title"]
+                        var textTranslated = json["text"]
+
+                        if(titleTranlated == "null"){
+                            $.getScript('js/materialize.min.js', function()
+                            {
+                                $('.modal').modal({dismissible: false, onCloseEnd: ()=>$('.modal').modal('destroy')});
+                                $('.modal').modal('open');
+                            });
+                        } else{
+                            $("#title-" + num) .val(titleTranlated)
+                        }
+
+                        if(titleTranlated != "null" && textTranslated == "null"){
+                            $.getScript('js/materialize.min.js', function()
+                            {
+                                $('.modal').modal({dismissible: false, onCloseEnd: ()=>$('.modal').modal('destroy')});
+                                $('.modal').modal('open');
+                            });
+                        } else if(textTranslated != "null"){
+                            $("#text-" + num) .val(textTranslated)
+                        }
+
+                    }
+                });
+
             }
         </script>
     </head>
@@ -137,23 +179,23 @@
                             <c:choose>
                                 <c:when test="${fn:contains(uiMsg,'results')}">
                                     <!--- For each com os valores do arrayList--->
+                                    <c:set var = "i" scope = "session" value = "${0}"/>
                                     <c:forEach items="${searchResults}" var="result">
-                                        <s:form action="translateAction" method="POST">
                                             <div class="row">
                                                 <div class="col s12">
                                                     <div class="card hoverable">
                                                         <div class="card-content">
                                                             <span class="card-title">
-                                                                <span class="badge">${result.lang} - <button type="submit" class="linkBtn" onclick="traduzir()">Traduzir</button></span>
-                                                                <input class = "nothing" type="text" name = "title" readonly value = "${result.title}">
+                                                                <span class="badge">${result.lang} - <button id = "btn-<c:out value = "${i}"/>" class="linkBtn" onclick="traduzir(this)">Traduzir</button></span>
+                                                                <input id = "title-<c:out value = "${i}"/>" class = "nothing" type="text" name = "title" readonly value = "${result.title}">
                                                             </span>
                                                             <p><a href="${result.url}" target="_blank">${result.url}</a></p>
-                                                            <input class = "nothing" type="text" name="text" readonly value = "${result.text}">
+                                                            <input id = "text-<c:out value = "${i}"/>" class = "nothing" type="text" name="text" readonly value = "${result.text}">
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </s:form>
+                                        <c:set var="i" value="${i + 1}" scope="page"/>
                                     </c:forEach>
                                 </c:when>
                             </c:choose>
@@ -162,6 +204,18 @@
                 </div>
             </div>
         </div>
+        <!-- Modal Structure -->
+        <div class="modal">
+            <div class="modal-content">
+                <h4>Error</h4>
+                <p>There was an error in translation</p>
+
+            </div>
+            <div class="modal-footer">
+                <a class="modal-close waves-effect waves-green btn-flat">Ok</a>
+            </div>
+        </div>
+
         <c:choose>
             <c:when test="${(session.typeOfClient eq 'user') || (session.typeOfClient eq 'admin')}">
                 <script type="text/javascript" src="js/websockets.js"></script>

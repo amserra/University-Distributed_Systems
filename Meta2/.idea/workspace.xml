@@ -9,20 +9,18 @@
     <list default="true" id="1cebd835-8165-47e0-9b03-c550efdbb3fc" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/artifacts/Meta2.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/artifacts/Meta2.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Meta1/Meta1.iml" beforeDir="false" afterPath="$PROJECT_DIR$/Meta1/Meta1.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Meta1/files/index_1.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Meta1/files/index_1.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Meta1/files/index_2.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Meta1/files/search_1.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Meta1/files/search_1.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Meta1/files/search_2.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Meta1/files/urls_1.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Meta1/files/urls_1.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Meta1/files/urls_2.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Meta1/files/users_1.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Meta1/files/users_1.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Meta1/files/users_2.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Meta1/src/RMIMulticastManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/Meta1/src/RMIMulticastManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Meta1/src/RMIServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/Meta1/src/RMIServer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Meta2/Meta2.iml" beforeDir="false" afterPath="$PROJECT_DIR$/Meta2/Meta2.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Meta2/WebContent/searchResults.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/Meta2/WebContent/searchResults.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Meta2/src/meta2/ws/WebSocket.java" beforeDir="false" afterPath="$PROJECT_DIR$/Meta2/src/meta2/ws/WebSocket.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Meta2/src/meta2/action/TranslateAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/Meta2/src/meta2/action/TranslateAction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Meta2/src/struts.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Meta2/src/struts.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/artifacts/Meta2/Meta2.war" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/Meta2/Meta2.war" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Meta2/struts.xml" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Meta2/struts.xml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -240,7 +238,7 @@
       <workItem from="1576235698934" duration="9929000" />
       <workItem from="1576248605988" duration="2479000" />
       <workItem from="1576256171113" duration="2134000" />
-      <workItem from="1576258504700" duration="1640000" />
+      <workItem from="1576258504700" duration="14066000" />
     </task>
     <servers />
   </component>
@@ -264,12 +262,11 @@
     <state x="304" y="187" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1576076563623">
       <screen x="0" y="0" width="1680" height="1050" />
     </state>
-    <state x="304" y="187" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1680.1050@0.0.1680.1050" timestamp="1576166218732" />
-    <state x="653" y="216" key="#com.intellij.ide.util.MemberChooser" timestamp="1576259949334">
+    <state x="304" y="187" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1680.1050@0.0.1680.1050" timestamp="1576076563623" />
+    <state x="653" y="216" key="#com.intellij.ide.util.MemberChooser" timestamp="1576159838997">
       <screen x="0" y="0" width="1680" height="1050" />
     </state>
-    <state x="653" y="216" key="#com.intellij.ide.util.MemberChooser/0.0.1680.1050@0.0.1680.1050" timestamp="1576259949334" />
-    <state x="653" y="216" key="#com.intellij.ide.util.MemberChooser/1680.0.1920.1080/0.0.1680.1050@0.0.1680.1050" timestamp="1576200064065" />
+    <state x="653" y="216" key="#com.intellij.ide.util.MemberChooser/0.0.1680.1050@0.0.1680.1050" timestamp="1576159838997" />
     <state x="577" y="316" key="#com.intellij.ide.util.TreeClassChooserDialog" timestamp="1576076484267">
       <screen x="0" y="0" width="1680" height="1050" />
     </state>
@@ -321,10 +318,10 @@
     <state width="1126" height="295" key="GridCell.Tab.2.right" timestamp="1576160572744">
       <screen x="0" y="0" width="1680" height="1050" />
     </state>
-    <state x="284" y="226" width="1396" height="598" key="NewModule_or_Project.wizard/0.0.1680.1050@0.0.1680.1050" timestamp="1576165634676" />
-    <state x="328" y="106" key="SettingsEditor" timestamp="1576258373618">
+    <state width="1126" height="295" key="GridCell.Tab.2.right/0.0.1680.1050@0.0.1680.1050" timestamp="1576160572744" />
+    <state x="328" y="106" key="SettingsEditor" timestamp="1576076249923">
       <screen x="0" y="0" width="1680" height="1050" />
     </state>
-    <state x="328" y="106" key="SettingsEditor/0.0.1680.1050@0.0.1680.1050" timestamp="1576258373618" />
+    <state x="328" y="106" key="SettingsEditor/0.0.1680.1050@0.0.1680.1050" timestamp="1576076249923" />
   </component>
 </project>

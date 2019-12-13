@@ -2,39 +2,51 @@ package meta2.action;
 
 import com.opensymphony.xwork2.ActionSupport;
 import meta2.classes.SearchResult;
-import org.apache.struts2.interceptor.SessionAware;
-
-import java.io.IOException;
-import java.rmi.RemoteException;
-import java.util.ArrayList;
-import java.util.Map;
 import meta2.model.HeyBean;
+import org.apache.struts2.interceptor.SessionAware;
+import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 import rmiserver.ServerInterface;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Map;
 
 public class TranslateAction extends ActionSupport implements SessionAware {
     private static final long serialVersionUID = 4L;
     private Map<String, Object> session;
     // To return to jsp
     private ArrayList<SearchResult> searchResults;
-    private String text = null, title = null;
+    private String text = null, title = null, result = null, textTranslate = null, titleTranslate = null;
 
     @Override
     public String execute() throws IOException, ParseException {
-        System.out.println(text);
-        System.out.println(title);
 
         ServerInterface server = getHeyBean().getServer();
 
-        String textTranslate = server.translateText(text);
+        textTranslate = server.translateText(text);
 
-        String titleTranslate = server.translateText(title);
+        titleTranslate = server.translateText(title);
 
         System.out.println(textTranslate);
 
         System.out.println(titleTranslate);
 
+        JSONObject json = new JSONObject();
+        json.put("title", titleTranslate);
+        json.put("text", textTranslate);
+
+        result = json.toString();
+
        return SUCCESS;
+    }
+
+    public String getResult() {
+        return result;
+    }
+
+    public void setResult(String result) {
+        this.result = result;
     }
 
     public String getText() {

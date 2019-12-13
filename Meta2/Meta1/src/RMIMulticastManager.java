@@ -82,7 +82,7 @@ public class RMIMulticastManager extends Thread {
                     // Process message
                     deleteMulticastServer(serverNo);
                 } else if (type.equals("rtsUpdate") && !this.server.isBackup) {
-                    this.server.sendRtsToAll(msgReceive);
+                   // this.server.sendRtsToAll(msgReceive);
                 } else if (type.equals("rmiServerStarterResult") && this.server.isBackup) {
                     int noOfServers = Integer.parseInt(parameters[2].split("\\|\\|\\|")[1]);
                     int init = 3;
@@ -96,7 +96,12 @@ public class RMIMulticastManager extends Thread {
                 } else if(type.equals("detect") && !this.server.isBackup){
                     String serverNo = parameters[1].split("\\|\\|\\|")[1];
                     String urlId = parameters[2].split("\\|\\|\\|")[1];
-                    String text = parameters[3].split("\\|\\|\\|")[1];
+                    String text;
+                    try {
+                        text = parameters[3].split("\\|\\|\\|")[1];
+                    } catch (ArrayIndexOutOfBoundsException e){
+                        text = "";
+                    }
 
                     String language = server.detectLanguage(text);
 

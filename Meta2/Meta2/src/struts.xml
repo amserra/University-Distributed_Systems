@@ -14,9 +14,11 @@ and should reside on the classpath of the webapp (generally /WEB-INF/classes). -
     <constant name="struts.ui.theme" value="simple"/>
     <constant name="struts.action.excludePattern" value="/meta2/ws"/>
 
-    <package name="meta2" extends="struts-default">
+    <package name="meta2" extends="struts-default,json-default">
+
 
         <default-action-ref name="indexView"/>
+
 
         <global-results>
             <result name="error">/error.jsp</result>
@@ -120,8 +122,12 @@ and should reside on the classpath of the webapp (generally /WEB-INF/classes). -
             <result name="error">/error.jsp</result>
         </action>
 
+
+
         <action name="translateAction" class="meta2.action.TranslateAction" method="execute">
-            <result name="success">/searchResults.jsp</result>
+            <result type="json">
+                <param name="root">result</param>
+            </result>
             <result name="error">/error.jsp</result>
         </action>
 
