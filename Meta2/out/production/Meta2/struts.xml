@@ -12,6 +12,7 @@ and should reside on the classpath of the webapp (generally /WEB-INF/classes). -
     <!-- devMode equals debug information and reload everything for every request -->
     <constant name="struts.devMode" value="true"/>
     <constant name="struts.ui.theme" value="simple"/>
+    <constant name="struts.action.excludePattern" value="/meta2/ws"/>
 
     <package name="meta2" extends="struts-default">
 
@@ -41,6 +42,10 @@ and should reside on the classpath of the webapp (generally /WEB-INF/classes). -
 
         <action name="searchResultsView">
             <result>/searchResults.jsp</result>
+        </action>
+
+        <action name="rtsView">
+            <result>/rts.jsp</result>
         </action>
 
         <action name="registerAction" class="meta2.action.AuthAction" method="execute">
