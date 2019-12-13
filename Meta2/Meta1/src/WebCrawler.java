@@ -1,8 +1,6 @@
 import java.io.EOFException;
 import java.io.IOException;
-import java.net.ConnectException;
-import java.net.MalformedURLException;
-import java.net.UnknownHostException;
+import java.net.*;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -19,11 +17,16 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-public class WebCrawler extends Thread {
+public class WebCrawler extends Thread implements Runnable{
 
     private MulticastServer server;
     private String url;
     private int MaxWordsText = 20; // Max words that is stored in text
+    private int MaxTextDetect = 100;
+    private InetAddress group;
+    private MulticastSocket socket;
+    private int urlID;
+    private String languageCurrent;
 
     private Queue<String> urlQueue = new LinkedList<>(); // Queue with URLs to be indexed
 
@@ -33,12 +36,18 @@ public class WebCrawler extends Thread {
     /** 
      * @param server
      * @param url
-     * @return 
+     * @param group
+     * @param socket
+     * @param urlID
+     * @return
      */
-    public WebCrawler(MulticastServer server, String url) {
+    public WebCrawler(MulticastServer server, String url, InetAddress group, MulticastSocket socket, int urlID) {
         super();
         this.server = server;
         this.url = url;
+        this.group = group;
+        this.socket = socket;
+        this.urlID = urlID;
     }
 
     public void run() {
@@ -124,6 +133,7 @@ public class WebCrawler extends Thread {
                 StringTokenizer tokens = new StringTokenizer(doc.text());
                 String currentToken;
                 String text = ""; // Save text
+                String textDetect = ""; //Text to send to RMI server to detect language
                 int wordsCount = 0;
                 while (tokens.hasMoreElements()) {
                     currentToken = tokens.nextToken();
@@ -137,11 +147,29 @@ public class WebCrawler extends Thread {
 
                     indexURLs.add(url);
 
-                    if (wordsCount <= MaxWordsText) { //Only saves MaxWordsText
-                        text += currentToken + " ";
+                    if (wordsCount <= MaxTextDetect) { //Only saves MaxWordsText
+                        textDetect += currentToken + " ";
+                        if(wordsCount <= MaxWordsText)
+                            text += currentToken + " ";
                         wordsCount++;
                     }
+
+
+
                 }
+
+                sendTextToRMI(textDetect);
+
+
+                while(languageCurrent == null)
+                    synchronized (this){
+                        this.wait();
+                    }
+
+                urlObject.setLang(languageCurrent.toUpperCase());
+
+                languageCurrent = null;
+
 
                 urlObject.setText(text);
                 
@@ -199,4 +227,30 @@ public class WebCrawler extends Thread {
                 recursiveIndex(index, urlList, urlQueue.peek());
 
         }
+
+    private void sendTextToRMI(String textDetect) throws IOException {
+        String message = "type|||detect;;serverNo|||" + server.getMulticastServerNo() + ";;urlID|||" + urlID + ";;text|||" + textDetect;
+
+
+        byte[] buffer = message.getBytes();
+        DatagramPacket packetSent = new DatagramPacket(buffer, buffer.length, group, server.getPORT());
+        socket.send(packetSent);
+
     }
+
+    public int getUrlID() {
+        return urlID;
+    }
+
+    public void setUrlID(int urlID) {
+        this.urlID = urlID;
+    }
+
+    public String getLanguageCurrent() {
+        return languageCurrent;
+    }
+
+    public void setLanguageCurrent(String languageCurrent) {
+        this.languageCurrent = languageCurrent;
+    }
+}

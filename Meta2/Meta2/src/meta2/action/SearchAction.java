@@ -85,12 +85,14 @@ public class SearchAction extends ActionSupport implements SessionAware {
 								String title = parameters[j++].split("\\|\\|\\|")[1];
 								String url = parameters[j++].split("\\|\\|\\|")[1];
 								String text = parameters[j++].split("\\|\\|\\|")[1];
-								// Lang aqui
+								String lang = parameters[j++].split("\\|\\|\\|")[1];
+
 								System.out.println("Title: " + title);
 								System.out.println("Url: " + url);
 								System.out.println("Text: " + text);
-								// Lang aqui
-								searchResults.add(new SearchResult(title,url,text,"PT"));
+								System.out.println("Lang: " + lang);
+
+								searchResults.add(new SearchResult(title,url,text,lang));
 							}
 						}
 					}

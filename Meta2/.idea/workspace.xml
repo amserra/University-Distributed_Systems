@@ -12,19 +12,14 @@
       <change beforePath="$PROJECT_DIR$/Meta1/files/search_1.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Meta1/files/search_1.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Meta1/files/urls_1.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Meta1/files/urls_1.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Meta1/files/users_1.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Meta1/files/users_1.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Meta1/src/MulticastServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/Meta1/src/MulticastServer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Meta1/src/MulticastServerAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/Meta1/src/MulticastServerAction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Meta1/src/RMIMulticastManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/Meta1/src/RMIMulticastManager.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Meta1/src/RMIServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/Meta1/src/RMIServer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Meta1/src/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/Meta1/src/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Meta1/src/rmiserver/ServerInterface.java" beforeDir="false" afterPath="$PROJECT_DIR$/Meta1/src/rmiserver/ServerInterface.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Meta2/WebContent/index.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/Meta2/WebContent/index.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Meta2/src/meta2/action/AuthAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/Meta2/src/meta2/action/AuthAction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Meta2/src/meta2/action/ExchangeAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/Meta2/src/meta2/action/ExchangeAction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Meta2/src/meta2/action/FacebookLoginAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/Meta2/src/meta2/action/FacebookLoginAction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Meta2/src/rmiserver/ClientInterface.java" beforeDir="false" afterPath="$PROJECT_DIR$/Meta2/src/rmiserver/ClientInterface.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Meta2/src/rmiserver/ServerInterface.java" beforeDir="false" afterPath="$PROJECT_DIR$/Meta2/src/rmiserver/ServerInterface.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Meta2/src/struts.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Meta2/src/struts.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Meta1/src/URL.java" beforeDir="false" afterPath="$PROJECT_DIR$/Meta1/src/URL.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Meta1/src/WebCrawler.java" beforeDir="false" afterPath="$PROJECT_DIR$/Meta1/src/WebCrawler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Meta2/src/meta2/action/SearchAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/Meta2/src/meta2/action/SearchAction.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/artifacts/Meta2/Meta2.war" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/Meta2/Meta2.war" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Meta2/struts.xml" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Meta2/struts.xml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -233,7 +228,8 @@
       <workItem from="1576075575253" duration="155000" />
       <workItem from="1576076948044" duration="5895000" />
       <workItem from="1576150462604" duration="21085000" />
-      <workItem from="1576186216114" duration="8973000" />
+      <workItem from="1576186216114" duration="9242000" />
+      <workItem from="1576235698934" duration="9672000" />
     </task>
     <servers />
   </component>
@@ -245,7 +241,9 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
           </value>
         </entry>
       </map>

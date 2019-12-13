@@ -306,13 +306,29 @@ public class RMIServer extends UnicastRemoteObject implements ServerInterface {
         HttpURLConnection connection = getYandexConnection(url);
 
         OutputStream os = connection.getOutputStream();
-        os.write(("key=" + yandexKey + "&text=" + text + "&lang=en").getBytes());
+        os.write(("key=" + yandexKey + "&text=" + text + "&lang=pt").getBytes());
         os.flush();
 
-        String language = getAnswer(false, connection );
+        String translatedText = getAnswer(false, connection );
+
+        return translatedText;
+    }
+
+    public String detectLanguage(String text) throws IOException, ParseException {
+        URL url = new URL(yandexDetectLanguage);
+
+        HttpURLConnection connection = getYandexConnection(url);
+
+        OutputStream os = connection.getOutputStream();
+        os.write(("key=" + yandexKey + "&text=" + text).getBytes());
+        os.flush();
+
+        String language = getAnswer(true, connection );
 
         return language;
     }
+
+
 
     public HttpURLConnection getYandexConnection(URL url) throws IOException {
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -336,14 +352,16 @@ public class RMIServer extends UnicastRemoteObject implements ServerInterface {
         }
         in.close();
 
-        System.out.println(response.toString());
-
         JSONParser parser = new JSONParser();
         JSONObject json = (JSONObject) parser.parse(response.toString());
 
-        JSONArray jsonArray = (JSONArray) json.get("text");
+        if(isDetect){
+            return (String) json.get("lang");
+        }else{
+            JSONArray jsonArray = (JSONArray) json.get("text");
 
-        return (String) jsonArray.get(0);
+            return (String) jsonArray.get(0);
+        }
     }
 
     // End of rmiserver.ServerInterface methods

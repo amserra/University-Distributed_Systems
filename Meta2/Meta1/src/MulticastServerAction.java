@@ -214,13 +214,16 @@ public class MulticastServerAction extends Thread {
                 String serverNo = receivedSplit[2].split("\\|\\|\\|")[1];
                 String url = receivedSplit[3].split("\\|\\|\\|")[1];
 
+                server.setUrlID(server.getUrlID() + 1);
+
                 for (MulticastServerInfo msi : server.getMulticastServerList())
                     if (msi.getServerNo() == Integer.parseInt(serverNo))
                         msi.setLoad(msi.getLoad() + 1);
 
                 if (Integer.parseInt(serverNo) == server.getMulticastServerNo()) {
 
-                    WebCrawler getUrls = new WebCrawler(server, url);
+                    WebCrawler getUrls = new WebCrawler(server, url, group, socket, server.getUrlID());
+                    server.getWebCrawlersList().add(getUrls);
                     getUrls.start();
 
                     message = "type|||indexResult;;clientNo|||" + clientNo + ";;status|||started";
@@ -323,7 +326,7 @@ public class MulticastServerAction extends Thread {
                         if (urlResults.contains(url.getUrl()) && !check.contains(url.getUrl())) {
                             check.add(url.getUrl());
                             message += ";;title_" + urlCount + "|||" + url.getTitle() + ";;url_" + urlCount + "|||"
-                                    + url.getUrl() + ";;text_" + urlCount + "|||" + url.getText();
+                                    + url.getUrl() + ";;text_" + urlCount + "|||" + url.getText() + ";;language_" + urlCount + "|||" + url.getLang();
                             urlCount++;
                             if (urlCount == maxUrlsSent)
                                 break;
@@ -566,6 +569,20 @@ public class MulticastServerAction extends Thread {
                 }
 
                 System.out.println("Message sent: " + message);
+            } else if(messageType.equals("detectResult")){
+                int receivedServerNo = Integer.parseInt(receivedSplit[1].split("\\|\\|\\|")[1]);
+                int receivedUrlId = Integer.parseInt(receivedSplit[2].split("\\|\\|\\|")[1]);
+                String language = receivedSplit[3].split("\\|\\|\\|")[1];
+
+                if(receivedServerNo == server.getMulticastServerNo()){
+                    for(WebCrawler wc: server.getWebCrawlersList())
+                        if(wc.getUrlID() == receivedUrlId) {
+                            wc.setLanguageCurrent(language);
+                            synchronized(wc){
+                                wc.notify();
+                            }
+                        }
+                }
             }
 
             if (!message.equals("")) {
