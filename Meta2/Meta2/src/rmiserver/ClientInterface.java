@@ -179,4 +179,7 @@ public interface ClientInterface extends Remote {
      */
     public String grantPrivileges(int clientNo, String username)
             throws java.rmi.RemoteException, java.rmi.NotBoundException, java.net.MalformedURLException;
+
+    public void notification()
+            throws java.rmi.RemoteException, java.rmi.NotBoundException, java.net.MalformedURLException;
 }

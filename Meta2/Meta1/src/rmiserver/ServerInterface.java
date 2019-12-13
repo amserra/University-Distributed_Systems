@@ -40,8 +40,6 @@ public interface ServerInterface extends Remote {
          */
         public String sayHelloFromClient(ClientInterface client) throws java.rmi.RemoteException;
 
-        public void sayHelloFromWebSocket(int clientNo, Session session) throws RemoteException;
-
         /**
          * Remote method used by BackupRMIServer to test the PrimaryRMIServer
          * 
@@ -208,4 +206,8 @@ public interface ServerInterface extends Remote {
          */
         public String grantPrivileges(int clientNo, String username)
                         throws java.rmi.RemoteException, java.rmi.NotBoundException, java.net.MalformedURLException;
+
+        public void sayHelloFromClient(int clientNo, ClientInterface client) throws RemoteException;
+
+        public void removeClient(int clientNo) throws RemoteException;
 }

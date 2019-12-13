@@ -12,7 +12,7 @@ function connect(host) { // connect to the host websocket
     else if ('MozWebSocket' in window)
         websocket = new MozWebSocket(host);
     else {
-        writeToHistory('Get a real browser which supports WebSocket.');
+        console.log('Get a real browser which supports WebSocket.');
         return;
     }
 
@@ -23,38 +23,42 @@ function connect(host) { // connect to the host websocket
 }
 
 function onOpen(event) {
-    writeToHistory('Connected to ' + window.location.host + '.');
+    console.log('Connected to ' + window.location.host + '.');
+    console.log(window.location.pathname + window.location.search);
+    /*
     document.getElementById('chat').onkeydown = function(key) {
         if (key.code === 'Enter')
             doSend(); // call doSend() on enter key press
     };
+    */
 }
 
 function onClose(event) {
-    writeToHistory('WebSocket closed (code ' + event.code + ').');
-    document.getElementById('chat').onkeydown = null;
+    console.log('WebSocket closed (code ' + event.code + ').');
+    //document.getElementById('chat').onkeydown = null;
 }
 
 function onMessage(message) { // print the received message
     if(message.data == "You have been promoted to admin!") {
         console.log('Promoting to admin toast');
-        M.toast({html: 'You have been promoted to admin!',displayLength: 20000});
+        M.toast({html: 'You have been promoted to admin! Refresh the page.',displayLength: 20000});
     }
-        writeToHistory(message.data);
+        console.log(message.data);
 }
 
 function onError(event) {
-    writeToHistory('WebSocket error.');
-    document.getElementById('chat').onkeydown = null;
+    console.log('WebSocket error.');
+    //document.getElementById('chat').onkeydown = null;
 }
 
 function doSend() {
     var message = document.getElementById('chat').value;
     if (message != '')
         websocket.send(message); // send the message to the server
-    document.getElementById('chat').value = '';
+    //document.getElementById('chat').value = '';
 }
 
+/*
 function writeToHistory(text) {
     var history = document.getElementById('history');
     var line = document.createElement('p');
@@ -62,4 +66,4 @@ function writeToHistory(text) {
     line.innerHTML = text;
     history.appendChild(line);
     history.scrollTop = history.scrollHeight;
-}
+}*/

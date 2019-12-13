@@ -70,7 +70,7 @@ public class RMIClient extends UnicastRemoteObject implements ClientInterface {
 
     public void establishConnection() throws MalformedURLException, RemoteException, NotBoundException {
         // Dar para trocar o bkup pelo prim vir aqui. E so para ser + rapido
-        serverInterface = (ServerInterface) Naming.lookup(RMINAME);
+        serverInterface = (ServerInterface) LocateRegistry.getRegistry(REGISTRYPORT).lookup(RMINAME);
     }
 
     public void rtsUpdate(String msg) {
@@ -95,6 +95,7 @@ public class RMIClient extends UnicastRemoteObject implements ClientInterface {
             //serverInterface = (ServerInterface) Naming.lookup(RMINAME);
             serverInterface = (ServerInterface) LocateRegistry.getRegistry(REGISTRYPORT).lookup(RMINAME);
         } catch (java.rmi.ConnectException e) {
+            e.printStackTrace();
             System.out.println("\nConnect the server first.");
             System.exit(-1);
         }
