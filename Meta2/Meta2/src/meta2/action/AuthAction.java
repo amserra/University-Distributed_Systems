@@ -14,7 +14,7 @@ import rmiserver.ServerInterface;
 public class AuthAction extends ActionSupport implements SessionAware {
     private static final long serialVersionUID = 4L;
     private Map<String, Object> session;
-    private String username = null, password = null, type = null, uiMsg = null, notificationMsg = null;
+    private String username = null, password = null, type = null, uiMsg = null, notificationMsg = null, name = null;
 
     @Override
     public String execute() {
@@ -57,6 +57,15 @@ public class AuthAction extends ActionSupport implements SessionAware {
                                     if (notification) {
                                         System.out.println("Notification: You have been promoted to admin!");
                                         notificationMsg = "Since your last visit, you have been promoted to admin!";
+                                    }
+
+                                    try{
+                                        name = parameters[6].split("\\|\\|\\|")[1];
+                                        this.getHeyBean().setName(this.name);
+                                        session.put("name", this.name);
+
+                                    } catch (ArrayIndexOutOfBoundsException e){
+                                        System.out.println("Conta sem facebook associado");
                                     }
                                 } else {
                                     System.out.println("Register successful. Welcome " + usr + ".\n");

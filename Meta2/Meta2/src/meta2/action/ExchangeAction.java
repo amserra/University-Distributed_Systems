@@ -5,6 +5,7 @@ import meta2.model.HeyBean;
 import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.interceptor.SessionAware;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.ParseException;
 import rmiserver.ServerInterface;
 
 import java.io.IOException;
@@ -12,6 +13,7 @@ import java.net.URL;
 import java.net.URLDecoder;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 import javax.servlet.http.HttpServletRequest;
 
 
@@ -22,7 +24,7 @@ public class ExchangeAction extends ActionSupport implements SessionAware {
 
 
     @Override
-    public String execute() throws IOException{
+    public String execute() throws IOException, InterruptedException, ExecutionException, ParseException {
 
         System.out.println("Let's trade code for token!");
 
@@ -47,8 +49,9 @@ public class ExchangeAction extends ActionSupport implements SessionAware {
 
         String code = query_pairs.get("code");
 
+        System.out.println(getHeyBean().getUsername());
 
-        JSONObject json = server.exchangeCodeForToken(code, clientNo);
+        JSONObject json = server.exchangeCodeForToken(code, clientNo, getHeyBean().getUsername());
         System.out.println(json);
 
         String msg = (String) json.get("msg");
@@ -62,31 +65,53 @@ public class ExchangeAction extends ActionSupport implements SessionAware {
 
             if (clientNo == receivedClientNo) {
 
-                String usr = parameters[3].split("\\|\\|\\|")[1];
-                boolean isAdmin = Boolean.parseBoolean(parameters[4].split("\\|\\|\\|")[1]);
-                if (isAdmin) {
-                    this.getHeyBean().setTypeOfClient("admin");
-                    session.put("typeOfClient","admin");
+                if(getHeyBean().getUsername() == null || getHeyBean().getUsername().equals("")) {
+
+                    String usr = parameters[3].split("\\|\\|\\|")[1];
+                    boolean isAdmin = Boolean.parseBoolean(parameters[4].split("\\|\\|\\|")[1]);
+                    if (isAdmin) {
+                        this.getHeyBean().setTypeOfClient("admin");
+                        session.put("typeOfClient", "admin");
+                    } else {
+                        this.getHeyBean().setTypeOfClient("user");
+                        session.put("typeOfClient", "user");
+                    }
+
+                    System.out.println("Login successful. Welcome " + name + "\n");
+
+                    uiMsg = "Login successful. Welcome " + name;
+                    boolean notification = Boolean.parseBoolean(parameters[5].split("\\|\\|\\|")[1]);
+                    if (notification) {
+                        System.out.println("Notification: You have been promoted to admin!");
+                        notificationMsg = "You have been promoted to admin!";
+                    }
+
+                    this.getHeyBean().setUsername(this.username);
+                    session.put("username", username);
+
+                    this.getHeyBean().setName(this.name);
+                    session.put("name", this.name);
+
+                    return SUCCESS;
+                } else{
+
+                    String status = parameters[2].split("\\|\\|\\|")[1];
+
+                    if(status.equals("valid")){
+
+                        uiMsg = "Facebook associated successfully!";
+
+                        this.getHeyBean().setUsername(this.username);
+                        session.put("username", username);
+
+                        this.getHeyBean().setName(this.name);
+                        session.put("name", this.name);
+                    } else{
+                        uiMsg = "That Facebook account is already linked to other account.";
+                    }
+
+                    return LOGIN;
                 }
-                else {
-                    this.getHeyBean().setTypeOfClient("user");
-                    session.put("typeOfClient","user");
-                }
-
-                System.out.println("Login successful. Welcome " + name + "\n");
-
-                uiMsg = "Login successful. Welcome " + name;
-                boolean notification = Boolean.parseBoolean(parameters[5].split("\\|\\|\\|")[1]);
-                if (notification) {
-                    System.out.println("Notification: You have been promoted to admin!");
-                    notificationMsg = "You have been promoted to admin!";
-                }
-
-                this.getHeyBean().setUsername(this.username);
-                session.put("username", username);
-
-                this.getHeyBean().setName(this.name);
-                session.put("name", this.name);
 
             }
         } else {
@@ -94,8 +119,6 @@ public class ExchangeAction extends ActionSupport implements SessionAware {
 
             return ERROR;
         }
-
-
 
         return SUCCESS;
 

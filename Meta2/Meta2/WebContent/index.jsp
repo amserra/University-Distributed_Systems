@@ -13,6 +13,7 @@
 		<link href="css/navbar.css" rel="stylesheet">
 		<link href="css/index.css" rel="stylesheet">
 		<script type="text/javascript" src="js/materialize.min.js"></script>
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 	</head>
 
 	<body>
@@ -37,6 +38,11 @@
 							<c:when test="${session.typeOfClient eq 'admin'}">
 								<li><a href="<s:url action="indexNewUrlAction"></s:url>">Index url</a></li>
 								<li><a href="<s:url action="adminPrivilegesAction"></s:url>">Admin privileges</a></li>
+							</c:when>
+						</c:choose>
+						<c:choose>
+							<c:when test="${empty session.name}">
+								<li><a href="<s:url action="associateFacebookAction"></s:url>">Associate Facebook</a></li>
 							</c:when>
 						</c:choose>
 						<li><a href="<s:url action="searchHistoryAction"></s:url>">Search history</a></li>
@@ -123,6 +129,30 @@
 				</div>
 			</div>
 		</div>
+		<!-- Modal Structure -->
+		<div class="modal">
+			<div class="modal-content">
+				<h4>Associate Facebook</h4>
+				<p>${uiMsg}</p>
+
+			</div>
+			<div class="modal-footer">
+				<a class="modal-close waves-effect waves-green btn-flat">Ok</a>
+			</div>
+		</div>
+
+		<c:choose>
+			<c:when test="${uiMsg != null}">
+				<script>
+					$.getScript('js/materialize.min.js', function()
+					{
+						$('.modal').modal({dismissible: false, onCloseEnd: ()=>$('.modal').modal('destroy')});
+						$('.modal').modal('open');
+					});
+				</script>
+			</c:when>
+		</c:choose>
+
 		<script type="text/javascript" src="js/initializeSideBar.js"></script>
 	</body>
 </html>

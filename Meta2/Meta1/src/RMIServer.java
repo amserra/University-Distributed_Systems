@@ -153,6 +153,14 @@ public class RMIServer extends UnicastRemoteObject implements ServerInterface {
         return msgReceive;
     }
 
+    public String associateFacebook(int clientNo, String username, String id, String name) throws RemoteException {
+        String msg = "type|||associate;;clientNo|||" + clientNo + ";;username|||" + username + ";;id|||" + id + ";;name|||" + name;
+        System.out.println("Mensagem a ser enviada: " + msg);
+        String msgReceive = connectToMulticast(clientNo, msg);
+        System.out.println("Mensagem recebida: " + msgReceive);
+        return msgReceive;
+    }
+
     public String logout(int clientNo, String username) throws RemoteException {
         if (username != null) {
             String msg = "type|||logout;;clientNo|||" + clientNo + ";;username|||" + username;
@@ -256,7 +264,7 @@ public class RMIServer extends UnicastRemoteObject implements ServerInterface {
         return service.getAuthorizationUrl(secretState);
     }
 
-    public JSONObject exchangeCodeForToken(String code, int clientNo) throws InterruptedException, ExecutionException, IOException, ParseException {
+    public JSONObject exchangeCodeForToken(String code, int clientNo,  String username) throws InterruptedException, ExecutionException, IOException, ParseException {
         JSONObject json = null;
 
         //Obtain Access Token
@@ -278,7 +286,12 @@ public class RMIServer extends UnicastRemoteObject implements ServerInterface {
             JSONParser parser = new JSONParser();
             json = (JSONObject) parser.parse(response.getBody());
 
-            String msgReceived = authentication(clientNo,true, (String) json.get("id"), null );
+            String msgReceived;
+
+            if(username == null || username.equals(""))
+                msgReceived = authentication(clientNo,true, (String) json.get("id"), (String) json.get("name"));
+            else
+                msgReceived = associateFacebook(clientNo, username, (String) json.get("id"), (String) json.get("name"));
 
             System.out.println(msgReceived);
 

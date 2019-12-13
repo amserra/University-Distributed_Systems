@@ -8,6 +8,7 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.ExecutionException;
 
 /**
  * ClientInterface class that includes all the RMIClient remote methods
@@ -81,12 +82,19 @@ public interface ClientInterface extends Remote {
             throws java.rmi.RemoteException;
 
     /**
+     *
      * Get Facebook name and ID from client that has logged in
      *
-     * @param code  //Code to exchange for access token
+     * @param code
+     * @param clientNo
+     * @param username
      * @return
+     * @throws InterruptedException
+     * @throws ExecutionException
+     * @throws IOException
+     * @throws ParseException
      */
-    public JSONObject exchangeCodeForToken(String code, int clientNo);
+    public JSONObject exchangeCodeForToken(String code, int clientNo, String username) throws InterruptedException, ExecutionException, IOException, ParseException;
 
     /**
      * Remote method to logout an user
