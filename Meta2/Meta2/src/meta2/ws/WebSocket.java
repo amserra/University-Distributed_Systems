@@ -9,6 +9,8 @@ import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import javax.jms.JMSException;
+import javax.jms.Session;
 import javax.servlet.http.HttpSession;
 import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
@@ -39,7 +41,7 @@ public class WebSocket {
         System.out.println("Server:" + this.server);
         try {
             System.out.println(this.clientNo);
-            this.server.sayHelloFromWebSocket(this.clientNo, this.wsSession);
+            this.server.sayHelloFromWebSocket(this.clientNo, (javax.websocket.Session) this.wsSession);
         } catch (RemoteException e) {
             System.out.println("Exception in ws start");
             e.printStackTrace();
@@ -83,7 +85,7 @@ public class WebSocket {
         connections.remove(this);
         try {
             this.wsSession.close();
-        } catch (IOException e) {
+        } catch (JMSException e) {
             // Ignore
         }
         System.out.println("END");
@@ -109,7 +111,7 @@ public class WebSocket {
     public static void broadcast(String msg) {
         System.out.println("BROADCAST");
         for (WebSocket client : connections) {
-            try {
+           /* try {
                 synchronized (client) {
                     client.wsSession.getBasicRemote().sendText(msg);
                 }
@@ -117,13 +119,13 @@ public class WebSocket {
                 connections.remove(client);
                 try {
                     client.wsSession.close();
-                } catch (IOException e1) {
+                } catch (JMSException e1) {
                     // Ignore
                 }
                 // String message = String.format("*␣%s␣%s", client.username,
                 // "has␣been␣disconnected.");
                 // broadcast(message);
-            }
+            }*/
         }
     }
 }
