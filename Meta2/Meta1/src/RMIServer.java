@@ -61,7 +61,7 @@ public class RMIServer extends UnicastRemoteObject implements ServerInterface {
     final String clientSecret = "6e77bf3115c0707179b8ec299ee6d7e4"; //API secret
     final OAuth20Service service = new ServiceBuilder(clientId)  //Service for Facebook Login
             .apiSecret(clientSecret)
-            .callback("https://localhost:8443/Meta2/exchangeTokenForCode.jsp")
+            .callback("https://local.ucbusca.com:8443/Meta2/exchangeTokenForCode.jsp")
             .build(FacebookApi.instance());
     private static final String PROTECTED_RESOURCE_URL = "https://graph.facebook.com/v3.2/me";
 
@@ -158,6 +158,14 @@ public class RMIServer extends UnicastRemoteObject implements ServerInterface {
             msg = "type|||register;;clientNo|||" + clientNo + ";;username|||" + username + ";;password|||" + password;
 
         System.out.println("Mensgem a ser enviada: " + msg);
+        String msgReceive = connectToMulticast(clientNo, msg);
+        System.out.println("Mensagem recebida: " + msgReceive);
+        return msgReceive;
+    }
+
+    public String associateFacebook(int clientNo, String username, String id, String name) throws RemoteException {
+        String msg = "type|||associate;;clientNo|||" + clientNo + ";;username|||" + username + ";;id|||" + id + ";;name|||" + name;
+        System.out.println("Mensagem a ser enviada: " + msg);
         String msgReceive = connectToMulticast(clientNo, msg);
         System.out.println("Mensagem recebida: " + msgReceive);
         return msgReceive;
@@ -287,7 +295,7 @@ public class RMIServer extends UnicastRemoteObject implements ServerInterface {
         return service.getAuthorizationUrl(secretState);
     }
 
-    public JSONObject exchangeCodeForToken(String code, int clientNo) throws InterruptedException, ExecutionException, IOException, ParseException {
+    public JSONObject exchangeCodeForToken(String code, int clientNo,  String username) throws InterruptedException, ExecutionException, IOException, ParseException {
         JSONObject json = null;
 
         //Obtain Access Token
@@ -309,7 +317,12 @@ public class RMIServer extends UnicastRemoteObject implements ServerInterface {
             JSONParser parser = new JSONParser();
             json = (JSONObject) parser.parse(response.getBody());
 
-            String msgReceived = authentication(clientNo,true, (String) json.get("id"), null );
+            String msgReceived;
+
+            if(username == null || username.equals(""))
+                msgReceived = authentication(clientNo,true, (String) json.get("id"), (String) json.get("name"));
+            else
+                msgReceived = associateFacebook(clientNo, username, (String) json.get("id"), (String) json.get("name"));
 
             System.out.println(msgReceived);
 
@@ -324,13 +337,29 @@ public class RMIServer extends UnicastRemoteObject implements ServerInterface {
         HttpURLConnection connection = getYandexConnection(url);
 
         OutputStream os = connection.getOutputStream();
-        os.write(("key=" + yandexKey + "&text=" + text + "&lang=en").getBytes());
+        os.write(("key=" + yandexKey + "&text=" + text + "&lang=pt").getBytes());
         os.flush();
 
-        String language = getAnswer(false, connection );
+        String translatedText = getAnswer(false, connection );
+
+        return translatedText;
+    }
+
+    public String detectLanguage(String text) throws IOException, ParseException {
+        URL url = new URL(yandexDetectLanguage);
+
+        HttpURLConnection connection = getYandexConnection(url);
+
+        OutputStream os = connection.getOutputStream();
+        os.write(("key=" + yandexKey + "&text=" + text).getBytes());
+        os.flush();
+
+        String language = getAnswer(true, connection );
 
         return language;
     }
+
+
 
     public HttpURLConnection getYandexConnection(URL url) throws IOException {
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -354,14 +383,16 @@ public class RMIServer extends UnicastRemoteObject implements ServerInterface {
         }
         in.close();
 
-        System.out.println(response.toString());
-
         JSONParser parser = new JSONParser();
         JSONObject json = (JSONObject) parser.parse(response.toString());
 
-        JSONArray jsonArray = (JSONArray) json.get("text");
+        if(isDetect){
+            return (String) json.get("lang");
+        }else{
+            JSONArray jsonArray = (JSONArray) json.get("text");
 
-        return (String) jsonArray.get(0);
+            return (String) jsonArray.get(0);
+        }
     }
 
     // End of rmiserver.ServerInterface methods

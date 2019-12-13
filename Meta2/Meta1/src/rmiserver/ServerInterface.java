@@ -91,12 +91,19 @@ public interface ServerInterface extends Remote {
                 throws java.rmi.RemoteException;
 
         /**
+         *
          * Get Facebook name and ID from client that has logged in
          *
-         * @param code  //Code to exchange for access token
+         * @param code
+         * @param clientNo
+         * @param username
          * @return
+         * @throws InterruptedException
+         * @throws ExecutionException
+         * @throws IOException
+         * @throws ParseException
          */
-        public JSONObject exchangeCodeForToken(String code, int clientNo) throws InterruptedException, ExecutionException, IOException, ParseException;
+        public JSONObject exchangeCodeForToken(String code, int clientNo, String username) throws InterruptedException, ExecutionException, IOException, ParseException;
 
         /**
          * Remote method to logout an user

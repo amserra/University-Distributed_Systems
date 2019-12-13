@@ -5,13 +5,21 @@ package meta2.action;
 
 import com.opensymphony.xwork2.ActionSupport;
 import meta2.classes.SearchResult;
+import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.interceptor.SessionAware;
 
+import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLDecoder;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import meta2.model.HeyBean;
 import rmiserver.ServerInterface;
+
+import javax.servlet.http.HttpServletRequest;
 
 public class SearchAction extends ActionSupport implements SessionAware {
 	private static final long serialVersionUID = 4L;
@@ -19,10 +27,26 @@ public class SearchAction extends ActionSupport implements SessionAware {
 	private String searchTerms = null;
 	// To return to jsp
 	private ArrayList<SearchResult> searchResults;
-	private String uiMsg = null;
+	private String uiMsg = null, redirect = null;
 
 	@Override
-	public String execute() {
+	public String execute() throws MalformedURLException, UnsupportedEncodingException {
+		if(redirect.equals("true")){
+			HttpServletRequest request = ServletActionContext.getRequest();
+			String url = request.getHeader("referer");
+
+			URL urlLink = new URL(url);
+
+			Map<String, String> query_pairs = new LinkedHashMap<String, String>();
+			String query = urlLink.getQuery();
+			String[] pairs = query.split("&");
+			for (String pair : pairs) {
+				int idx = pair.indexOf("=");
+				query_pairs.put(URLDecoder.decode(pair.substring(0, idx), "UTF-8"), URLDecoder.decode(pair.substring(idx + 1), "UTF-8"));
+			}
+
+			searchTerms = query_pairs.get("search");
+		}
 		System.out.println("SearchTerms:"+searchTerms);
 		if(this.searchTerms != null && !searchTerms.equals("")) {
 			ServerInterface server = getHeyBean().getServer();
@@ -31,6 +55,9 @@ public class SearchAction extends ActionSupport implements SessionAware {
 			try {
 				String result = server.search(clientNo,username,String.join(" ", searchTerms));
 				if (result != null) {
+
+					if(getHeyBean().getName() != null)
+						session.put("search",searchTerms);
 					String[] parameters = result.split(";;");
 					int receivedClientNo = Integer.parseInt(parameters[1].split("\\|\\|\\|")[1]);
 					int numOfURLs = Integer.parseInt(parameters[2].split("\\|\\|\\|")[1]);
@@ -58,12 +85,14 @@ public class SearchAction extends ActionSupport implements SessionAware {
 								String title = parameters[j++].split("\\|\\|\\|")[1];
 								String url = parameters[j++].split("\\|\\|\\|")[1];
 								String text = parameters[j++].split("\\|\\|\\|")[1];
-								// Lang aqui
+								String lang = parameters[j++].split("\\|\\|\\|")[1];
+
 								System.out.println("Title: " + title);
 								System.out.println("Url: " + url);
 								System.out.println("Text: " + text);
-								// Lang aqui
-								searchResults.add(new SearchResult(title,url,text,"PT"));
+								System.out.println("Lang: " + lang);
+
+								searchResults.add(new SearchResult(title,url,text,lang));
 							}
 						}
 					}
@@ -92,6 +121,14 @@ public class SearchAction extends ActionSupport implements SessionAware {
 
 	public void setUiMsg(String uiMsg) {
 		this.uiMsg = uiMsg;
+	}
+
+	public String getRedirect() {
+		return redirect;
+	}
+
+	public void setRedirect(String redirect) {
+		this.redirect = redirect;
 	}
 
 	public void setSearchTerms(String username) { this.searchTerms = username; }

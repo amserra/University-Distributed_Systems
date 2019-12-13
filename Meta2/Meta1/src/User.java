@@ -6,6 +6,7 @@ public class User implements Serializable{
     private static final long serialVersionUID = 1L;
     private String username;    //Username for users that registered normally
     private String id;      //id to know User Facebook ID
+    private String name;    //Name in facebook
     private String password;
     private boolean isAdmin; // Check if User is Admin
     private ArrayList<String> searchHistory; // List with searches that the user has made
@@ -34,6 +35,27 @@ public class User implements Serializable{
         this.searchHistory = new ArrayList<>();
     }
 
+    /**
+     *
+     * @param id
+     * @param isAdmin
+     * @param isLoggedIn
+     * @param clientNo
+     * @param notification
+     * @param name
+     */
+    public User(String id, boolean isAdmin, boolean isLoggedIn, int clientNo, boolean notification, String name) {
+        this.id = id;
+        this.name = name;
+        this.isAdmin = isAdmin;
+        this.isLoggedIn = isLoggedIn;
+        this.clientNo = clientNo;
+        this.notification = false;
+        this.searchHistory = new ArrayList<>();
+    }
+
+
+
     
     /** 
      * @param username
@@ -60,8 +82,23 @@ public class User implements Serializable{
             return false;
     }
 
-    
-    /** 
+    /**
+     *
+     * @return
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     *
+     * @param name
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    /**
      * @return String
      */
     public String getUsername() {

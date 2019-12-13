@@ -12,10 +12,10 @@
     <link type="text/css" rel="stylesheet" href="css/materialize.min.css" media="screen,projection">
     <link href="css/navbar.css" rel="stylesheet">
     <link href="css/index.css" rel="stylesheet">
-    <meta http-equiv="refresh" content="0; URL=./exchangeAction" />
+    <meta http-equiv="refresh" content="0; URL=./searchRedirectAction" />
 </head>
 
 <body>
-    If you are not automatically redirected please click <a href="<s:url action="exchangeAction"></s:url>">here</a>.
+    If you are not automatically redirected please click <a href="<s:url action="searchRedirectAction"></s:url>">here</a>.
 </body>
 </html>

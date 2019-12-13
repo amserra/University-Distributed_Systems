@@ -68,16 +68,37 @@ and should reside on the classpath of the webapp (generally /WEB-INF/classes). -
         </action>
 
         <action name="loginFacebook" class="meta2.action.FacebookLoginAction" method="execute">
+            <param name="isFacebookLogin">true</param>
+            <result name="success">/facebookLogin.jsp</result>
+            <result name="error">/error.jsp</result>
+        </action>
+
+        <action name="associateFacebookAction" class="meta2.action.FacebookLoginAction" method="execute">
+            <param name="isFacebookLogin">false</param>
             <result name="success">/facebookLogin.jsp</result>
             <result name="error">/error.jsp</result>
         </action>
 
         <action name="exchangeAction" class="meta2.action.ExchangeAction" method="execute">
             <result name="success">/login.jsp</result>
+            <result name="login">/index.jsp</result>
+            <result name="error">/error.jsp</result>
+        </action>
+
+        <action name="facebookShare" class="meta2.action.FacebookShareAction" method="execute">
+            <result name="success">/facebookLogin.jsp</result>
             <result name="error">/error.jsp</result>
         </action>
 
         <action name="searchAction" class="meta2.action.SearchAction" method="execute">
+            <param name="redirect">false</param>
+            <result name="success">/searchResults.jsp</result>
+            <result name="none">/index.jsp</result>
+            <result name="error">/error.jsp</result>
+        </action>
+
+        <action name="searchRedirectAction" class="meta2.action.SearchAction" method="execute">
+            <param name="redirect">true</param>
             <result name="success">/searchResults.jsp</result>
             <result name="none">/index.jsp</result>
             <result name="error">/error.jsp</result>

@@ -32,7 +32,9 @@ public class MulticastServer extends Thread {
 
     private CopyOnWriteArrayList<User> listUsers = new CopyOnWriteArrayList<User>(); // List with information about
                                                                                      // Users
+    private CopyOnWriteArrayList<WebCrawler> webCrawlersList = new CopyOnWriteArrayList<>();
     private CopyOnWriteArrayList<URL> urlList = new CopyOnWriteArrayList<>(); // List with information about URLs
+    private int urlID = 0;
     private CopyOnWriteArrayList<Search> searchList = new CopyOnWriteArrayList<>(); // Searches List
 
     private ConcurrentHashMap<String, CopyOnWriteArraySet<String>> index = new ConcurrentHashMap<>(); // HashMap with URL for each word
@@ -398,4 +400,35 @@ public class MulticastServer extends Thread {
         this.searchList = searchList;
     }
 
+    /**
+     *
+     * @return
+     */
+    public int getUrlID() {
+        return urlID;
+    }
+
+    /**
+     *
+     * @param urlID
+     */
+    public void setUrlID(int urlID) {
+        this.urlID = urlID;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public CopyOnWriteArrayList<WebCrawler> getWebCrawlersList() {
+        return webCrawlersList;
+    }
+
+    /**
+     *
+     * @param webCrawlersList
+     */
+    public void setWebCrawlersList(CopyOnWriteArrayList<WebCrawler> webCrawlersList) {
+        this.webCrawlersList = webCrawlersList;
+    }
 }

@@ -93,10 +93,25 @@ public class RMIMulticastManager extends Thread {
                         int load = Integer.parseInt(parameters[init++].split("\\|\\|\\|")[1]);
                         this.server.multicastServers.add(new MulticastServerInfo(serverNo, ip, port, load));
                     }
+                } else if(type.equals("detect") && !this.server.isBackup){
+                    String serverNo = parameters[1].split("\\|\\|\\|")[1];
+                    String urlId = parameters[2].split("\\|\\|\\|")[1];
+                    String text = parameters[3].split("\\|\\|\\|")[1];
+
+                    String language = server.detectLanguage(text);
+
+                    String msg = "type|||detectResult;;serverNo|||" + serverNo + ";;urlID|||" + urlId + ";;lang|||" + language;
+
+                    System.out.println(msg);
+
+                    byte[] bufferSend = msg.getBytes();
+                    DatagramPacket packetSend = new DatagramPacket(bufferSend, bufferSend.length, group, PORT);
+                    socket.send(packetSend);
                 }
             }
         } catch (Exception e) {
             socket.close();
+            System.out.println("Error RMI multicast manager");
             System.out.println("[Thread] ERROR: Something went wrong. Aborting program...");
             System.exit(-1);
         } finally {

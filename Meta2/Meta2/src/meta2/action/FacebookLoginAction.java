@@ -12,7 +12,7 @@ import java.util.Map;
 public class FacebookLoginAction extends ActionSupport implements SessionAware {
     private static final long serialVersionUID = 4L;
     private Map<String, Object> session;
-    private String authorizationUrl;
+    private String authorizationUrl, isFacebookLogin;
 
     @Override
     public String execute() {
@@ -35,6 +35,11 @@ public class FacebookLoginAction extends ActionSupport implements SessionAware {
             return ERROR;
         }
 
+    }
+
+
+    public void setIsFacebookLogin(String isFacebookLogin) {
+        this.isFacebookLogin = isFacebookLogin;
     }
 
     public String getAuthorizationUrl() {

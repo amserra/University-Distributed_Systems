@@ -7,6 +7,7 @@ public class URL implements Comparable<URL>, Serializable {
     private String url; // URL of the page
     private String title; // Title of the page
     private String text; // Part of the text of the page
+    private String lang; //Language of url
     private Integer linksCount; // Number of links pointing to this page
     private CopyOnWriteArraySet<String> urlPointingToMeList; // Links pointing to this page
 
@@ -98,8 +99,23 @@ public class URL implements Comparable<URL>, Serializable {
         this.title = title;
     }
 
-    
-    /** 
+    /**
+     *
+     * @return
+     */
+    public String getLang() {
+        return lang;
+    }
+
+    /**
+     *
+     * @param lang
+     */
+    public void setLang(String lang) {
+        this.lang = lang;
+    }
+
+    /**
      * @return String
      */
     public String getText() {

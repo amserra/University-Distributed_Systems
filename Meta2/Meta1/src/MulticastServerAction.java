@@ -73,7 +73,7 @@ public class MulticastServerAction extends Thread {
 
 
                 for (User u : listUsers) {
-                    if (u.getUsername().equals(username))
+                    if (u.getUsername() != null && u.getUsername().equals(username))
                         checkUser = true;
                 }
 
@@ -109,11 +109,14 @@ public class MulticastServerAction extends Thread {
                 String username = receivedSplit[2].split("\\|\\|\\|")[1];
                 String password = receivedSplit[3].split("\\|\\|\\|")[1];
 
-                if(username.matches("[0-9]+")){
+                if(username.matches("[0-9]+")){ //In this case username id Facebook ID and password is name on Facebook
 
                     for (User u : listUsers) {
-                        if (u.getId() != null && u.getId().equals(username))
+                        if (u.getId() != null && u.getId().equals(username)) {
                             checkUser = true;
+                            user = u;
+                            break;
+                        }
                     }
 
                     if (checkUser) {
@@ -123,21 +126,18 @@ public class MulticastServerAction extends Thread {
                                 + user.getUsername() + ";;isAdmin|||" + user.isAdmin() + ";;notification|||"
                                 + user.isNotification();
                         user.setNotification(false);
-
-
-
                     } else{
                         User newUser;
                         // First user is admin
                         if (listUsers.isEmpty())
-                            newUser = new User(username, null, true, true, Integer.parseInt(clientNo), false);
+                            newUser = new User(username, true, true, Integer.parseInt(clientNo), false, password);
                             // Other is user
                         else
-                            newUser = new User(username, null, false, true, Integer.parseInt(clientNo), false);
+                            newUser = new User(username, false, true, Integer.parseInt(clientNo), false, password);
 
                         listUsers.add(newUser);
                         message = "type|||loginResult;;clientNo|||" + clientNo + ";;status|||valid;;username|||"
-                                + newUser.getUsername() + ";;isAdmin|||" + newUser.isAdmin() + ";;notification|||false";
+                                + newUser.getId() + ";;isAdmin|||" + newUser.isAdmin() + ";;notification|||false";
                     }
 
                     saveUsers();
@@ -145,7 +145,7 @@ public class MulticastServerAction extends Thread {
                 } else{
 
                     for (User u : listUsers) {
-                        if (u.getUsername().equals(username) && u.getPassword().equals(password)) {
+                        if (u.getUsername() != null && u.getUsername().equals(username) && u.getPassword().equals(password)) {
                             checkUser = true;
                             user = u;
                             break;
@@ -160,6 +160,9 @@ public class MulticastServerAction extends Thread {
                                 + user.isNotification();
                         user.setNotification(false);
 
+                        if(user.getName() != null)
+                            message += ";;name|||" + user.getName();
+
                         saveUsers();
 
                     } else {
@@ -168,6 +171,38 @@ public class MulticastServerAction extends Thread {
                 }
 
                 System.out.println("Message sent: " + message);
+
+            } else if(messageType.equals("associate")){
+
+                System.out.println(received);
+
+                String clientNo = receivedSplit[1].split("\\|\\|\\|")[1];
+                String username = receivedSplit[2].split("\\|\\|\\|")[1];
+                String id = receivedSplit[3].split("\\|\\|\\|")[1];
+                String name = receivedSplit[4].split("\\|\\|\\|")[1];
+
+                User user = null;
+                boolean checkFacebook = false;
+
+                for(User u: listUsers){
+                    if(u.getUsername() != null && u.getUsername().equals(username))
+                        user = u;
+                    if(u.getId() != null && u.getId().equals(id)) {
+                        checkFacebook = true;
+                        break;
+                    }
+                }
+
+                if(!checkFacebook){
+                    user.setId(id);
+                    user.setName(name);
+
+                    message += "type|||associateResult;;clientNo|||" + clientNo + ";;status|||valid";
+
+                    saveUsers();
+                } else{
+                    message += "type|||associateResult;;clientNo|||" + clientNo + ";;status|||invalid";
+                }
 
             }
 
@@ -179,13 +214,16 @@ public class MulticastServerAction extends Thread {
                 String serverNo = receivedSplit[2].split("\\|\\|\\|")[1];
                 String url = receivedSplit[3].split("\\|\\|\\|")[1];
 
+                server.setUrlID(server.getUrlID() + 1);
+
                 for (MulticastServerInfo msi : server.getMulticastServerList())
                     if (msi.getServerNo() == Integer.parseInt(serverNo))
                         msi.setLoad(msi.getLoad() + 1);
 
                 if (Integer.parseInt(serverNo) == server.getMulticastServerNo()) {
 
-                    WebCrawler getUrls = new WebCrawler(server, url);
+                    WebCrawler getUrls = new WebCrawler(server, url, group, socket, server.getUrlID());
+                    server.getWebCrawlersList().add(getUrls);
                     getUrls.start();
 
                     message = "type|||indexResult;;clientNo|||" + clientNo + ";;status|||started";
@@ -225,7 +263,7 @@ public class MulticastServerAction extends Thread {
                     User user = null;
 
                     for (User u : listUsers)
-                        if (u.getUsername().equals(username)) {
+                        if ((u.getUsername() != null && u.getUsername().equals(username)) || (u.getId() != null && u.getId().equals(username))) {
                             user = u;
                             break;
                         }
@@ -288,7 +326,7 @@ public class MulticastServerAction extends Thread {
                         if (urlResults.contains(url.getUrl()) && !check.contains(url.getUrl())) {
                             check.add(url.getUrl());
                             message += ";;title_" + urlCount + "|||" + url.getTitle() + ";;url_" + urlCount + "|||"
-                                    + url.getUrl() + ";;text_" + urlCount + "|||" + url.getText();
+                                    + url.getUrl() + ";;text_" + urlCount + "|||" + url.getText() + ";;language_" + urlCount + "|||" + url.getLang();
                             urlCount++;
                             if (urlCount == maxUrlsSent)
                                 break;
@@ -308,7 +346,7 @@ public class MulticastServerAction extends Thread {
 
                 //Get User
                 for (User u : listUsers)
-                    if (u.getUsername().equals(username)) {
+                    if ((u.getUsername() != null && u.getUsername().equals(username)) || (u.getId() != null && u.getId().equals(username))) {
                         user = u;
                         break;
                     }
@@ -370,11 +408,16 @@ public class MulticastServerAction extends Thread {
                 String clientNo = receivedSplit[1].split("\\|\\|\\|")[1];
                 String username = receivedSplit[2].split("\\|\\|\\|")[1];
 
-                User tempUser = new User(username);
+                User user = null;
 
-                if (listUsers.contains(tempUser)) {
-                    int indexOfUser = listUsers.indexOf(tempUser);
-                    User user = listUsers.get(indexOfUser);
+                //Get User
+                for (User u : listUsers)
+                    if ((u.getUsername() != null && u.getUsername().equals(username)) || (u.getId() != null && u.getId().equals(username))) {
+                        user = u;
+                        break;
+                    }
+
+                if (user != null) {
                     if (user.isAdmin())
                         message = "type|||promoteResult;;clientNo|||" + clientNo
                                 + ";;status|||invalid;;message|||User is already admin";
@@ -388,7 +431,6 @@ public class MulticastServerAction extends Thread {
                             user.setNotification(true);
 
                         saveUsers();
-
                     }
                 } else {
                     message = "type|||promoteResult;;clientNo|||" + clientNo
@@ -447,13 +489,18 @@ public class MulticastServerAction extends Thread {
                 String clientNo = receivedSplit[1].split("\\|\\|\\|")[1];
                 String username = receivedSplit[2].split("\\|\\|\\|")[1];
 
-                User tempUser = new User(username);
+                User user = null;
 
-                int indexOfUser = listUsers.indexOf(tempUser);
-                User user = listUsers.get(indexOfUser);
+                //Get User
+                for (User u : listUsers)
+                    if ((u.getUsername() != null && u.getUsername().equals(username)) || (u.getId() != null && u.getId().equals(username))) {
+                        user = u;
+                        break;
+                    }
 
                 //Set logged in to false
-                user.setLoggedIn(false);
+                if(user != null)
+                    user.setLoggedIn(false);
 
                 message = "type|||logoutResult;;clientNo|||" + clientNo + ";;status|||valid";
 
@@ -522,6 +569,20 @@ public class MulticastServerAction extends Thread {
                 }
 
                 System.out.println("Message sent: " + message);
+            } else if(messageType.equals("detectResult")){
+                int receivedServerNo = Integer.parseInt(receivedSplit[1].split("\\|\\|\\|")[1]);
+                int receivedUrlId = Integer.parseInt(receivedSplit[2].split("\\|\\|\\|")[1]);
+                String language = receivedSplit[3].split("\\|\\|\\|")[1];
+
+                if(receivedServerNo == server.getMulticastServerNo()){
+                    for(WebCrawler wc: server.getWebCrawlersList())
+                        if(wc.getUrlID() == receivedUrlId) {
+                            wc.setLanguageCurrent(language);
+                            synchronized(wc){
+                                wc.notify();
+                            }
+                        }
+                }
             }
 
             if (!message.equals("")) {

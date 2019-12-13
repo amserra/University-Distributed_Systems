@@ -3,7 +3,7 @@
     outline: none;
     color: black;
     box-shadow: none;
-    border-bottom: none;
+    border-bottom: none !important;
 }
 
 .linkBtn{

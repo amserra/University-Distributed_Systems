@@ -59,9 +59,18 @@
 										</div>
 
 										<div class="row card-action">
-											<button class="btn waves-effect waves-light blue" type="submit">Register</button>
+											<div class="col">
+												<button class="btn waves-effect waves-light blue" type="submit">Register</button>
+											</div>
+										</s:form>
+											<div class="col">
+												<s:form action="loginFacebook">
+													<button class="btn waves-effect waves-light blue" type="submit">
+														Sign in With Facebook
+													</button>
+												</s:form>
+											</div>
 										</div>
-									</s:form>
 								</div>
 
 							</div>
