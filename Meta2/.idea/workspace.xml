@@ -8,18 +8,6 @@
   <component name="ChangeListManager">
     <list default="true" id="1cebd835-8165-47e0-9b03-c550efdbb3fc" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Meta1/files/index_1.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Meta1/files/index_1.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Meta1/files/search_1.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Meta1/files/search_1.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Meta1/files/urls_1.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Meta1/files/urls_1.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Meta1/files/users_1.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Meta1/files/users_1.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Meta1/src/MulticastServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/Meta1/src/MulticastServer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Meta1/src/MulticastServerAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/Meta1/src/MulticastServerAction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Meta1/src/RMIMulticastManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/Meta1/src/RMIMulticastManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Meta1/src/RMIServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/Meta1/src/RMIServer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Meta1/src/URL.java" beforeDir="false" afterPath="$PROJECT_DIR$/Meta1/src/URL.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Meta1/src/WebCrawler.java" beforeDir="false" afterPath="$PROJECT_DIR$/Meta1/src/WebCrawler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Meta2/src/meta2/action/SearchAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/Meta2/src/meta2/action/SearchAction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/Meta2/Meta2.war" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/Meta2/Meta2.war" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -229,7 +217,8 @@
       <workItem from="1576076948044" duration="5895000" />
       <workItem from="1576150462604" duration="21085000" />
       <workItem from="1576186216114" duration="9242000" />
-      <workItem from="1576235698934" duration="9672000" />
+      <workItem from="1576235698934" duration="9929000" />
+      <workItem from="1576248605988" duration="213000" />
     </task>
     <servers />
   </component>
