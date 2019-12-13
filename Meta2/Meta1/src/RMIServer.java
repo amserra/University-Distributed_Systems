@@ -5,6 +5,7 @@ import com.github.scribejava.core.model.OAuthRequest;
 import com.github.scribejava.core.model.Response;
 import com.github.scribejava.core.model.Verb;
 import com.github.scribejava.core.oauth.OAuth20Service;
+import meta2.ws.WebSocket;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -12,6 +13,7 @@ import org.json.simple.parser.ParseException;
 import rmiserver.ClientInterface;
 import rmiserver.ServerInterface;
 
+import javax.websocket.Session;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -26,7 +28,10 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.server.UnicastRemoteObject;
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -37,6 +42,7 @@ public class RMIServer extends UnicastRemoteObject implements ServerInterface {
     int clientNo = 1; // Id for RMIServer to indentify RMIClients
     ServerInterface serverInterface; // For backup server to have the reference
     HashMap<Integer, ClientInterface> clientInterfacesMap = new HashMap<>(); // Map between clientNo and rmi reference
+    ConcurrentHashMap<Integer,Session> webSocketClientMap = new ConcurrentHashMap<>();
     // All the multicast servers
     CopyOnWriteArrayList<MulticastServerInfo> multicastServers = new CopyOnWriteArrayList<>();
     boolean isBackup; // Is backup server?
@@ -116,13 +122,17 @@ public class RMIServer extends UnicastRemoteObject implements ServerInterface {
         return msg;
     }
 
-
     public String sayHelloFromClient(ClientInterface client) throws RemoteException {
         System.out.println("[Client no " + clientNo + "] " + "Has just connected.");
         this.clientInterfacesMap.put(clientNo, client);
         String msg = "Connected to RMI Primary Server successfully!\nServer gave me the id no " + clientNo;
         clientNo++;
         return msg;
+    }
+
+    public void sayHelloFromWebSocket(int clientNo, Session session) throws RemoteException {
+        System.out.println("Got the reference");
+        this.webSocketClientMap.put(clientNo,session);
     }
 
     public String testPrimary() throws RemoteException {
@@ -239,6 +249,15 @@ public class RMIServer extends UnicastRemoteObject implements ServerInterface {
         return msgReceive;
     }
 
+    public String realTimeStatistics(int clientNo, Session session) throws RemoteException {
+        // To have the client session reference
+        String msg = "type|||rts;;clientNo|||" + clientNo;
+        System.out.println("Mensagem a ser enviada: " + msg);
+        String msgReceive = connectToMulticast(clientNo, msg);
+        System.out.println("Mensagem recebida: " + msgReceive);
+        return msgReceive;
+    }
+
     public String grantPrivileges(int clientNo, String username)
             throws RemoteException, MalformedURLException, NotBoundException {
         String msg = "type|||promote;;clientNo|||" + clientNo + ";;username|||" + username;
@@ -254,6 +273,18 @@ public class RMIServer extends UnicastRemoteObject implements ServerInterface {
                 int newAdminNo = Integer.parseInt(parameters[3].split("\\|\\|\\|")[1]);
                 ClientInterface client = clientInterfacesMap.get(newAdminNo);
                 client.notification();
+                System.out.println("promoting to admin...");
+                try {
+                    webSocketClientMap.get(newAdminNo).getBasicRemote().sendText("You have been promoted to admin!");
+                } catch (IOException e) {
+                    System.out.println("IO exception granting admin");
+                    try {
+                        this.webSocketClientMap.get(newAdminNo).close();
+                        this.webSocketClientMap.remove(newAdminNo);
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
+                }
             }
         }
 
@@ -554,6 +585,21 @@ public class RMIServer extends UnicastRemoteObject implements ServerInterface {
             System.out.println("ERROR #7: Something went wrong.");
         }
     }
+
+    /*
+    public void webNotification(int clientNo) {
+        try {
+            if(webClientInterfaces.get(clientNo) != null) {
+                webClientInterfaces.get(clientNo).getBasicRemote().sendText("Foi promovido a admin!");
+            } else {
+                System.out.println("Client does not exist... It's okay");
+            }
+        } catch (IOException e) {
+            System.out.println("IO exception in webNotification.");
+        }
+    }
+    */
+
 
     /**
      * Auxiliar method that gets the lowest loaded server available, in order to

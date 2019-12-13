@@ -55,7 +55,7 @@ public class AdminPrivilegesAction extends ActionSupport implements SessionAware
                 return ERROR;
             }
         }
-        System.out.println("Returning success from indexNewUrl");
+        System.out.println("Returning success from adminPrivileges");
         return SUCCESS;
     }
 

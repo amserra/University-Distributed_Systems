@@ -1,10 +1,13 @@
 package rmiserver;
 
+import meta2.ws.WebSocket;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 
+import javax.websocket.Session;
 import java.io.IOException;
 import java.rmi.Remote;
+import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
 
@@ -36,6 +39,8 @@ public interface ServerInterface extends Remote {
          * @throws java.rmi.RemoteException
          */
         public String sayHelloFromClient(ClientInterface client) throws java.rmi.RemoteException;
+
+        public void sayHelloFromWebSocket(int clientNo, Session session) throws RemoteException;
 
         /**
          * Remote method used by BackupRMIServer to test the PrimaryRMIServer
@@ -180,6 +185,16 @@ public interface ServerInterface extends Remote {
          * @throws java.rmi.RemoteException
          */
         public String realTimeStatistics(int clientNo) throws java.rmi.RemoteException;
+
+        /**
+         * Remote method called by an admin to get the realTimeStatistics in the web
+         *
+         * @param clientNo
+         * @param session
+         * @return Answer message
+         * @throws java.rmi.RemoteException
+         */
+        public String realTimeStatistics(int clientNo, Session session) throws RemoteException;
 
         /**
          * Remote method used by an admin to grant privileges to another admin
