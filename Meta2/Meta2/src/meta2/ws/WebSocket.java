@@ -17,6 +17,8 @@ import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.ExecutionException;
 
+import javax.jms.JMSException;
+import javax.jms.Session;
 import javax.servlet.http.HttpSession;
 import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
@@ -67,7 +69,7 @@ public class WebSocket extends UnicastRemoteObject implements ClientInterface {
         connections.remove(this);
         try {
             this.wsSession.close();
-        } catch (IOException e) {
+        } catch (JMSException e) {
             // Ignore
         }
         // broadcast("* "+username+" disconnected");
@@ -99,7 +101,7 @@ public class WebSocket extends UnicastRemoteObject implements ClientInterface {
     public static void broadcast(String msg) {
         System.out.println("BROADCAST");
         for (WebSocket client : connections) {
-            try {
+           /* try {
                 synchronized (client) {
                     client.wsSession.getBasicRemote().sendText(msg);
                 }
@@ -107,13 +109,13 @@ public class WebSocket extends UnicastRemoteObject implements ClientInterface {
                 connections.remove(client);
                 try {
                     client.wsSession.close();
-                } catch (IOException e1) {
+                } catch (JMSException e1) {
                     // Ignore
                 }
                 // String message = String.format("*␣%s␣%s", client.username,
                 // "has␣been␣disconnected.");
                 // broadcast(message);
-            }
+            }*/
         }
     }
 

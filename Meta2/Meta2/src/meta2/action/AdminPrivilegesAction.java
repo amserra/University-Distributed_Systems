@@ -1,6 +1,3 @@
-/**
- * Raul Barbosa 2014-11-07
- */
 package meta2.action;
 
 import com.opensymphony.xwork2.ActionSupport;

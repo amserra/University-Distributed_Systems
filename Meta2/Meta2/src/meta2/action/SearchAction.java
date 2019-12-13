@@ -1,6 +1,3 @@
-/**
- * Raul Barbosa 2014-11-07
- */
 package meta2.action;
 
 import com.opensymphony.xwork2.ActionSupport;
@@ -44,9 +41,9 @@ public class SearchAction extends ActionSupport implements SessionAware {
 				int idx = pair.indexOf("=");
 				query_pairs.put(URLDecoder.decode(pair.substring(0, idx), "UTF-8"), URLDecoder.decode(pair.substring(idx + 1), "UTF-8"));
 			}
-
 			searchTerms = query_pairs.get("search");
 		}
+
 		System.out.println("SearchTerms:"+searchTerms);
 		if(this.searchTerms != null && !searchTerms.equals("")) {
 			ServerInterface server = getHeyBean().getServer();
