@@ -3,7 +3,7 @@ var websocket = null;
 window.onload = function() { // URI = ws://10.16.0.165:8080/WebSocket/ws
     // Aqui meter /Meta2/ws
     connect('wss://' + window.location.host + '/Meta2/meta2/ws');
-    document.getElementById("chat").focus();
+    //document.getElementById("chat").focus();
 }
 
 function connect(host) { // connect to the host websocket
@@ -24,7 +24,10 @@ function connect(host) { // connect to the host websocket
 
 function onOpen(event) {
     console.log('Connected to ' + window.location.host + '.');
-    console.log(window.location.pathname + window.location.search);
+    console.log(window.location.pathname);
+    if(window.location.pathname == "/Meta2/rtsView.action")
+        doSend("inRTS");
+
     /*
     document.getElementById('chat').onkeydown = function(key) {
         if (key.code === 'Enter')
@@ -39,11 +42,13 @@ function onClose(event) {
 }
 
 function onMessage(message) { // print the received message
+    console.log(message.data);
     if(message.data == "You have been promoted to admin!") {
         console.log('Promoting to admin toast');
         M.toast({html: 'You have been promoted to admin! Refresh the page.',displayLength: 20000});
+    } else {
+        console.log("RTS UPDATE HERE");
     }
-        console.log(message.data);
 }
 
 function onError(event) {
@@ -51,10 +56,10 @@ function onError(event) {
     //document.getElementById('chat').onkeydown = null;
 }
 
-function doSend() {
-    var message = document.getElementById('chat').value;
-    if (message != '')
-        websocket.send(message); // send the message to the server
+function doSend(msg) {
+    //var message = document.getElementById('chat').value;
+    if (msg != '')
+        websocket.send(msg); // send the message to the server
     //document.getElementById('chat').value = '';
 }
 

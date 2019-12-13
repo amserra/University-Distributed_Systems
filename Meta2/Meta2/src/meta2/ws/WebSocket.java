@@ -44,24 +44,12 @@ public class WebSocket extends UnicastRemoteObject implements ClientInterface {
         this.heyBean = (HeyBean) this.httpSession.getAttribute("heyBean");
         this.clientNo = heyBean.getClientNo();
         this.server = heyBean.getServer();
-        System.out.println("Server:" + this.server);
-        System.out.println(this.heyBean.getUsername());
-        if(this.heyBean.getUsername() != null) {
-            try {
-                this.server.sayHelloFromClient(clientNo,this);
-            } catch (RemoteException e) {
-                System.out.println("Exception in ws start");
-            }
-            connections.add(this);
-        } else {
-            System.out.println("Not a user. No need for websocket");
-            try {
-                this.wsSession.close();
-            } catch (IOException e) {
-                System.out.println("Exception closing");
-            }
+        try {
+            this.server.sayHelloFromClient(clientNo,this);
+        } catch (RemoteException e) {
+            System.out.println("Exception in ws start");
         }
-
+        connections.add(this);
         // String message = "*" + username + "* connected.";
         // broadcast(message);
         // sendMessage(message);
@@ -87,12 +75,19 @@ public class WebSocket extends UnicastRemoteObject implements ClientInterface {
 
     @OnMessage
     public void receiveMessage(String message) {
-        System.out.println("RECEIVEMSG");
+        System.out.println("RECEIVEMSG:"+message);
+        if(message == "inRTS") {
+            startRts();
+        }
         // one should never trust the client, and sensitive HTML
         // characters should be replaced with &lt; &gt; &quot; &amp;
-        String upperCaseMessage = message.toUpperCase();
+        //String upperCaseMessage = message.toUpperCase();
         // sendMessage("[" + username + "] " + upperCaseMessage);
         // broadcast("["+username+"] "+message);
+    }
+
+    public String startRts() {
+        return null;
     }
 
     @OnError

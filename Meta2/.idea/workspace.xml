@@ -264,11 +264,12 @@
     <state x="304" y="187" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1576076563623">
       <screen x="0" y="0" width="1680" height="1050" />
     </state>
-    <state x="304" y="187" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1680.1050@0.0.1680.1050" timestamp="1576076563623" />
-    <state x="653" y="216" key="#com.intellij.ide.util.MemberChooser" timestamp="1576159838997">
+    <state x="304" y="187" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1680.1050@0.0.1680.1050" timestamp="1576166218732" />
+    <state x="653" y="216" key="#com.intellij.ide.util.MemberChooser" timestamp="1576259949334">
       <screen x="0" y="0" width="1680" height="1050" />
     </state>
-    <state x="653" y="216" key="#com.intellij.ide.util.MemberChooser/0.0.1680.1050@0.0.1680.1050" timestamp="1576159838997" />
+    <state x="653" y="216" key="#com.intellij.ide.util.MemberChooser/0.0.1680.1050@0.0.1680.1050" timestamp="1576259949334" />
+    <state x="653" y="216" key="#com.intellij.ide.util.MemberChooser/1680.0.1920.1080/0.0.1680.1050@0.0.1680.1050" timestamp="1576200064065" />
     <state x="577" y="316" key="#com.intellij.ide.util.TreeClassChooserDialog" timestamp="1576076484267">
       <screen x="0" y="0" width="1680" height="1050" />
     </state>
@@ -320,10 +321,10 @@
     <state width="1126" height="295" key="GridCell.Tab.2.right" timestamp="1576160572744">
       <screen x="0" y="0" width="1680" height="1050" />
     </state>
-    <state width="1126" height="295" key="GridCell.Tab.2.right/0.0.1680.1050@0.0.1680.1050" timestamp="1576160572744" />
-    <state x="328" y="106" key="SettingsEditor" timestamp="1576076249923">
+    <state x="284" y="226" width="1396" height="598" key="NewModule_or_Project.wizard/0.0.1680.1050@0.0.1680.1050" timestamp="1576165634676" />
+    <state x="328" y="106" key="SettingsEditor" timestamp="1576258373618">
       <screen x="0" y="0" width="1680" height="1050" />
     </state>
-    <state x="328" y="106" key="SettingsEditor/0.0.1680.1050@0.0.1680.1050" timestamp="1576076249923" />
+    <state x="328" y="106" key="SettingsEditor/0.0.1680.1050@0.0.1680.1050" timestamp="1576258373618" />
   </component>
 </project>

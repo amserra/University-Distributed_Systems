@@ -155,7 +155,11 @@
 			</c:when>
 		</c:choose>
 
-		<script type="text/javascript" src="js/websockets.js"></script>
+		<c:choose>
+			<c:when test="${(session.typeOfClient eq 'user') || (session.typeOfClient eq 'admin')}">
+				<script type="text/javascript" src="js/websockets.js"></script>
+			</c:when>
+		</c:choose>
 		<script type="text/javascript" src="js/initializeSideBar.js"></script>
 	</body>
 </html>

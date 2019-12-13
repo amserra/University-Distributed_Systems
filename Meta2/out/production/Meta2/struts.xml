@@ -44,8 +44,9 @@ and should reside on the classpath of the webapp (generally /WEB-INF/classes). -
             <result>/searchResults.jsp</result>
         </action>
 
-        <action name="rtsView">
-            <result>/rts.jsp</result>
+        <action name="rtsView" class="meta2.action.RtsAction">
+            <result name="success">/rts.jsp</result>
+            <result name="error">/error.jsp</result>
         </action>
 
         <action name="registerAction" class="meta2.action.AuthAction" method="execute">
