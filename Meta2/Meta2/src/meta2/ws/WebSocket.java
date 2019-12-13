@@ -1,20 +1,28 @@
 package meta2.ws;
 
 import meta2.model.HeyBean;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.ParseException;
+import rmiserver.ClientInterface;
 import rmiserver.ServerInterface;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.ExecutionException;
 
 import javax.servlet.http.HttpSession;
 import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
 
 @ServerEndpoint(value = "/meta2/ws", configurator = GetHttpSessionConfigurator.class)
-public class WebSocket {
+public class WebSocket extends UnicastRemoteObject implements ClientInterface {
     // private static final AtomicInteger sequence = new AtomicInteger(1);
     private static final Set<WebSocket> connections = new CopyOnWriteArraySet<>();
     // private final String username;
@@ -22,8 +30,9 @@ public class WebSocket {
     private Session wsSession;
     private HttpSession httpSession;
     private int clientNo;
+    private HeyBean heyBean;
 
-    public WebSocket() {
+    public WebSocket() throws RemoteException {
         System.out.println("CONSTRUCTOR");
         // username = "User" + sequence.getAndIncrement();
     }
@@ -33,60 +42,46 @@ public class WebSocket {
         System.out.println("START");
         this.wsSession = session;
         this.httpSession = (HttpSession) config.getUserProperties().get(HttpSession.class.getName());
-        HeyBean heyBean = (HeyBean) this.httpSession.getAttribute("heyBean");
+        this.heyBean = (HeyBean) this.httpSession.getAttribute("heyBean");
         this.clientNo = heyBean.getClientNo();
         this.server = heyBean.getServer();
         System.out.println("Server:" + this.server);
-        try {
-            System.out.println(this.clientNo);
-            this.server.sayHelloFromWebSocket(this.clientNo, this.wsSession);
-        } catch (RemoteException e) {
-            System.out.println("Exception in ws start");
-            e.printStackTrace();
+        System.out.println(this.heyBean.getUsername());
+        if(this.heyBean.getUsername() != null) {
+            try {
+                this.server.sayHelloFromClient(clientNo,this);
+            } catch (RemoteException e) {
+                System.out.println("Exception in ws start");
+            }
+            connections.add(this);
+        } else {
+            System.out.println("Not a user. No need for websocket");
+            try {
+                this.wsSession.close();
+            } catch (IOException e) {
+                System.out.println("Exception closing");
+            }
         }
 
-        // startRts();
-
-        connections.add(this);
         // String message = "*" + username + "* connected.";
         // broadcast(message);
         // sendMessage(message);
     }
 
-    public void startRts() {
-        try {
-            String msg = server.realTimeStatistics(this.clientNo);
-
-            if (msg != null) {
-                String[] parameters = msg.split(";;");
-                int receivedClientNo = Integer.parseInt(parameters[1].split("\\|\\|\\|")[1]);
-                System.out.println("Recieved client no: " + receivedClientNo);
-                if (this.clientNo == receivedClientNo) {
-                    System.out.println("Started receiving updates...");
-                    // printTop10(parameters);
-
-                }
-            } else {
-                System.out.println("TIMEOUT: Could not recieve info in 30s. Returning to main menu\n");
-                // this.inRealTimeStatistics = false;
-                // userUI.mainMenu();
-            }
-        } catch (RemoteException e) {
-            System.out.println("ERROR #9: Something went wrong. Returning to main menu");
-            // this.inRealTimeStatistics = false;
-            // userUI.mainMenu();
-        }
-    }
-
     @OnClose
     public void end() {
+        System.out.println("END");
+        try {
+            server.removeClient(this.clientNo);
+        } catch(RemoteException e) {
+            System.out.println("Error removing client. Ignoring");
+        }
         connections.remove(this);
         try {
             this.wsSession.close();
         } catch (IOException e) {
             // Ignore
         }
-        System.out.println("END");
         // broadcast("* "+username+" disconnected");
         // clean up once the WebSocket connection is closed
     }
@@ -126,4 +121,117 @@ public class WebSocket {
             }
         }
     }
+
+    @Override
+    public boolean userMatchesPassword(String user, String password) throws RemoteException {
+        return false;
+    }
+
+    @Override
+    public ArrayList<String> getAllUsers() throws RemoteException {
+        return null;
+    }
+
+    @Override
+    public String sayHelloFromBackup() throws RemoteException {
+        return null;
+    }
+
+    @Override
+    public String sayHelloFromClient(ClientInterface client) throws RemoteException {
+        return null;
+    }
+
+    @Override
+    public String testPrimary() throws RemoteException {
+        return null;
+    }
+
+    @Override
+    public HashMap<Integer, ClientInterface> getHashMapFromPrimary() throws RemoteException {
+        return null;
+    }
+
+    @Override
+    public int getClientNoFromPrimary() throws RemoteException {
+        return 0;
+    }
+
+    @Override
+    public String authentication(int clientNo, boolean isLogin, String username, String password) throws RemoteException {
+        return null;
+    }
+
+    @Override
+    public String getAuthorizationUrl(String secretState) throws RemoteException {
+        return null;
+    }
+
+    @Override
+    public JSONObject exchangeCodeForToken(String code, int clientNo, String username) throws InterruptedException, ExecutionException, IOException, ParseException {
+        return null;
+    }
+
+    @Override
+    public String logout(int clientNo, String username, boolean exit) throws RemoteException {
+        return null;
+    }
+
+    @Override
+    public String search(int clientNo, String username, String searchTerms) throws RemoteException {
+        return null;
+    }
+
+    @Override
+    public String translateText(String text) throws IOException, ParseException {
+        return null;
+    }
+
+    @Override
+    public String searchHistory(int clientNo, String username) throws RemoteException {
+        return null;
+    }
+
+    @Override
+    public String linksPointing(int clientNo, String url) throws RemoteException {
+        return null;
+    }
+
+    @Override
+    public String indexNewURL(int clientNo, String url) throws RemoteException {
+        return null;
+    }
+
+    @Override
+    public String realTimeStatistics(int clientNo) throws RemoteException {
+        return null;
+    }
+
+    @Override
+    public String grantPrivileges(int clientNo, String username) throws RemoteException, NotBoundException, MalformedURLException {
+        return null;
+    }
+
+    @Override
+    public void notification() throws RemoteException, NotBoundException, MalformedURLException {
+
+        if (this.heyBean.getTypeOfClient().equals("user")) {
+            System.out.print("\n\nNotification: Promoted to admin! Sending to ui... ");
+            try {
+                this.wsSession.getBasicRemote().sendText("You have been promoted to admin!");
+                this.heyBean.setTypeOfClient("admin");
+                this.httpSession.setAttribute("typeOfClient","admin");
+            } catch (IOException e) {
+                server.removeClient(this.clientNo);
+                connections.remove(this);
+                try {
+                    this.wsSession.close();
+                } catch (IOException e1) {
+                    // Ignore
+                }
+            }
+        }
+    }
+
+
 }

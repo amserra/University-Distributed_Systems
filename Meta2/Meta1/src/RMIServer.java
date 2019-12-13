@@ -42,7 +42,7 @@ public class RMIServer extends UnicastRemoteObject implements ServerInterface {
     int clientNo = 1; // Id for RMIServer to indentify RMIClients
     ServerInterface serverInterface; // For backup server to have the reference
     HashMap<Integer, ClientInterface> clientInterfacesMap = new HashMap<>(); // Map between clientNo and rmi reference
-    ConcurrentHashMap<Integer,Session> webSocketClientMap = new ConcurrentHashMap<>();
+    ConcurrentHashMap<Integer,ClientInterface> webSocketClientMap = new ConcurrentHashMap<>();
     // All the multicast servers
     CopyOnWriteArrayList<MulticastServerInfo> multicastServers = new CopyOnWriteArrayList<>();
     boolean isBackup; // Is backup server?
@@ -128,11 +128,6 @@ public class RMIServer extends UnicastRemoteObject implements ServerInterface {
         String msg = "Connected to RMI Primary Server successfully!\nServer gave me the id no " + clientNo;
         clientNo++;
         return msg;
-    }
-
-    public void sayHelloFromWebSocket(int clientNo, Session session) throws RemoteException {
-        System.out.println("Got the reference");
-        this.webSocketClientMap.put(clientNo,session);
     }
 
     public String testPrimary() throws RemoteException {
@@ -274,6 +269,7 @@ public class RMIServer extends UnicastRemoteObject implements ServerInterface {
                 ClientInterface client = clientInterfacesMap.get(newAdminNo);
                 client.notification();
                 System.out.println("promoting to admin...");
+                /*
                 try {
                     webSocketClientMap.get(newAdminNo).getBasicRemote().sendText("You have been promoted to admin!");
                 } catch (IOException e) {
@@ -285,6 +281,7 @@ public class RMIServer extends UnicastRemoteObject implements ServerInterface {
                         e1.printStackTrace();
                     }
                 }
+                */
             }
         }
 
@@ -624,5 +621,14 @@ public class RMIServer extends UnicastRemoteObject implements ServerInterface {
         }
         ref.incrementLoad();
         return serverNo;
+    }
+
+    public void sayHelloFromClient(int clientNo, ClientInterface client) throws RemoteException {
+        System.out.println("Added "+clientNo+" to map.");
+        this.clientInterfacesMap.put(clientNo, client);
+    }
+
+    public void removeClient(int clientNo) throws RemoteException {
+        this.clientInterfacesMap.remove(clientNo);
     }
 }

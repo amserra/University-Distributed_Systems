@@ -74,6 +74,7 @@
 						<c:when test="${session.typeOfClient eq 'admin'}">
 							<li><a href="<s:url action="indexNewUrlAction"></s:url>">Index url</a></li>
 							<li><a href="<s:url action="adminPrivilegesAction"></s:url>">Admin privileges</a></li>
+							<li><a href="<s:url action="rtsView"></s:url>">RTS</a></li>
 						</c:when>
 					</c:choose>
 					<li><a href="<s:url action="searchHistoryAction"></s:url>">Search history</a></li>
@@ -154,6 +155,7 @@
 			</c:when>
 		</c:choose>
 
+		<script type="text/javascript" src="js/websockets.js"></script>
 		<script type="text/javascript" src="js/initializeSideBar.js"></script>
 	</body>
 </html>

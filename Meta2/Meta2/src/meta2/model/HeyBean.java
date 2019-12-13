@@ -31,7 +31,9 @@ public class HeyBean {
 		}
 	}
 
-	//public
+	public String getTypeOfClient() {
+		return typeOfClient;
+	}
 	
 	public void setUsername(String username) {
 		this.username = username;
