@@ -102,8 +102,6 @@ public class RMIMulticastManager extends Thread {
 
                     String msg = "type|||detectResult;;serverNo|||" + serverNo + ";;urlID|||" + urlId + ";;lang|||" + language;
 
-                    System.out.println(msg);
-
                     byte[] bufferSend = msg.getBytes();
                     DatagramPacket packetSend = new DatagramPacket(bufferSend, bufferSend.length, group, PORT);
                     socket.send(packetSend);

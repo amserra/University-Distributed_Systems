@@ -6,6 +6,9 @@ import org.json.simple.parser.ParseException;
 import rmiserver.ClientInterface;
 import rmiserver.ServerInterface;
 
+import javax.servlet.http.HttpSession;
+import javax.websocket.*;
+import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.rmi.NotBoundException;
@@ -16,12 +19,6 @@ import java.util.HashMap;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.ExecutionException;
-
-import javax.jms.JMSException;
-import javax.jms.Session;
-import javax.servlet.http.HttpSession;
-import javax.websocket.*;
-import javax.websocket.server.ServerEndpoint;
 
 @ServerEndpoint(value = "/meta2/ws", configurator = GetHttpSessionConfigurator.class)
 public class WebSocket extends UnicastRemoteObject implements ClientInterface {
@@ -81,7 +78,7 @@ public class WebSocket extends UnicastRemoteObject implements ClientInterface {
         connections.remove(this);
         try {
             this.wsSession.close();
-        } catch (JMSException e) {
+        } catch (IOException e) {
             // Ignore
         }
         // broadcast("* "+username+" disconnected");
@@ -106,7 +103,7 @@ public class WebSocket extends UnicastRemoteObject implements ClientInterface {
     public static void broadcast(String msg) {
         System.out.println("BROADCAST");
         for (WebSocket client : connections) {
-           /* try {
+           try {
                 synchronized (client) {
                     client.wsSession.getBasicRemote().sendText(msg);
                 }
@@ -114,13 +111,13 @@ public class WebSocket extends UnicastRemoteObject implements ClientInterface {
                 connections.remove(client);
                 try {
                     client.wsSession.close();
-                } catch (JMSException e1) {
+                } catch (IOException e1) {
                     // Ignore
                 }
                 // String message = String.format("*␣%s␣%s", client.username,
                 // "has␣been␣disconnected.");
                 // broadcast(message);
-            }*/
+            }
         }
     }
 
@@ -217,7 +214,7 @@ public class WebSocket extends UnicastRemoteObject implements ClientInterface {
     @Override
     public void notification() throws RemoteException, NotBoundException, MalformedURLException {
 
-        if (this.heyBean.getTypeOfClient().equals("user")) {
+        /*if (this.heyBean.getTypeOfClient().equals("user")) {
             System.out.print("\n\nNotification: Promoted to admin! Sending to ui... ");
             try {
                 this.wsSession.getBasicRemote().sendText("You have been promoted to admin!");
@@ -228,11 +225,11 @@ public class WebSocket extends UnicastRemoteObject implements ClientInterface {
                 connections.remove(this);
                 try {
                     this.wsSession.close();
-                } catch (IOException e1) {
+                } catch (JMSException e1) {
                     // Ignore
                 }
             }
-        }
+        }*/
     }
 
 
