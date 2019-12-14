@@ -223,7 +223,7 @@ public class WebSocket extends UnicastRemoteObject implements ClientInterface {
                 connections.remove(this);
                 try {
                     this.wsSession.close();
-                } catch (IOException e1) {
+                } catch ( JMSException e1) {
                     // Ignore
                 }
             }
