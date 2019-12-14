@@ -7,20 +7,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1cebd835-8165-47e0-9b03-c550efdbb3fc" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/artifacts/Meta2.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/artifacts/Meta2.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Meta1/files/index_1.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Meta1/files/index_1.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Meta1/files/search_1.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Meta1/files/search_1.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Meta1/files/urls_1.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Meta1/files/urls_1.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Meta1/files/users_1.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Meta1/files/users_1.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Meta1/src/RMIMulticastManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/Meta1/src/RMIMulticastManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Meta1/src/RMIServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/Meta1/src/RMIServer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Meta2/Meta2.iml" beforeDir="false" afterPath="$PROJECT_DIR$/Meta2/Meta2.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Meta2/WebContent/searchResults.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/Meta2/WebContent/searchResults.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Meta2/src/meta2/action/TranslateAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/Meta2/src/meta2/action/TranslateAction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Meta2/src/struts.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Meta2/src/struts.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/Meta2/Meta2.war" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/Meta2/Meta2.war" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Meta2/struts.xml" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Meta2/struts.xml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -238,7 +225,8 @@
       <workItem from="1576235698934" duration="9929000" />
       <workItem from="1576248605988" duration="2479000" />
       <workItem from="1576256171113" duration="2134000" />
-      <workItem from="1576258504700" duration="14066000" />
+      <workItem from="1576258504700" duration="14288000" />
+      <workItem from="1576286131915" duration="50000" />
     </task>
     <servers />
   </component>
