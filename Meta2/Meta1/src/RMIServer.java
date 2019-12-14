@@ -5,7 +5,6 @@ import com.github.scribejava.core.model.OAuthRequest;
 import com.github.scribejava.core.model.Response;
 import com.github.scribejava.core.model.Verb;
 import com.github.scribejava.core.oauth.OAuth20Service;
-import meta2.ws.WebSocket;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -18,8 +17,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.net.*;
 import java.net.URL;
+import java.net.*;
 import java.rmi.AccessException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
@@ -28,10 +27,8 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.server.UnicastRemoteObject;
 import java.time.LocalDateTime;
 import java.util.HashMap;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -371,24 +368,29 @@ public class RMIServer extends UnicastRemoteObject implements ServerInterface {
     }
 
     public String getAnswer(boolean isDetect, HttpURLConnection connection) throws IOException, ParseException {
-        BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        try {
+            BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 
-        String inputLine;
-        StringBuffer response = new StringBuffer();
-        while((inputLine = in.readLine()) != null){
-            response.append(inputLine);
-        }
-        in.close();
+            String inputLine;
+            StringBuffer response = new StringBuffer();
+            while ((inputLine = in.readLine()) != null) {
+                response.append(inputLine);
+            }
+            in.close();
 
-        JSONParser parser = new JSONParser();
-        JSONObject json = (JSONObject) parser.parse(response.toString());
+            JSONParser parser = new JSONParser();
+            JSONObject json = (JSONObject) parser.parse(response.toString());
 
-        if(isDetect){
-            return (String) json.get("lang");
-        }else{
-            JSONArray jsonArray = (JSONArray) json.get("text");
+            if (isDetect) {
+                return (String) json.get("lang");
+            } else {
+                JSONArray jsonArray = (JSONArray) json.get("text");
 
-            return (String) jsonArray.get(0);
+                return (String) jsonArray.get(0);
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+            return "null";
         }
     }
 
