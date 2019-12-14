@@ -45,7 +45,7 @@ public class WebSocket extends UnicastRemoteObject implements ClientInterface {
         this.clientNo = heyBean.getClientNo();
         this.server = heyBean.getServer();
         try {
-            this.server.sayHelloFromClient(clientNo,this);
+            this.server.sayHelloFromClient(clientNo, this);
         } catch (RemoteException e) {
             System.out.println("Exception in ws start");
         }
@@ -60,7 +60,7 @@ public class WebSocket extends UnicastRemoteObject implements ClientInterface {
         System.out.println("END");
         try {
             server.removeClient(this.clientNo);
-        } catch(RemoteException e) {
+        } catch (RemoteException e) {
             System.out.println("Error removing client. Ignoring");
         }
         connections.remove(this);
@@ -75,13 +75,13 @@ public class WebSocket extends UnicastRemoteObject implements ClientInterface {
 
     @OnMessage
     public void receiveMessage(String message) {
-        System.out.println("RECEIVEMSG:"+message);
-        if(message == "inRTS") {
+        System.out.println("RECEIVEMSG:" + message);
+        if (message == "inRTS") {
             startRts();
         }
         // one should never trust the client, and sensitive HTML
         // characters should be replaced with &lt; &gt; &quot; &amp;
-        //String upperCaseMessage = message.toUpperCase();
+        // String upperCaseMessage = message.toUpperCase();
         // sendMessage("[" + username + "] " + upperCaseMessage);
         // broadcast("["+username+"] "+message);
     }
@@ -98,7 +98,7 @@ public class WebSocket extends UnicastRemoteObject implements ClientInterface {
     public static void broadcast(String msg) {
         System.out.println("BROADCAST");
         for (WebSocket client : connections) {
-           try {
+            try {
                 synchronized (client) {
                     client.wsSession.getBasicRemote().sendText(msg);
                 }
@@ -152,7 +152,8 @@ public class WebSocket extends UnicastRemoteObject implements ClientInterface {
     }
 
     @Override
-    public String authentication(int clientNo, boolean isLogin, String username, String password) throws RemoteException {
+    public String authentication(int clientNo, boolean isLogin, String username, String password)
+            throws RemoteException {
         return null;
     }
 
@@ -162,7 +163,8 @@ public class WebSocket extends UnicastRemoteObject implements ClientInterface {
     }
 
     @Override
-    public JSONObject exchangeCodeForToken(String code, int clientNo, String username) throws InterruptedException, ExecutionException, IOException, ParseException {
+    public JSONObject exchangeCodeForToken(String code, int clientNo, String username)
+            throws InterruptedException, ExecutionException, IOException, ParseException {
         return null;
     }
 
@@ -202,30 +204,24 @@ public class WebSocket extends UnicastRemoteObject implements ClientInterface {
     }
 
     @Override
-    public String grantPrivileges(int clientNo, String username) throws RemoteException, NotBoundException, MalformedURLException {
+    public String grantPrivileges(int clientNo, String username)
+            throws RemoteException, NotBoundException, MalformedURLException {
         return null;
     }
 
     @Override
     public void notification() throws RemoteException, NotBoundException, MalformedURLException {
 
-        /*if (this.heyBean.getTypeOfClient().equals("user")) {
-            System.out.print("\n\nNotification: Promoted to admin! Sending to ui... ");
-            try {
-                this.wsSession.getBasicRemote().sendText("You have been promoted to admin!");
-                this.heyBean.setTypeOfClient("admin");
-                this.httpSession.setAttribute("typeOfClient","admin");
-            } catch (IOException e) {
-                server.removeClient(this.clientNo);
-                connections.remove(this);
-                try {
-                    this.wsSession.close();
-                } catch (JMSException e1) {
-                    // Ignore
-                }
-            }
-        }*/
+        /*
+         * if (this.heyBean.getTypeOfClient().equals("user")) {
+         * System.out.print("\n\nNotification: Promoted to admin! Sending to ui... ");
+         * try {
+         * this.wsSession.getBasicRemote().sendText("You have been promoted to admin!");
+         * this.heyBean.setTypeOfClient("admin");
+         * this.httpSession.setAttribute("typeOfClient","admin"); } catch (IOException
+         * e) { server.removeClient(this.clientNo); connections.remove(this); try {
+         * this.wsSession.close(); } catch ( JMSException e1) { // Ignore } } }
+         */
     }
-
 
 }
