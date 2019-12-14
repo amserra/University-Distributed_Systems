@@ -172,7 +172,7 @@ public class MulticastServerAction extends Thread {
 
                 System.out.println("Message sent: " + message);
 
-            } else if(messageType.equals("associate")){
+            } else if(messageType.equals("associate")){ //Associate Facebook to an existing account
 
                 System.out.println(received);
 
@@ -569,7 +569,7 @@ public class MulticastServerAction extends Thread {
                 }
 
                 System.out.println("Message sent: " + message);
-            } else if(messageType.equals("detectResult")){
+            } else if(messageType.equals("detectResult")){  // Result obtained from language detection in a page
                 int receivedServerNo = Integer.parseInt(receivedSplit[1].split("\\|\\|\\|")[1]);
                 int receivedUrlId = Integer.parseInt(receivedSplit[2].split("\\|\\|\\|")[1]);
                 String language = receivedSplit[3].split("\\|\\|\\|")[1];
