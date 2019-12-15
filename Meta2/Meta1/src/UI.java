@@ -392,12 +392,10 @@ public class UI {
      */
     public String validatePasswordValue(String errorMsg)
             throws RemoteException, MalformedURLException, NotBoundException {
-        Console console = System.console();
-        //console.flush();
         while (true) {
             System.out.println("Note that, for security reasons, your password doesn't happear as you type it.");
-            //String line = new String(console.readPassword("Password: "));
-            String line = "password";
+            System.out.print("Password: ");
+            String line = sc.nextLine();
             try {
                 if (line.equals("-1")) {
                     mainMenu();

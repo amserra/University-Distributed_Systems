@@ -167,13 +167,11 @@
                                 </div>
 
                                 <div class="row s12 center-align">
-                                    <div class="col">
-                                        <button class="btn waves-effect waves-light blue" type="submit">
-                                            Procurar
-                                            <i class="material-icons right">search</i>
-                                        </button>
-                                        </s:form>
-                                    </div>
+                                    <button class="btn waves-effect waves-light blue" type="submit">
+                                        Procurar
+                                        <i class="material-icons right">search</i>
+                                    </button>
+                                </s:form>
                                     <c:choose>
                                         <c:when test="${not empty session.name}">
                                             <s:form action="facebookShare">
