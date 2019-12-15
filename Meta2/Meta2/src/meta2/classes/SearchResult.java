@@ -1,5 +1,8 @@
 package meta2.classes;
 
+/**
+ * Class with information about a specific result from a search
+ */
 public class SearchResult {
     private String title;
     private String url;

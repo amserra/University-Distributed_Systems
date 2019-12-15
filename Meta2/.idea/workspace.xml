@@ -6,7 +6,25 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d3795b85-be95-480a-a3be-5ba84898fe12" name="Default Changelist" comment="" />
+    <list default="true" id="1cebd835-8165-47e0-9b03-c550efdbb3fc" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Meta1/src/MulticastServerAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/Meta1/src/MulticastServerAction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Meta2/src/meta2/action/AdminPrivilegesAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/Meta2/src/meta2/action/AdminPrivilegesAction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Meta2/src/meta2/action/AuthAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/Meta2/src/meta2/action/AuthAction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Meta2/src/meta2/action/ExchangeAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/Meta2/src/meta2/action/ExchangeAction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Meta2/src/meta2/action/FacebookLoginAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/Meta2/src/meta2/action/FacebookLoginAction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Meta2/src/meta2/action/FacebookShareAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/Meta2/src/meta2/action/FacebookShareAction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Meta2/src/meta2/action/IndexNewUrlAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/Meta2/src/meta2/action/IndexNewUrlAction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Meta2/src/meta2/action/LinksPointingAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/Meta2/src/meta2/action/LinksPointingAction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Meta2/src/meta2/action/LogoutAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/Meta2/src/meta2/action/LogoutAction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Meta2/src/meta2/action/RtsAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/Meta2/src/meta2/action/RtsAction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Meta2/src/meta2/action/SearchAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/Meta2/src/meta2/action/SearchAction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Meta2/src/meta2/action/SearchHistoryAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/Meta2/src/meta2/action/SearchHistoryAction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Meta2/src/meta2/action/TranslateAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/Meta2/src/meta2/action/TranslateAction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Meta2/src/meta2/classes/SearchResult.java" beforeDir="false" afterPath="$PROJECT_DIR$/Meta2/src/meta2/classes/SearchResult.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Meta2/src/meta2/model/HeyBean.java" beforeDir="false" afterPath="$PROJECT_DIR$/Meta2/src/meta2/model/HeyBean.java" afterDir="false" />
+    </list>
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -141,27 +159,8 @@
       <item itemvalue="Tomcat Server.Tomcat Meta2" />
     </list>
   </component>
-  <component name="ServiceViewManager">
-    <option name="viewStates">
-      <list>
-        <serviceView>
-          <treeState>
-            <expand>
-              <path>
-                <item name="services root" type="e789fda9:ObjectUtils$Sentinel" />
-                <item name="Tomcat Server" type="7427dc5b:ServiceModel$ServiceGroupNode" />
-              </path>
-              <path>
-                <item name="services root" type="e789fda9:ObjectUtils$Sentinel" />
-                <item name="Tomcat Server" type="7427dc5b:ServiceModel$ServiceGroupNode" />
-                <item name="Finished" type="7427dc5b:ServiceModel$ServiceGroupNode" />
-              </path>
-            </expand>
-            <select />
-          </treeState>
-        </serviceView>
-      </list>
-    </option>
+  <component name="SvnConfiguration">
+    <configuration />
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">

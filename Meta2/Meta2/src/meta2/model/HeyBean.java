@@ -3,14 +3,15 @@
  */
 package meta2.model;
 
-import java.rmi.registry.LocateRegistry;
-import java.util.ArrayList;
-import java.rmi.Naming;
-import java.rmi.NotBoundException;
-import java.net.MalformedURLException;
-import java.rmi.RemoteException;
 import rmiserver.ServerInterface;
 
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+
+/**
+ * Model that saves reference to RMI server and username, name, type of client and client number of the current user
+ */
 public class HeyBean {
 	private ServerInterface server;
 	private String username; // username and password supplied by the user

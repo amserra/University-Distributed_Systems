@@ -12,6 +12,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
 
+/**
+ * Action that gets the title and text translated to portuguese
+ */
 public class TranslateAction extends ActionSupport implements SessionAware {
     private static final long serialVersionUID = 4L;
     private Map<String, Object> session;

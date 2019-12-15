@@ -8,7 +8,9 @@ import rmiserver.ServerInterface;
 import java.rmi.RemoteException;
 import java.util.Map;
 
-
+/**
+ * Action to get Authorization URL from Facebook API to login
+ */
 public class FacebookLoginAction extends ActionSupport implements SessionAware {
     private static final long serialVersionUID = 4L;
     private Map<String, Object> session;

@@ -1,15 +1,17 @@
 package meta2.action;
 
 import com.opensymphony.xwork2.ActionSupport;
-import meta2.classes.SearchResult;
+import meta2.model.HeyBean;
 import org.apache.struts2.interceptor.SessionAware;
+import rmiserver.ServerInterface;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Map;
-import meta2.model.HeyBean;
-import rmiserver.ServerInterface;
 
+/**
+ * Action that gets search History of logged in user
+ */
 public class SearchHistoryAction extends ActionSupport implements SessionAware {
     private static final long serialVersionUID = 4L;
     private Map<String, Object> session;

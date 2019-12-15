@@ -8,15 +8,17 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 import rmiserver.ServerInterface;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
-import javax.servlet.http.HttpServletRequest;
 
-
+/**
+ * Action that exchanges code for access token and performs login or association with facebook
+ */
 public class ExchangeAction extends ActionSupport implements SessionAware {
     private static final long serialVersionUID = 4L;
     private Map<String, Object> session;
