@@ -15,6 +15,9 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
+/**
+ * Enables websocket use on the server-side
+ */
 @ServerEndpoint(value = "/meta2/ws", configurator = GetHttpSessionConfigurator.class)
 public class WebSocket extends UnicastRemoteObject implements ClientInterface {
     private static final Set<WebSocket> connections = new CopyOnWriteArraySet<>();
@@ -29,6 +32,11 @@ public class WebSocket extends UnicastRemoteObject implements ClientInterface {
         System.out.println("CONSTRUCTOR");
     }
 
+    /**
+     * Initializes websocket connection
+     * @param session
+     * @param config
+     */
     @OnOpen
     public void start(Session session, EndpointConfig config) {
         System.out.println("START begin");
@@ -46,6 +54,9 @@ public class WebSocket extends UnicastRemoteObject implements ClientInterface {
         System.out.println("START end");
     }
 
+    /**
+     * Closes websocket connection
+     */
     @OnClose
     public void end() {
         System.out.println("END");
@@ -62,6 +73,10 @@ public class WebSocket extends UnicastRemoteObject implements ClientInterface {
         }
     }
 
+    /**
+     * Triggered a message is received
+     * @param message
+     */
     @OnMessage
     public void receiveMessage(String message) {
         System.out.println("RECEIVEMSG:" + message);
@@ -73,11 +88,18 @@ public class WebSocket extends UnicastRemoteObject implements ClientInterface {
         }
     }
 
+    /**
+     * Handles wesocket errors
+     * @param t
+     */
     @OnError
     public void handleError(Throwable t) {
         System.out.println("ERROR");
     }
 
+    /**
+     * ClientInterface method that handles notifications (promotion to admin)
+     */
     @Override
     public void notification() {
         if (this.heyBean.getTypeOfClient().equals("user")) {
@@ -101,6 +123,13 @@ public class WebSocket extends UnicastRemoteObject implements ClientInterface {
         }
     }
 
+    /**
+     * ClientInterface method called by RMIServer when a RTS update occurs
+     * @param msg
+     * @throws MalformedURLException
+     * @throws RemoteException
+     * @throws NotBoundException
+     */
     @Override
     public void rtsUpdate(String msg) throws MalformedURLException, RemoteException, NotBoundException {
         System.out.println("RECEIVED RTS UPDATE IN WEBSOCKET");
@@ -121,7 +150,7 @@ public class WebSocket extends UnicastRemoteObject implements ClientInterface {
 
 
 
-
+    // Just some override methods that do nothing in this case...
 
 
     @Override

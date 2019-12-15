@@ -14,11 +14,21 @@ import java.util.Random;
 import java.util.Scanner;
 import java.util.concurrent.ExecutionException;
 
+/**
+ * Class that enables connection with facebook account
+ */
 public class FacebookConnect {
 
     private static final String PROTECTED_RESOURCE_URL = "https://graph.facebook.com/v3.2/me";
     private static final String NETWORK_NAME = "Facebook";
 
+    /**
+     * Method to facebook connection based on the API keys.
+     * @param args
+     * @throws InterruptedException
+     * @throws ExecutionException
+     * @throws IOException
+     */
     public static void main(String[] args) throws InterruptedException, ExecutionException, IOException {
 
             //2531245710257107
@@ -80,6 +90,12 @@ public class FacebookConnect {
         System.out.println("Thats it man! Go and build something awesome with ScribeJava! :)");
     }
 
+    /**
+     * Method to get the Facebook's final URL(processed)
+     * @param url The url to process
+     * @return Final URL
+     * @throws IOException
+     */
     public static String getFinalURL(String url) throws IOException {
         HttpURLConnection con = (HttpURLConnection) new URL(url).openConnection();
         con.setInstanceFollowRedirects(false);
