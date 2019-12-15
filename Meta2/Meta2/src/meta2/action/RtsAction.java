@@ -15,9 +15,9 @@ public class RtsAction extends ActionSupport implements SessionAware {
     private static final long serialVersionUID = 4L;
     private Map<String, Object> session;
     // To return to jsp
-    private ArrayList<String> mostRelevant;
-    private ArrayList<String> mostSearched;
-    private HashMap<String,String> multicastServers;
+    private ArrayList<String> mostRelevant = new ArrayList<>();
+    private ArrayList<String> mostSearched = new ArrayList<>();
+    private ArrayList<String> multicastServers = new ArrayList<>();
 
     @Override
     public String execute() {
@@ -26,12 +26,12 @@ public class RtsAction extends ActionSupport implements SessionAware {
         int clientNo = getHeyBean().getClientNo();
         try {
             String msg = server.realTimeStatistics(clientNo);
-
             if (msg != null) {
                 String[] parameters = msg.split(";;");
                 int receivedClientNo = Integer.parseInt(parameters[1].split("\\|\\|\\|")[1]);
-                System.out.println("Recieved client no: " + receivedClientNo);
+                System.out.println("Received client no: " + receivedClientNo);
                 if (clientNo == receivedClientNo) {
+                    System.out.println("Message: "+msg);
                     System.out.println("Started receiving updates...");
                     arrangeInfo(parameters);
                 }
@@ -42,7 +42,7 @@ public class RtsAction extends ActionSupport implements SessionAware {
             System.out.println("ERROR #9: Something went wrong. Returning to main menu");
             return ERROR;
         }
-        System.out.println("Returning success from search history");
+        System.out.println("Returning success from rts");
         return SUCCESS;
     }
 
@@ -68,9 +68,10 @@ public class RtsAction extends ActionSupport implements SessionAware {
             }
             // novo
 
+
             if(i < 12) mostRelevant.add(parameters[i].split("\\|\\|\\|")[1]);
             else if(i < 22) mostSearched.add(parameters[i].split("\\|\\|\\|")[1]);
-            else multicastServers.put(parameters[i].split("\\|\\|\\|")[1],parameters[i].split("\\|\\|\\|")[1]); // isto n ta bem
+            else multicastServers.add("IP: " + parameters[i-1].split("\\|\\|\\|")[1] + " PORT: " +parameters[i].split("\\|\\|\\|")[1]);
         }
     }
 
@@ -90,11 +91,11 @@ public class RtsAction extends ActionSupport implements SessionAware {
         this.mostSearched = mostSearched;
     }
 
-    public HashMap<String, String> getMulticastServers() {
+    public ArrayList<String> getMulticastServers() {
         return multicastServers;
     }
 
-    public void setMulticastServers(HashMap<String, String> multicastServers) {
+    public void setMulticastServers(ArrayList<String> multicastServers) {
         this.multicastServers = multicastServers;
     }
 

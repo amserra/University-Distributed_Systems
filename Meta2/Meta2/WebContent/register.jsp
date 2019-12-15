@@ -47,7 +47,7 @@
 									<s:form action="registerAction" method="POST">
 										<div class="row">
 											<div class="input-field col s12">
-												<input id="username" type="text" class="validate" name="username">
+												<input id="username" type="text" class="validate" name="username" autofocus>
 												<label for="username" class="active">Username</label>
 											</div>
 										</div>

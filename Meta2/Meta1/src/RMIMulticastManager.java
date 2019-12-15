@@ -82,7 +82,7 @@ public class RMIMulticastManager extends Thread {
                     // Process message
                     deleteMulticastServer(serverNo);
                 } else if (type.equals("rtsUpdate") && !this.server.isBackup) {
-                   // this.server.sendRtsToAll(msgReceive);
+                    this.server.sendRtsToAll(msgReceive);
                 } else if (type.equals("rmiServerStarterResult") && this.server.isBackup) {
                     int noOfServers = Integer.parseInt(parameters[2].split("\\|\\|\\|")[1]);
                     int init = 3;

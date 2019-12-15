@@ -14,7 +14,7 @@
         <link href="css/navbar.css" rel="stylesheet">
         <link href="css/register.css" rel="stylesheet">
         <script type="text/javascript" src="js/materialize.min.js"></script>
-        <!---<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>--->
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     </head>
 
     <body>
@@ -27,7 +27,7 @@
         <nav>
             <div class="nav-wrapper blue lighten-2">
                 <ul class="left">
-                    <li><a href="#"><img id="navImg" class="circle responsive-img" src="assets/img/logo_transparent_no_letter.png" alt="Logo"></a></li>
+                    <li><a href="<s:url action="indexView"></s:url>"><img id="navImg" class="circle responsive-img" src="assets/img/logo_transparent_no_letter.png" alt="Logo"></a></li>
                 </ul>
                 <a href="#" data-target="mobile-demo" class="sidenav-trigger right"><i class="material-icons">menu</i></a>
                 <ul class="right hide-on-med-and-down">
@@ -74,7 +74,7 @@
                             <li><a style="pointer-events: none;cursor: default;">${session.username}</a><br></li>
                         </c:when>
                         <c:otherwise>
-                            <li><a style="pointer-events: none;cursor: default">${session.name}</a></li>
+                            <li><a style="pointer-events: none;cursor: default">${session.name}</a><br></li>
                         </c:otherwise>
                     </c:choose>
                     <c:choose>
@@ -82,6 +82,11 @@
                             <li><a href="<s:url action="indexNewUrlAction"></s:url>">Index url</a></li>
                             <li><a href="<s:url action="adminPrivilegesAction"></s:url>">Admin privileges</a></li>
                             <li><a href="#">RTS</a></li>
+                        </c:when>
+                    </c:choose>
+                    <c:choose>
+                        <c:when test="${empty session.name}">
+                            <li><a href="<s:url action="associateFacebookAction"></s:url>">Associate Facebook</a></li>
                         </c:when>
                     </c:choose>
                     <li><a href="<s:url action="searchHistoryAction"></s:url>">Search history</a></li>
@@ -95,45 +100,42 @@
             </c:choose>
         </ul>
 
-        <div class="valign-wrapper" style="width:100%;height:80%;position: absolute;">
+        <div style="height: 3vh"></div>
+        <div class="valign-wrapper" style="width:100%;position: absolute;">
             <div class="valign" style="width:100%;">
                 <div class="container">
                     <div class="row">
-                        <div class="col s12 m6 offset-m3">
-                            <div class="row center-align">
-                                <img id="mainImg" class="circle responsive-img" src="assets/img/logo_transparent.png" alt="ucBusca">
-                            </div>
-                            <!--- Em action mete-se o nome da action...--->
-                            <s:form action="searchAction" method="POST">
-                                <div class="input-field row s12">
-                                    <input id="search" type="text" name="searchTerms" class="validate" autofocus>
-                                    <c:choose>
-                                        <c:when test="${empty session.username}">
-                                            <label for="search">O que busca?</label>
-                                        </c:when>
-                                        <c:otherwise>
-                                            <c:choose>
-                                                <c:when test="${empty session.name}">
-                                                    <label for="search">${session.username}, o que busca?</label>
-                                                </c:when>
-                                                <c:otherwise>
-                                                    <label for="search">${session.name}, o que busca?</label>
-                                                </c:otherwise>
-                                            </c:choose>
-                                        </c:otherwise>
-                                    </c:choose>
-                                </div>
-
-                                <div class="row s12 center-align">
-                                    <button class="btn waves-effect waves-light blue" type="submit">
-                                        Procurar
-                                        <i class="material-icons right">search</i>
-                                    </button>
-                                </div>
-
-                            </s:form>
-
+                        <div class="col s4">
+                            <ul class="collection with-header">
+                                <li class="collection-header"><h6><b>Most relevant pages</b></h6></li>
+                                <c:set var = "i" value = "${1}"/>
+                                <c:forEach items="${mostRelevant}" var="result">
+                                    <li id="mostRelevant-${i}" class="collection-item">${i}. ${result}</li>
+                                    <c:set var="i" value="${i + 1}"/>
+                                </c:forEach>
+                            </ul>
                         </div>
+                        <div class="col s4">
+                            <ul class="collection with-header">
+                                <li class="collection-header"><h6><b>Most searched terms</b></h6></li>
+                                <c:set var = "j" value = "${1}"/>
+                                <c:forEach items="${mostSearched}" var="result">
+                                    <li id="mostSearched-${j}" class="collection-item">${j}. ${result}</li>
+                                    <c:set var="j" value="${j + 1}"/>
+                                </c:forEach>
+                            </ul>
+                        </div>
+                        <div class="col s4">
+                            <ul class="collection with-header" id="multicastServersContainer">
+                                <li class="collection-header"><h6><b>Active multicast servers</b></h6></li>
+                                <c:set var = "k" value = "${1}"/>
+                                <c:forEach items="${multicastServers}" var="result">
+                                    <li id="multicastServers-${k}" class="collection-item">${result}</li>
+                                    <c:set var="k" value="${k + 1}"/>
+                                </c:forEach>
+                            </ul>
+                        </div>
+
                     </div>
                 </div>
             </div>

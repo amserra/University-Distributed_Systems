@@ -67,7 +67,7 @@
 							<li><a style="pointer-events: none;cursor: default;">${session.username}</a><br></li>
 						</c:when>
 						<c:otherwise>
-							<li><a style="pointer-events: none;cursor: default">${session.name}</a></li>
+							<li><a style="pointer-events: none;cursor: default">${session.name}</a><br></li>
 						</c:otherwise>
 					</c:choose>
 					<c:choose>
@@ -75,6 +75,11 @@
 							<li><a href="<s:url action="indexNewUrlAction"></s:url>">Index url</a></li>
 							<li><a href="<s:url action="adminPrivilegesAction"></s:url>">Admin privileges</a></li>
 							<li><a href="<s:url action="rtsView"></s:url>">RTS</a></li>
+						</c:when>
+					</c:choose>
+					<c:choose>
+						<c:when test="${empty session.name}">
+							<li><a href="<s:url action="associateFacebookAction"></s:url>">Associate Facebook</a></li>
 						</c:when>
 					</c:choose>
 					<li><a href="<s:url action="searchHistoryAction"></s:url>">Search history</a></li>
@@ -156,7 +161,7 @@
 		</c:choose>
 
 		<c:choose>
-			<c:when test="${(session.typeOfClient eq 'user') || (session.typeOfClient eq 'admin')}">
+			<c:when test="${session.typeOfClient eq 'user'}">
 				<script type="text/javascript" src="js/websockets.js"></script>
 			</c:when>
 		</c:choose>

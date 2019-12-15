@@ -3,7 +3,6 @@ var websocket = null;
 window.onload = function() { // URI = ws://10.16.0.165:8080/WebSocket/ws
     // Aqui meter /Meta2/ws
     connect('wss://' + window.location.host + '/Meta2/meta2/ws');
-    //document.getElementById("chat").focus();
 }
 
 function connect(host) { // connect to the host websocket
@@ -27,18 +26,11 @@ function onOpen(event) {
     console.log(window.location.pathname);
     if(window.location.pathname == "/Meta2/rtsView.action")
         doSend("inRTS");
-
-    /*
-    document.getElementById('chat').onkeydown = function(key) {
-        if (key.code === 'Enter')
-            doSend(); // call doSend() on enter key press
-    };
-    */
 }
 
 function onClose(event) {
     console.log('WebSocket closed (code ' + event.code + ').');
-    //document.getElementById('chat').onkeydown = null;
+    websocket.close();
 }
 
 function onMessage(message) { // print the received message
@@ -47,28 +39,43 @@ function onMessage(message) { // print the received message
         console.log('Promoting to admin toast');
         M.toast({html: 'You have been promoted to admin! Refresh the page.',displayLength: 20000});
     } else {
-        console.log("RTS UPDATE HERE");
+        if(window.location.pathname == "/Meta2/rtsView.action") {
+            console.log("RTS UPDATE HERE");
+            let parameters = message.data.split(";;");
+            updatePage(parameters);
+        }
+    }
+}
+
+function updatePage(parameters) {
+    console.log('Params:',parameters);
+    var mostRelevant = parameters.slice(2,12);
+    var mostSearched = parameters.slice(12,22);
+    var multicastServers = new Array();
+    for(let i = 22,j = 0; i < parameters.length; i++,j++) {
+        multicastServers[j] = 'IP: ' + parameters[i++].split('|||')[1] + ' PORT: ' + parameters[i].split('|||')[1];
+    }
+
+    for(let i = 1; i <= 10; i++) {
+        $('#mostRelevant-'+i).html(i + ". " + mostRelevant[i-1].split('|||')[1]);
+        $('#mostSearched-'+i).html(i + ". " + mostSearched[i-1].split('|||')[1]);
+    }
+
+    $('#multicastServersContainer').empty();
+    $('#multicastServersContainer').append('<li class="collection-header"><h6><b>Active multicast servers</b></h6></li>');
+    $()
+    for(let i = 0; i < multicastServers.length; i++) {
+        let theId = 'multicastServers-'+(i+1);
+        $('#multicastServersContainer').append('<li id=' + theId + ' class="collection-item">' + multicastServers[i] + '</li>');
     }
 }
 
 function onError(event) {
     console.log('WebSocket error.');
-    //document.getElementById('chat').onkeydown = null;
+    websocket.close();
 }
 
 function doSend(msg) {
-    //var message = document.getElementById('chat').value;
     if (msg != '')
         websocket.send(msg); // send the message to the server
-    //document.getElementById('chat').value = '';
 }
-
-/*
-function writeToHistory(text) {
-    var history = document.getElementById('history');
-    var line = document.createElement('p');
-    line.style.wordWrap = 'break-word';
-    line.innerHTML = text;
-    history.appendChild(line);
-    history.scrollTop = history.scrollHeight;
-}*/
