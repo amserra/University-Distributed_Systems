@@ -562,6 +562,7 @@ public class RMIServer extends UnicastRemoteObject implements ServerInterface {
      * @throws NotBoundException
      */
     public void sendRtsToAll(String msg) throws MalformedURLException, RemoteException, NotBoundException {
+        System.out.println("sending rts to all");
         for (HashMap.Entry<Integer, ClientInterface> entry : clientInterfacesMap.entrySet()) {
             ClientInterface client = entry.getValue();
             client.rtsUpdate(msg);

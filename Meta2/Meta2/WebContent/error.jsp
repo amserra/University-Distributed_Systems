@@ -25,6 +25,7 @@
 			<a href="<s:url action="indexView"/>">Go TO Homepage</a>
 		</div>
 	</div>
+	<p><s:property value="exceptionStack" /></p>
 
 	<script type="text/javascript" src="js/materialize.min.js"></script>
 	</body>

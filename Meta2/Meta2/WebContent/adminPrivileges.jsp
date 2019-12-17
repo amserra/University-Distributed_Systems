@@ -7,7 +7,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html, charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ucBusca</title>
+    <title>Admin privileges</title>
     <link rel="icon" href="assets/img/logo_transparent_no_letter.png">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link type="text/css" rel="stylesheet" href="css/materialize.min.css" media="screen,projection">
@@ -38,6 +38,12 @@
                         <c:when test="${session.typeOfClient eq 'admin'}">
                             <li><a href="<s:url action="indexNewUrlAction"></s:url>">Index url</a></li>
                             <li><a href="#">Admin privileges</a></li>
+                            <li><a href="<s:url action="rtsView"></s:url>">RTS</a></li>
+                        </c:when>
+                    </c:choose>
+                    <c:choose>
+                        <c:when test="${empty session.name}">
+                            <li><a href="<s:url action="associateFacebookAction"></s:url>">Associate Facebook</a></li>
                         </c:when>
                     </c:choose>
                     <li><a href="<s:url action="searchHistoryAction"></s:url>">Search history</a></li>
@@ -58,20 +64,26 @@
         <c:when test="${(session.typeOfClient eq 'user') || (session.typeOfClient eq 'admin')}">
             <c:choose>
                 <c:when test="${empty session.name}">
-                    <li><a style="pointer-events: none;cursor: default">${session.username}</a></li>
+                    <li><a style="pointer-events: none;cursor: default">${session.username}</a><br></li>
                 </c:when>
                 <c:otherwise>
-                    <li><a style="pointer-events: none;cursor: default">${session.name}</a></li>
+                    <li><a style="pointer-events: none;cursor: default">${session.name}</a><br></li>
                 </c:otherwise>
             </c:choose>
             <c:choose>
                 <c:when test="${session.typeOfClient eq 'admin'}">
                     <li><a href="<s:url action="indexNewUrlAction"></s:url>">Index url</a></li>
                     <li><a href="#">Admin privileges</a></li>
+                    <li><a href="<s:url action="rtsView"></s:url>">RTS</a></li>
+                </c:when>
+            </c:choose>
+            <c:choose>
+                <c:when test="${empty session.name}">
+                    <li><a href="<s:url action="associateFacebookAction"></s:url>">Associate Facebook</a></li>
                 </c:when>
             </c:choose>
             <li><a href="<s:url action="searchHistoryAction"></s:url>">Search history</a></li>
-            <li><a href="#">Links pointing</a></li>
+            <li><a href="<s:url action="linksPointingAction"></s:url>">Links pointing</a></li>
             <li><a href="<s:url action="logoutAction"/>">Logout</a></li>
         </c:when>
         <c:otherwise>
