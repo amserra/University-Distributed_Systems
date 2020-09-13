@@ -1,0 +1,1 @@
+This folder contains the project guide provided by the teatchers, alongisde with the final reports, both in portuguese.
