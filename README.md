@@ -1,6 +1,6 @@
-## Distributed Systems Project 
+## ucBusca 
 
-This project consists on a search engine (called ucBusca) and was build in my 3rd bachelor degree year for the Distributed Systems subject. 
+A distributed search engine. It includes a fault-tolerant backend and a frotend. 
 
 It is a full-stack web application built with Java and Struts2 and its architecture is as follows.
 
