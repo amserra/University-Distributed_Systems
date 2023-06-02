@@ -1,3 +1,7 @@
+# University-Distributed_Systems
+
+Repository that contains the files of the project developed during the **Distributed Systems** class, performed in the 3rd year of my BSc in Computer Science at Universidade de Coimbra. Description below.
+
 ## ucBusca 
 
 A distributed search engine. It includes a fault-tolerant backend and a frotend. 
